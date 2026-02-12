@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS tenants (
+    tenant_id BINARY(16) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    domain VARCHAR(255) NULL,
+    plan ENUM('free', 'pro', 'enterprise') NOT NULL DEFAULT 'free',
+    owner_email VARCHAR(255) NULL,
+    contact_number VARCHAR(20) NULL,
+    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

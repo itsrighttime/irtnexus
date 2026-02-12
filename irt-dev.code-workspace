@@ -18,7 +18,7 @@
 				"driver": "MySQL",
 				"name": "irt-dev",
 				"username": "root",
-				"database": "irt-dev",
+				"database": "irt_dev_db",
 				"password": "root"
 			}
 		]

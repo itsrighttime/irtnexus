@@ -1,7 +1,7 @@
 // databaseFactory.js
 import { Database } from "./database.js";
 import userConfig from "../config/user.config.js";
-import { DB_USER_PASS } from "#config";
+import { DB_GLOBAL, DB_USER_PASS } from "#config";
 
 /**
  * DatabaseFactory
@@ -75,7 +75,7 @@ export class DatabaseFactory {
     // if (username === "report_user") return "reporting_db";
     // if (username === "dev_user") return "dev_db";
 
-    return "irt-dev"; // default database
+    return DB_GLOBAL.database; // default database
   }
 
   /**

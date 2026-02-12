@@ -1,3 +1,4 @@
+export { comparePassword, hashPassword } from "./hash.util.js";
 export { extractRows } from "./extractRows.util.js";
 export { executeAction } from "./executeAction.js";
 export { loadFile } from "./loadFile.js";
