@@ -1,0 +1,207 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxl); /* was --spacing-6 */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: var(--spacing-sm); /* was --spacing-2 */
+}
+
+.pageTitle {
+  font-size: var(--font-size-xxl); /* 1.875rem */
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.pageSubtitle {
+  color: var(--color-text-light);
+  margin-top: var(--spacing-xs);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xxl);
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+/* Score Card */
+.scoreCard {
+  grid-column: 1 / -1;
+  background: linear-gradient(
+    135deg,
+    #1e293b,
+    #0f172a
+  ); /* custom dark gradient */
+  color: white;
+  border: none;
+}
+
+.scoreContent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xxl);
+  padding: var(--spacing-xxl);
+}
+
+.scoreCircle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 8px solid var(--color-success);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.scoreValue {
+  font-size: 2.5rem;
+  font-weight: var(--font-weight-extrabold);
+  line-height: 1;
+}
+
+.scoreLabel {
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.scoreInfo {
+  flex: 1;
+}
+
+.scoreTitle {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-2);
+}
+
+.scoreDesc {
+  opacity: 0.8;
+  max-width: 600px;
+}
+
+/* Factors Card */
+.factorsCard {
+  grid-column: 1;
+}
+
+.factorsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.factorItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding-bottom: var(--spacing-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.factorItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.factorIcon {
+  padding: var(--spacing-2);
+  background-color: #fef2f2;
+  color: var(--color-danger);
+  border-radius: var(--radius-md);
+}
+
+.factorInfo {
+  flex: 1;
+}
+
+.factorName {
+  font-weight: var(--font-weight-semibold);
+}
+
+.factorDate {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+}
+
+/* Recommendations Card */
+.recsCard {
+  grid-column: 2;
+  grid-row: span 2;
+}
+
+.recsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.recItem {
+  padding: var(--spacing-4);
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.recTitle {
+  font-weight: var(--font-weight-semibold);
+  font-size: 0.95rem;
+  margin-bottom: var(--spacing-xs);
+}
+
+.recDesc {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+}
+
+.recBtn {
+  align-self: flex-start;
+}
+
+/* Trust Signals */
+.trustCard {
+  grid-column: 1;
+}
+
+.signalsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-4);
+  text-align: center;
+}
+
+.signalItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  padding: var(--spacing-4);
+  background-color: #f8fafc;
+  border-radius: var(--radius-md);
+}
+
+.signalLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.signalValue {
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}

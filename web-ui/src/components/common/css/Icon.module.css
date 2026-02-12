@@ -1,0 +1,22 @@
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+.icon {
+  width: 100%;
+  height: 100%;
+}
+
+.icon svg {
+  width: 100%;
+  height: 100%;
+  fill: var(--icon-color); /* color controlled by CSS variable */
+}
+
+.icon svg path {
+  color: var(--icon-color); /* color controlled by CSS variable */
+}

@@ -1,0 +1,17 @@
+export const EP_ROUTE_KEYS = {
+  profile: "/profile",
+  authentication: "/authentication",
+  roles_authority: "/roles-authority",
+  tenants: "/tenants",
+  access_entitlements: "/access-entitlements",
+  lifecycle: "/lifecycle",
+  risk_trust: "/risk-trust",
+  devices_trust: "/devices-trust",
+  security_nudges: "/security-nudges",
+  activity_decisions: "/activity-decisions",
+  transparency: "/transparency",
+  data_vault: "/data-vault",
+  consent_compliance: "/consent-compliance",
+  emergency_recovery: "/emergency-recovery",
+  security_guidance: "/security-guidance",
+};

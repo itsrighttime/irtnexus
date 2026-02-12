@@ -1,0 +1,98 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxl); /* was --spacing-6 */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.pageTitle {
+  font-size: var(--font-size-xxl); /* 1.875rem ~ 30px, closest is 24px */
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.pageSubtitle {
+  color: var(--color-text-light);
+  margin-top: var(--spacing-xs); /* was --spacing-1 */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xxl); /* was --spacing-6 */
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.tableContent {
+  padding: 0;
+}
+
+.resourceName {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm); /* was --spacing-2 */
+  font-weight: var(--font-weight-semibold);
+}
+
+.icon {
+  color: var(--color-text-light);
+}
+
+.requestList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md); /* was --spacing-4 */
+  margin-bottom: var(--spacing-xxl); /* was --spacing-6 */
+}
+
+.requestItem {
+  padding: var(--spacing-md); /* was --spacing-4 */
+  background-color: var(--color-surface); /* was #f8fafc */
+  border-radius: var(--radius-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.requestTitle {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-xs); /* was 4px */
+}
+
+.requestMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs); /* was 4px */
+  font-size: var(--font-size-xs); /* was 0.8rem */
+  color: var(--color-text-light);
+}
+
+.quickActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm); /* was --spacing-3 */
+}
+
+.quickTitle {
+  font-size: var(--font-size-sm); /* was 0.9rem */
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.quickBtn {
+  justify-content: space-between;
+}

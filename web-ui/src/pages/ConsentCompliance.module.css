@@ -1,0 +1,129 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxl); /* was --spacing-6 */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.pageTitle {
+  font-size: var(--font-size-xxl); /* ~1.875rem */
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.pageSubtitle {
+  color: var(--color-text-light);
+  margin-top: var(--spacing-xs); /* was --spacing-1 */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xxl); /* was --spacing-6 */
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.consentsCard {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 1024px) {
+  .consentsCard {
+    grid-column: 1;
+  }
+}
+
+.tableContent {
+  padding: 0;
+}
+
+.appName {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm); /* was --spacing-3 */
+  font-weight: var(--font-weight-semibold); /* 600 */
+}
+
+.appIcon {
+  width: 28px;
+  height: 28px;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs); /* was 0.85rem */
+}
+
+.revokeBtn {
+  color: var(--color-error); /* was --color-danger */
+}
+
+.revokeBtn:hover {
+  background-color: #fee2e2; /* keep light red hover */
+}
+
+.complianceCard {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 1024px) {
+  .complianceCard {
+    grid-column: 2;
+  }
+}
+
+.complianceList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md); /* was --spacing-4 */
+}
+
+.complianceItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md); /* was --spacing-4 */
+  padding: var(--spacing-md); /* was --spacing-4 */
+  background-color: var(--color-surface); /* was #f8fafc */
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.complianceIcon {
+  color: var(--color-text-light); /* was --color-text-secondary */
+  background-color: var(--color-surface-light); /* was white */
+  padding: var(--spacing-sm); /* was 8px */
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+}
+
+.complianceInfo {
+  flex: 1;
+}
+
+.complianceTitle {
+  font-weight: var(--font-weight-semibold); /* was 600 */
+  font-size: var(--font-size-sm); /* was 0.95rem */
+}
+
+.complianceDesc {
+  font-size: var(--font-size-xs); /* was 0.8rem */
+  color: var(--color-text-light);
+}
+
+.checkSuccess {
+  color: var(--color-success);
+}

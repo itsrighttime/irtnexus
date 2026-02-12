@@ -1,0 +1,76 @@
+.field {
+  display: flex;
+  align-items: stretch;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  width: 100%;
+
+  transition:
+    box-shadow var(--transition-normal),
+    background-color var(--transition-normal);
+
+  /* min-width: 0; */
+  container-type: inline-size;
+  container-name: field;
+}
+
+.field:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+/* ================= LEFT ================= */
+
+.left {
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leftIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+}
+
+/* ================= MIDDLE ================= */
+
+.middle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-light);
+  line-height: var(--line-height-tight);
+  text-wrap: wrap;
+}
+
+.value {
+  font-weight: var(--font-weight-normal);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  line-height: var(--line-height-normal);
+}
+
+.title,
+.value {
+  word-break: break-word;
+}
+
+@container field (max-width: 360px) {
+  .left {
+    width: auto;
+  }
+}

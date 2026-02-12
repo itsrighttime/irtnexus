@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}

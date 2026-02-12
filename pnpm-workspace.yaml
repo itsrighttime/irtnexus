@@ -1,0 +1,7 @@
+packages:
+  - "core-ui"
+  - "seo-ui"
+  - "desktop-ui"
+  - "mobile-ui"
+  - "web-ui"
+  - "server"

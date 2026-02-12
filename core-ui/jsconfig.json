@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    // Enable latest JS and DOM APIs
+    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "allowJs": true,
+
+    // Bundler mode
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+
+    // Code quality (optional but useful)
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // Paths for absolute imports (adjust as needed)
+    "baseUrl": "src",
+    "paths": {
+      "#api": ["api/index.js"],
+      "#assets": ["assets/index.js"],
+      "#configs": ["configs/index.js"],
+      "#constants": ["constants/index.js"],
+      "#contexts": ["contexts/index.js"],
+      "#hooks": ["hooks/index.js"],
+      "#services": ["services/index.js"],
+      "#store": ["store/index.js"],
+      "#translations": ["translations/index.js"],
+      "#utils": ["utils/index.js"],
+      "#widgets": ["widgets/index.js"],
+      "#api/*": ["api/*"],
+      "#assets/*": ["assets/*"],
+      "#configs/*": ["configs/*"],
+      "#constants/*": ["constants/*"],
+      "#contexts/*": ["contexts/*"],
+      "#hooks/*": ["hooks/*"],
+      "#services/*": ["services/*"],
+      "#store/*": ["store/*"],
+      "#translations/*": ["translations/*"],
+      "#utils/*": ["utils/*"],
+      "#widgets/*": ["widgets/*"]
+    }
+  }
+}

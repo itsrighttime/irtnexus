@@ -1,0 +1,12 @@
+CREATE TABLE user_names (
+    name_id BINARY(16) PRIMARY KEY,
+    user_id BINARY(16) NOT NULL,
+    full_name VARCHAR(255) NOT NULL,
+    name_type ENUM('legal', 'preferred', 'alias') NOT NULL,
+    verified BOOLEAN NOT NULL DEFAULT FALSE,
+    issuer VARCHAR(100),
+    valid_from TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    valid_to TIMESTAMP NULL,
+    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);

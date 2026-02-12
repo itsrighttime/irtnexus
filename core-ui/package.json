@@ -1,0 +1,52 @@
+{
+  "name": "core-ui",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/core.umd.js",
+  "module": "dist/core.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/core.es.js",
+      "require": "./dist/core.umd.js"
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Danishan",
+    "email": "danishan089@gmail.com",
+    "url": "https://danishan1.github.io/portfolio/"
+  },
+  "license": "lincence",
+  "packageManager": "pnpm@10.14.0",
+  "dependencies": {
+    "@itsrighttime/ui-components": "^0.0.90",
+    "@reduxjs/toolkit": "^2.11.1",
+    "axios": "^1.13.2",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-redux": "^9.2.0",
+    "redux": "^5.0.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
+    "dotenv": "^17.2.3",
+    "eslint": "^9.39.2",
+    "prettier": "^3.7.4",
+    "vite": "^7.2.7"
+  }
+}

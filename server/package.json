@@ -1,0 +1,128 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "migrate": "node src/migrate.js",
+    "seed": "node src/seed.js",
+    "setup": "pnpm migrate && pnpm seed"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.4",
+  "dependencies": {
+    "@itsrighttime/broadcast": "^0.0.8",
+    "@itsrighttime/socket-io": "^0.0.5",
+    "@itsrighttime/utils": "^0.0.21",
+    "async_hooks": "^1.0.0",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "connect-redis": "^9.0.0",
+    "cors": "^2.8.6",
+    "csurf": "^1.11.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-mysql-session": "^3.0.3",
+    "express-rate-limit": "^8.2.1",
+    "express-session": "^1.19.0",
+    "helmet": "^8.1.0",
+    "i18n": "^0.15.3",
+    "ioredis": "^5.9.2",
+    "kafkajs": "^2.2.4",
+    "moment": "^2.30.1",
+    "mysql2": "^3.16.2",
+    "node-forge": "^1.3.3",
+    "prom-client": "^15.1.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  },
+  "imports": {
+    "#config": [
+      "./src/config/index.js"
+    ],
+    "#controllers": [
+      "./src/controllers/index.js"
+    ],
+    "#database": [
+      "./src/database/index.js"
+    ],
+    "#core": [
+      "./src/core/index.js"
+    ],
+    "#middlewares": [
+      "./src/middlewares/index.js"
+    ],
+    "#packages": [
+      "./src/packages/index.js"
+    ],
+    "#queries": [
+      "./src/queries/index.js"
+    ],
+    "#routes": [
+      "./src/routes/index.js"
+    ],
+    "#services": [
+      "./src/services/index.js"
+    ],
+    "#sessions": [
+      "./src/sessions/index.js"
+    ],
+    "#translations": [
+      "./src/translations/index.js"
+    ],
+    "#utils": [
+      "./src/utils/index.js"
+    ],
+    "#validations": [
+      "./src/validations/index.js"
+    ],
+    "#config/*": [
+      "./src/config/*"
+    ],
+    "#controllers/*": [
+      "./src/controllers/*"
+    ],
+    "#database/*": [
+      "./src/database/*"
+    ],
+    "#core/*": [
+      "./src/core/*"
+    ],
+    "#middlewares/*": [
+      "./src/middlewares/*"
+    ],
+    "#packages/*": [
+      "./src/packages/*"
+    ],
+    "#queries/*": [
+      "./src/queries/*"
+    ],
+    "#routes/*": [
+      "./src/routes/*"
+    ],
+    "#services/*": [
+      "./src/services/*"
+    ],
+    "#sessions/*": [
+      "./src/sessions/*"
+    ],
+    "#translations/*": [
+      "./src/translations/*"
+    ],
+    "#utils/*": [
+      "./src/utils/*"
+    ],
+    "#validations/*": [
+      "./src/validations/*"
+    ]
+  }
+}

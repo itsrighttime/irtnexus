@@ -1,0 +1,118 @@
+/* Container */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.pageTitle {
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.pageSubtitle {
+  color: var(--color-text-light);
+  margin-top: var(--spacing-xs);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Grid Layout */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+/* Table Content */
+.tableContent {
+  padding: 0;
+}
+
+/* Role & User Display */
+.roleName {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.roleIcon {
+  color: var(--color-primary);
+}
+
+.userName {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.userAvatar {
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Break Glass Card */
+.breakGlassCard {
+  background: linear-gradient(to right, #fef2f2, var(--color-surface-light));
+  border: 1px solid #fee2e2;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+}
+
+.breakGlassContent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.bgIcon {
+  padding: var(--spacing-sm);
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bgInfo {
+  flex: 1;
+}
+
+.bgInfo h3 {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: #991b1b;
+  margin: 0;
+}
+
+.bgInfo p {
+  font-size: var(--font-size-sm);
+  color: #7f1d1d;
+  margin: 0;
+}

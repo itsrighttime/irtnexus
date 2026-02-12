@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxl); /* was --spacing-6 */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.pageTitle {
+  font-size: var(--font-size-xxl); /* closest to 1.875rem (~30px) */
+  font-weight: var(--font-weight-bold); /* 700 */
+  color: var(--color-text);
+}
+
+.pageSubtitle {
+  color: var(--color-text-light);
+  margin-top: var(--spacing-xs); /* was --spacing-1 */
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-sm); /* was --spacing-2 */
+}
+
+.logsCard {
+  background-color: var(--color-surface);
+}
+
+.tableContent {
+  padding: 0;
+}
+
+.actionCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm); /* was --spacing-2 */
+  font-weight: var(--font-weight-medium); /* 500 */
+}
+
+.actionIcon {
+  color: var(--color-text-light);
+}

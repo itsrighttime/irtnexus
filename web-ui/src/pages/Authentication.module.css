@@ -1,0 +1,157 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxl); /* was --spacing-6 */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: var(--spacing-sm); /* was --spacing-2 */
+}
+
+.pageTitle {
+  font-size: var(--font-size-xxl); /* 1.875rem ~ 30px, closest is 24px */
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.pageSubtitle {
+  color: var(--color-text-light);
+  margin-top: var(--spacing-xs); /* was --spacing-1 */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xxl); /* was --spacing-6 */
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.mfaCard,
+.passwordCard {
+  grid-column: span 1;
+}
+
+.sessionsCard {
+  grid-column: 1 / -1;
+}
+
+.cardHeaderFlex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* MFA List */
+.mfaList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md); /* was --spacing-4 */
+}
+
+.mfaItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md); /* was --spacing-4 */
+  padding: var(--spacing-md); /* was --spacing-4 */
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-background);
+}
+
+.mfaIcon {
+  color: var(--color-primary);
+  background-color: #eff6ff; /* keep custom light-blue accent */
+  padding: var(--spacing-sm); /* was --spacing-3 */
+  border-radius: 50%;
+}
+
+.mfaInfo {
+  flex: 1;
+}
+
+.mfaName {
+  font-weight: var(--font-weight-semibold); /* was 600 */
+  color: var(--color-text);
+}
+
+.mfaDetail {
+  font-size: var(--font-size-xs); /* was 0.85rem */
+  color: var(--color-text-light);
+}
+
+.mfaActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm); /* was --spacing-3 */
+}
+
+.dangerIcon {
+  color: var(--color-error); /* was --color-danger */
+}
+
+/* Password Security */
+.securityRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xxl); /* was --spacing-6 */
+}
+
+.securityLabel {
+  font-weight: var(--font-weight-medium); /* 500 */
+  color: var(--color-text-light);
+}
+
+.securityValue {
+  font-weight: var(--font-weight-semibold); /* 600 */
+  margin-top: var(--spacing-xs); /* was 4px */
+}
+
+.securityCheck {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm); /* was --spacing-3 */
+  padding: var(--spacing-sm); /* was --spacing-3 */
+  background-color: #ecfdf5; /* keep greenish accent */
+  color: #065f46; /* keep dark green text */
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm); /* was 0.9rem */
+}
+
+.checkIcon {
+  color: var(--color-success);
+}
+
+/* Sessions Table */
+.tableContent {
+  padding: 0;
+}
+
+.deviceCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm); /* was --spacing-2 */
+  font-weight: var(--font-weight-medium); /* 500 */
+}
+
+.currentDevice {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold); /* 600 */
+}
+
+.locationCell {
+  display: flex;
+  flex-direction: column;
+}
+
+.ipAddress {
+  font-size: var(--font-size-xs); /* was 0.75rem */
+  color: var(--color-text-light);
+}

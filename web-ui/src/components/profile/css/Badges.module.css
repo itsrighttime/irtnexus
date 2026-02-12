@@ -1,0 +1,41 @@
+.right {
+  width: 48px;
+  display: grid;
+  gap: var(--spacing-xs);
+  align-items: center;
+  justify-items: center;
+}
+
+/* Badge layout variations */
+.badges-1 {
+  grid-template-rows: 1fr;
+}
+
+.badges-2 {
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.badges-3 {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+
+  color: var(--color-secondary);
+  cursor: pointer;
+
+  transition: transform var(--transition-fast);
+}
+
+.badge:hover {
+  transform: scale(1.05);
+}
