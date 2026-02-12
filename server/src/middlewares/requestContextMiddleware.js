@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { observability } from "#services";
 import { HEADERS } from "#config";
-import { logger } from "#utils";
+import { generateBinaryUUID, logger } from "#utils";
 
 /**
  * Request Context Middleware
@@ -31,10 +31,10 @@ export const requestContextMiddleware = (req, res, next) => {
    */
   req.context = {
     // Prefer upstream request ID if present
-    requestId: req.id || crypto.randomUUID(),
+    requestId: req.id || generateBinaryUUID(),
 
     // Trace ID from headers or generate a new one
-    traceId: req.headers[HEADERS.TRACEPARENT] || crypto.randomUUID(),
+    traceId: req.headers[HEADERS.TRACEPARENT] || generateBinaryUUID(),
 
     // Lazily initialized when audit logging is required
     auditId: null,

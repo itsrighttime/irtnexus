@@ -1,0 +1,8 @@
+TODO : 
+
+- Remove the extra files and folders like policies, sdkManager, auth, graph and from other folders as well
+- Check and remove other then auditLog mentiod in Observalibility if not in busniess need     
+- Update the Observality this.#logEvent(), should have all the required daat
+- Check requestContextMiddleware to support the logEvent
+- Check executeAction to support logEvent
+- Check to avoid the dual data insertion in audit_log one by middleware and other by excecuteAction

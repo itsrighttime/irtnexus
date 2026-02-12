@@ -1,5 +1,5 @@
 import { DatabaseFactory } from "#database";
-import { logger } from "#utils";
+import { generateBinaryUUID, logger } from "#utils";
 
 /**
  * MySQLAuditStore
@@ -9,10 +9,6 @@ import { logger } from "#utils";
  * to provide tamper-evident audit logs.
  */
 export class MySQLAuditStore {
-  /**
-   * Creates a new audit store instance.
-   * Uses a dedicated audit database user.
-   */
   constructor() {
     // Database instance scoped for audit logging
     this.pool = DatabaseFactory.userAudit();
@@ -22,109 +18,93 @@ export class MySQLAuditStore {
    * Appends a new audit event to the audit_logs table.
    *
    * @param {Object} event - Fully constructed audit event
-   * @returns {Promise<void>}
+   * @param {Buffer|string} event.id - Primary key (BINARY(16))
+   * @param {Buffer|string} event.tenantId
+   * @param {Buffer|string} [event.userId]
+   * @param {string} [event.userRole]
+   * @param {string} event.eventType
+   * @param {number} [event.eventVersion=1]
+   * @param {Buffer|string} [event.requestId]
+   * @param {Buffer|string} [event.traceId]
+   * @param {string} [event.httpMethod]
+   * @param {string} [event.httpPath]
+   * @param {string} [event.ipAddress]
+   * @param {string} [event.userAgent]
+   * @param {string} [event.resourceTable]
+   * @param {Buffer|string} [event.resourceId]
+   * @param {Buffer|string} [event.historyId]
+   * @param {Object} [event.outcome]
+   * @param {Object} [event.metadata]
+   * @param {Object} [event.performance]
+   * @param {boolean} [event.audit=true]
+   * @param {string} [event.previousHash]
+   * @param {string} [event.hash]
+   * @param {Date} [event.timestamp=new Date()]
    */
   async append(event) {
-    /**
-     * SQL insert statement.
-     * Column order must strictly match the params array below.
-     */
     const sql = `
-    INSERT INTO audit_logs (
-      event_id,
-      event_type,
-      event_version,
-      timestamp,
+      INSERT INTO audit_logs (
+        id,
+        tenant_id,
+        user_id,
+        user_role,
+        event_type,
+        event_version,
+        request_id,
+        trace_id,
+        http_method,
+        http_path,
+        ip_address,
+        user_agent,
+        resource_table,
+        resource_id,
+        history_id,
+        outcome,
+        metadata,
+        performance,
+        audit,
+        previous_hash,
+        hash,
+        timestamp
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
-      actor_user_id,
-      actor_role,
-      actor_anonymous,
-
-      request_id,
-      trace_id,
-      http_method,
-      http_path,
-      ip_address,
-      user_agent,
-
-      action,
-      resource,
-      metadata,
-      performance,
-      outcome,
-      context,
-
-      audit,
-      previous_hash,
-      hash
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-
-    // Debug-level logging for audit persistence (no mutations)
-    logger.debug("MySQL Audit Store [APPEND] :", {
-      eventId: event.eventId || null,
-      eventType: event.eventType || null,
-      eventVersion: event.eventVersion || null,
-      timestamp: event.timestamp || null,
-
-      userId: event.actor?.userId || null,
-      role: event.actor?.role || null,
-      anonymous: event.actor?.anonymous || false,
-
-      requestId: event.request?.requestId || null,
-      traceId: event.request?.traceId || null,
-      method: event.request?.method || null,
-      path: event.request?.path || null,
-      ip: event.request?.ip || null,
-      userAgent: event.request?.userAgent || null,
-
-      action: JSON.stringify(event.action || {}),
-      resource: JSON.stringify(event.resource || {}),
-      metadata: JSON.stringify(event.metadata || {}),
-      performance: JSON.stringify(event.performance || {}),
-      outcome: JSON.stringify(event.outcome || {}),
-      context: JSON.stringify(event.context || {}),
-
-      audit: event.audit || null,
-      previousHash: event.previousHash || null,
-      hash: event.hash || null,
-    });
-
-    /**
-     * Parameter list for prepared statement execution.
-     * JSON fields are stringified before persistence.
-     */
     const params = [
-      event.eventId,
-      event.eventType,
-      event.eventVersion,
-      event.timestamp,
-
-      event.actor?.userId || null,
-      event.actor?.role || null,
-      event.actor?.anonymous || false,
-
-      event.request?.requestId || null,
-      event.request?.traceId || null,
-      event.request?.method || null,
-      event.request?.path || null,
-      event.request?.ip || null,
-      event.request?.userAgent || null,
-
-      JSON.stringify(event.action || {}),
-      JSON.stringify(event.resource || {}),
-      JSON.stringify(event.metadata || {}),
-      JSON.stringify(event.performance || {}),
-      JSON.stringify(event.outcome || {}),
-      JSON.stringify(event.context || {}),
-
-      // Indicates whether this event participates in audit chaining
-      !!event.audit,
-      event.previousHash,
-      event.hash,
+      event.id ?? generateBinaryUUID(),
+      event.tenantId ?? null,
+      event.userId ?? null,
+      event.userRole ?? null,
+      event.eventType ?? "UNKNOWN",
+      event.eventVersion ?? 1,
+      event.requestId ?? null,
+      event.traceId ?? null,
+      event.httpMethod ?? null,
+      event.httpPath ?? null,
+      event.ipAddress ?? null,
+      event.userAgent ?? null,
+      event.resourceTable ?? null,
+      event.resourceId ?? null,
+      event.historyId ?? null,
+      event.outcome ? JSON.stringify(event.outcome) : null,
+      event.metadata ? JSON.stringify(event.metadata) : null,
+      event.performance ? JSON.stringify(event.performance) : null,
+      event.audit ?? true,
+      event.previousHash ?? null,
+      event.hash ?? null,
+      event.timestamp ?? new Date(),
     ];
 
-    // Persist the audit log entry
+    logger.debug("MySQLAuditStore [APPEND]:", {
+      id: params[0],
+      tenantId: params[1],
+      userId: params[2],
+      eventType: params[4],
+      resourceTable: params[12],
+      resourceId: params[13],
+      historyId: params[14],
+      timestamp: params[21],
+    });
+
     await this.pool.execute(sql, params);
   }
 }

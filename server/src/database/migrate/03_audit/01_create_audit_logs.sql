@@ -1,37 +1,29 @@
 CREATE TABLE IF NOT EXISTS audit_logs (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  tenant_id BINARY(16) NOT NULL,
-  event_id CHAR(36) NOT NULL,
-  event_type VARCHAR(64) NOT NULL,
-  event_version INT NOT NULL,
-  timestamp TIMESTAMP(3) NOT NULL,
-  -- Actor
-  actor_user_id VARCHAR(64),
-  actor_role VARCHAR(64),
-  actor_anonymous BOOLEAN,
-  -- Request context
-  request_id VARCHAR(64),
-  trace_id VARCHAR(128),
-  http_method VARCHAR(16),
-  http_path TEXT,
-  ip_address VARCHAR(45),
-  user_agent TEXT,
-  -- Action / Resource
-  action JSON,
-  resource JSON,
-  -- Extra context
-  metadata JSON,
-  performance JSON,
-  outcome JSON,
-  context JSON,
-  -- Audit integrity
-  audit BOOLEAN NOT NULL,
-  previous_hash CHAR(64),
-  hash CHAR(64),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  id BINARY(16) PRIMARY KEY,
+  tenant_id BINARY(16) NULL,
+  user_id BINARY(16) NULL,
+  user_role VARCHAR(64) NULL,
+  event_type VARCHAR(64) NOT NULL,   -- e.g., USER_UPDATE, TENANT_DELETE
+  event_version INT NOT NULL DEFAULT 1,
+  request_id BINARY(16) NULL,
+  trace_id BINARY(16) NULL,
+  http_method VARCHAR(16) NULL,
+  http_path TEXT NULL,
+  ip_address VARCHAR(45) NULL,
+  user_agent TEXT NULL,
+  resource_table VARCHAR(64) NULL,   -- e.g., "users"
+  resource_id BINARY(16) NULL,   -- FK to entity
+  history_id BINARY(16) NULL,   -- FK to history_<entity> if applicable
+  outcome JSON NULL,   -- { success: true, message: "" }
+  metadata JSON NULL,   -- extra metadata
+  performance JSON NULL,   -- timings / latency
+  audit BOOLEAN NOT NULL DEFAULT TRUE,
+  previous_hash CHAR(64) NULL,
+  hash CHAR(64) NULL,
+  timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id),
-  INDEX idx_event_type (event_type),
-  INDEX idx_actor_user (actor_user_id),
-  INDEX idx_timestamp (timestamp),
-  INDEX idx_tenant_time (tenant_id, timestamp)
+  FOREIGN KEY (user_id) REFERENCES users(user_id),
+  INDEX idx_tenant_time (tenant_id, timestamp),
+  INDEX idx_actor_user (user_id),
+  INDEX idx_event_type (event_type)
 );
