@@ -3,6 +3,7 @@ import { validateUserConfig } from "./utils/validateUserConfig.js";
 import { createUser } from "./utils/userManager.js";
 import { rotatePassword } from "./utils/passwordManager.js";
 import { syncPrivileges } from "./utils/privilegeManager.js";
+import { grantAuditAccessToUser } from "./utils/grantAuditAccessToUser.js";
 import { logger } from "#utils";
 
 /**
@@ -47,6 +48,9 @@ export async function syncUsers({ plan = false } = {}) {
 
     // Synchronize privileges
     await syncPrivileges(user, plan);
+
+    // Grant audit INSERT and SELECT access to EVERY user
+    await grantAuditAccessToUser(user, plan);
   }
 
   logger.info(plan ? "PLAN COMPLETE" : "USER SYNC COMPLETE");

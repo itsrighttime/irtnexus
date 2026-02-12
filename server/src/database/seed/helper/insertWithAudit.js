@@ -1,5 +1,6 @@
 import { DatabaseFactory } from "#database/setup/DatabaseFactory.js";
 import { generateBinaryUUID, logger, bufferToUUID } from "#utils";
+import { DEF_USER_ID } from "./ids.js";
 
 const opUser = DatabaseFactory.userOp();
 const auditUser = DatabaseFactory.userAudit();
@@ -20,7 +21,7 @@ export async function insertWithAudit({
   idValue,
   tenantId = null,
   data,
-  changedBy = "system_seed",
+  changedBy = DEF_USER_ID,
 }) {
   const columns = Object.keys(data);
 
