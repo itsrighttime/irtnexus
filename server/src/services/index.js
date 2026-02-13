@@ -6,8 +6,6 @@ export {
   prometheusRegistry,
 } from "./monitoring/audit/AuditAttached.js";
 
-export * as graphService from "./graph/index.js";
-
 /**
  *
  * TODO :

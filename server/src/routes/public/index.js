@@ -1,6 +1,5 @@
 import express from "express";
 import { userRoute } from "./user.route.js";
-import { entityRoute } from "./entity.route.js";
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -8,6 +7,5 @@ router.get("/", (req, res) => {
 });
 
 router.use("/users", userRoute);
-router.use("/entity", entityRoute);
 
 export const publicRoutes = router;

@@ -5,7 +5,6 @@ import database from "./en/database.js";
 import file from "./en/file.js";
 import email from "./en/email.js";
 import error from "./en/error.js";
-import entity from "./en/entity.js";
 
 export const en = {
   ...user,
@@ -14,5 +13,4 @@ export const en = {
   ...database,
   ...file,
   ...email,
-  ...entity,
 };
