@@ -61,7 +61,7 @@ const obs = new Observability({
   ],
   metricsCollector: new MetricsCollector(),
   prometheusExporter,
-  // sampleRate: 0.2, // Optional: sample 20% of events
+  // sampleRate: 0.2, // Optional: sample 20% of events, TODO : Add the samplReate 
 });
 
 /**
