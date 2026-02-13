@@ -5,8 +5,8 @@ import { TotpStrategy } from "./strategies/totp.js";
 import { PasskeyStrategy } from "./strategies/passkey.js";
 import { PushStrategy } from "./strategies/push.js";
 import { BackupCodesStrategy } from "./strategies/backupCodes.js";
-// import {SsoStrategy} from "./strategies/sso.js";
-// import {FederatedIdentityStrategy} from "./strategies/federatedIdentity.js";
+import { SsoStrategy } from "./strategies/sso.js";
+import { FederatedIdentityStrategy } from "./strategies/federatedIdentity.js";
 // import {ApiKeysStrategy} from "./strategies/apiKeys.js";
 // import {OauthTokensStrategy} from "./strategies/oauthTokens.js";
 // import {SignedTokensStrategy} from "./strategies/signedTokens.js";
@@ -26,8 +26,8 @@ class AuthService {
       passkey: new PasskeyStrategy(),
       push: new PushStrategy(),
       backupCodes: new BackupCodesStrategy(),
-      // sso: new SsoStrategy(),
-      // federatedIdentity: new FederatedIdentityStrategy(),
+      sso: new SsoStrategy(),
+      federatedIdentity: new FederatedIdentityStrategy(),
       // apiKeys: new ApiKeysStrategy(),
       // oauthTokens: new OauthTokensStrategy(),
       // signedTokens: new SignedTokensStrategy(),
