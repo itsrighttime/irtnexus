@@ -1,8 +1,8 @@
 import Redis from "ioredis";
-import { UtilsError, UtilsLogger } from "../packages/index.js";
+import { UtilsError } from "../packages/index.js";
+import { logger } from "#utils";
 
 const { handleError } = UtilsError;
-const { fileLogger } = UtilsLogger;
 
 /**
  * Redis Client Instance
@@ -66,7 +66,7 @@ export const redis = new Redis({
 export const connectRedis = async () => {
   try {
     await redis.connect();
-    fileLogger.info({
+    logger.info({
       message: "Connected to Redis",
       code: "00010",
     });
@@ -84,9 +84,6 @@ export const connectRedis = async () => {
  * Logs Redis errors using the centralized logger
  */
 redis.on("error", (error) => {
-  fileLogger.error({
-    message: "Redis error",
-    error: error.message,
-    code: "00012",
-  });
+  logger.error(`message: "Redis error", code: "00012"`);
+  logger.error(error);
 });

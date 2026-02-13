@@ -45,16 +45,33 @@ export const uuidToBuffer = (uuid) => {
  * bufferToUUID(<Buffer 3f 1e 2d 4c 7b 8a 4f 5c 9d 2a 1e 6a 7b 8c 9d 0e>);
  * // Returns: '3f1e2d4c-7b8a-4f5c-9d2a-1e6a7b8c9d0e'
  */
-export const bufferToUUID = (buffer) => {
-  // Convert buffer to a hex string and format as a UUID
+export const bufferToUUID = (input) => {
+  // Ensure we have a proper Buffer
+  let buffer;
+  if (Buffer.isBuffer(input)) {
+    buffer = input;
+  } else if (input && typeof input === "object") {
+    // Convert object with numeric keys to buffer
+    buffer = Buffer.from(Object.values(input));
+  } else {
+    throw new TypeError("Invalid buffer input for UUID conversion");
+  }
+
+  if (buffer.length !== 16) {
+    throw new Error(`Invalid buffer length for UUID: ${buffer.length}`);
+  }
+
+  // Convert buffer to hex string
   const hex = buffer.toString("hex");
+
+  // Format as UUID
   return [
-    hex.slice(0, 8), // 8 characters for the first section
-    hex.slice(8, 12), // 4 characters for the second section
-    hex.slice(12, 16), // 4 characters for the third section
-    hex.slice(16, 20), // 4 characters for the fourth section
-    hex.slice(20, 32), // 12 characters for the final section
-  ].join("-"); // Join the sections with dashes
+    hex.slice(0, 8), // 8 chars
+    hex.slice(8, 12), // 4 chars
+    hex.slice(12, 16), // 4 chars
+    hex.slice(16, 20), // 4 chars
+    hex.slice(20, 32), // 12 chars
+  ].join("-");
 };
 
 export const hexToDashedUUID = (hex) => {

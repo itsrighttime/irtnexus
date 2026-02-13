@@ -1,5 +1,5 @@
 import { DatabaseFactory } from "#database";
-import { generateBinaryUUID, logger } from "#utils";
+import { bufferToUUID, generateBinaryUUID, logger } from "#utils";
 
 /**
  * MySQLAuditStore
@@ -42,6 +42,10 @@ export class MySQLAuditStore {
    * @param {Date} [event.timestamp=new Date()]
    */
   async append(event) {
+
+    console.log("DDDD : MYSQL Audit Store Append")
+
+
     const sql = `
       INSERT INTO audit_logs (
         id,
@@ -94,14 +98,15 @@ export class MySQLAuditStore {
       event.timestamp ?? new Date(),
     ];
 
+
     logger.debug("MySQLAuditStore [APPEND]:", {
-      id: params[0],
-      tenantId: params[1],
-      userId: params[2],
+      id: params[0] && bufferToUUID(params[0]),
+      tenantId: params[1] && bufferToUUID(params[1]),
+      userId: params[2] && bufferToUUID(params[2]),
       eventType: params[4],
       resourceTable: params[12],
-      resourceId: params[13],
-      historyId: params[14],
+      resourceId: params[13] && bufferToUUID(params[13]),
+      historyId: params[14] && bufferToUUID(params[14]),
       timestamp: params[21],
     });
 

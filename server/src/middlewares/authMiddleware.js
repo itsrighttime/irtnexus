@@ -31,7 +31,8 @@ export const authMiddleware = async (req, res, next) => {
 
     next(); // Allow request to continue
   } catch (err) {
-    logger.error("Auth Middleware Error:", err);
+    logger.error("Auth Middleware Error:");
+    logger.error(err);
     res
       .status(500)
       .json({ message: "Internal Server Error in authentication" });

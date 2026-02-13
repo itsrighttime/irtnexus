@@ -9,12 +9,10 @@ import {
   requestContextMiddleware,
   authMiddleware,
 } from "#middlewares";
+import { prometheusRegistry } from "#services";
 
 const app = express();
 const server = http.createServer(app);
-
-// SECURITY MIDDLEWARE
-app.use(securityConfig());
 
 // Language detection
 app.use(languageMiddleware);
@@ -25,8 +23,20 @@ app.use(express.json());
 // Session middleware
 app.use(sessionConfig());
 
+// SECURITY MIDDLEWARE
+app.use(securityConfig());
+
+
 // Request context for observability
 app.use(requestContextMiddleware);
+
+
+app.get("/metrics", async (_req, res) => {
+  res.set("Content-Type", prometheusRegistry.contentType);
+  res.end(await prometheusRegistry.metrics());
+});
+
+
 
 // Public routes
 app.use("/v1/public", publicRoutes);

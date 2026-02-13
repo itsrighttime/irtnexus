@@ -38,6 +38,7 @@ export class PrometheusExporter {
       name: "http_requests_total",
       help: "Total HTTP requests",
       labelNames: ["method", "endpoint", "status_class"],
+      registers: [this.register],
     });
 
     /** Records request latency (ms) for each method and endpoint */
@@ -46,12 +47,14 @@ export class PrometheusExporter {
       help: "HTTP request latency",
       labelNames: ["method", "endpoint"],
       buckets: [25, 50, 100, 200, 400, 800, 1500, 3000], // latency buckets in ms
+      registers: [this.register],
     });
 
     /** Tracks current in-flight HTTP requests */
     this.inFlightRequests = new client.Gauge({
       name: "http_in_flight_requests",
       help: "Current in-flight HTTP requests",
+      registers: [this.register],
     });
 
     /* -------------------------
@@ -63,6 +66,7 @@ export class PrometheusExporter {
       name: "business_events_total",
       help: "Business events count",
       labelNames: ["event_name", "outcome"], // success/failure
+      registers: [this.register],
     });
 
     /** Counts system events by severity (info, warn, error) */
@@ -70,6 +74,7 @@ export class PrometheusExporter {
       name: "system_events_total",
       help: "System events by severity",
       labelNames: ["severity"],
+      registers: [this.register],
     });
 
     /* -------------------------
@@ -81,12 +86,14 @@ export class PrometheusExporter {
       name: "auth_events_total",
       help: "Authentication & authorization events",
       labelNames: ["event_type", "outcome"], // login, logout, token refresh
+      registers: [this.register],
     });
 
     /** Tracks access denied events separately */
     this.accessDeniedTotal = new client.Counter({
       name: "access_denied_total",
       help: "Access denied events",
+      registers: [this.register],
     });
 
     /* -------------------------
@@ -99,6 +106,7 @@ export class PrometheusExporter {
       help: "External dependency latency",
       labelNames: ["dependency", "outcome"], // success/failure
       buckets: [50, 100, 300, 500, 1000, 2000, 5000],
+      registers: [this.register],
     });
 
     /* -------------------------

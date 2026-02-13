@@ -234,7 +234,8 @@ export const registerUserStep2 = async (req, payload) =>
           "00018",
         );
       } catch (err) {
-        logger.error("Error creating user", { error: err, email });
+        logger.error(`Error creating user via ${email}`);
+        logger.error(err);
         if (err?.errno === 1062) {
           logger.warn("User already exists", { email });
           return RESPONSE.struct(

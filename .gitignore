@@ -31,3 +31,5 @@ dist-ssr
 .npmrc
 logs/
 .turbo/
+
+/data

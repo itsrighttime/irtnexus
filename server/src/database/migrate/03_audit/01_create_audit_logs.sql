@@ -11,9 +11,8 @@ CREATE TABLE IF NOT EXISTS audit_logs (
   http_path TEXT NULL,
   ip_address VARCHAR(45) NULL,
   user_agent TEXT NULL,
-  resource_table VARCHAR(64) NULL,   -- e.g., "users"
-  resource_id BINARY(16) NULL,   -- FK to entity
-  history_id BINARY(16) NULL,   -- FK to history_<entity> if applicable
+  
+  resource JSON NULL,   -- [{ resourceTable, resourceId, historyId }]
   outcome JSON NULL,   -- { success: true, message: "" }
   metadata JSON NULL,   -- extra metadata
   performance JSON NULL,   -- timings / latency
@@ -27,3 +26,4 @@ CREATE TABLE IF NOT EXISTS audit_logs (
   INDEX idx_actor_user (user_id),
   INDEX idx_event_type (event_type)
 );
+

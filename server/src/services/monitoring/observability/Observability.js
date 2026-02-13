@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { EVENT_TYPES } from "./constants.js";
 import { maskSensitiveData } from "./utils/masking.js";
 import { ACTION, HEADERS } from "#config";
-import { generateBinaryUUID, logger } from "#utils";
+import { bufferToUUID, generateBinaryUUID, logger } from "#utils";
 
 /**
  * Observability
@@ -72,7 +72,7 @@ export class Observability {
       action: { name: ACTION.NAME.LOG, type: ACTION.TYPE.LOG },
 
       actor: ctx.actor,
-      request: this.#extractRequestFromContext(ctx),
+      request: this.#extractRequestFromContext(ctx, req),
       performance: { durationMs },
       outcome: {
         success,
@@ -227,7 +227,7 @@ export class Observability {
           await emitter.emit(safeEvent);
         } catch (err) {
           // Observability must never crash the app
-          logger.error({ msg: "Observability emitter failure:", err });
+          logger.error(err);
         }
       });
     }
@@ -258,11 +258,6 @@ export class Observability {
     return {
       id: generateBinaryUUID(), // Unique event ID
 
-      // Resource-related fields
-      resourceTable: event.resource?.resourceTable,
-      resourceId: event.resource?.resourceId,
-      historyId: event.resource?.historyId,
-
       // Actor info
       tenantId: event.actor?.tenantId,
       userId: event.actor?.userId,
@@ -280,10 +275,10 @@ export class Observability {
       ipAddress: event.request.ip,
       userAgent: event.request.userAgent,
 
-      severity: event.severity || null,
-
       timestamp: event.timestamp ?? new Date(),
       audit: Boolean(event.audit),
+
+      resource: event.resource,
       metadata:
         {
           ...event.metadata,
@@ -310,16 +305,16 @@ export class Observability {
    *   @property {string} ip
    *   @property {string} userAgent
    */
-  #extractRequestFromContext(ctx) {
+  #extractRequestFromContext(ctx, req = {}) {
     if (!ctx) return {};
 
     return {
       requestId: ctx.requestId,
       traceId: ctx.traceId,
-      method: req.method,
-      path: req.originalUrl,
-      ip: req.ip,
-      userAgent: req.headers[HEADERS.USER_AGENT],
+      method: req?.method,
+      path: req?.originalUrl,
+      ip: req?.ip,
+      userAgent: req?.headers[HEADERS.USER_AGENT],
     };
   }
 

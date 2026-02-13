@@ -60,10 +60,8 @@ export const sendOTPController = async (req, res) => {
 
     return RESPONSE.send(req, res, result);
   } catch (err) {
-    logger.error("Unexpected error in sendOTPController", {
-      requestId,
-      error: err,
-    });
+    logger.error(`Unexpected error in sendOTPController : ${requestId}`);
+    logger.error(err);
     return RESPONSE.error(req, res, err.message, "0001A");
   }
 };
@@ -126,10 +124,9 @@ export const registerUserController = async (req, res) => {
 
     return RESPONSE.send(req, res, result);
   } catch (err) {
-    logger.error("Unexpected error in registerUserController", {
-      requestId,
-      error: err,
-    });
+    logger.error(`Unexpected error in registerUserController : ${requestId}`);
+    logger.error(err);
+
     return RESPONSE.error(req, res, err.message, "0001B");
   }
 };

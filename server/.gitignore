@@ -32,3 +32,5 @@ dist-ssr
 /logs
 email-previews/
 backups/
+
+/prometheus/data/

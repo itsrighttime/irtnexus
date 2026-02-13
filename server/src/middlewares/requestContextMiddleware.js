@@ -59,20 +59,23 @@ export const requestContextMiddleware = (req, res, next) => {
     const durationMs = Date.now() - startTime;
 
     // Record Prometheus metrics
-    observability.prometheus?.endRequest({
-      method: req.method,
-      endpoint: req.route?.path || req.originalUrl || "unknown",
-      statusCode: res.statusCode,
-      durationMs,
-    });
+    const ignoredPaths = ["/metrics", "/health", "/internal"];
+    if (!ignoredPaths.includes(req.route?.path || req.originalUrl)) {
+      observability.prometheus?.endRequest({
+        method: req.method,
+        endpoint: req.route?.path || req.originalUrl || "unknown",
+        statusCode: res.statusCode,
+        durationMs,
+      });
 
-    // Centralized structured request logging
-    observability.logRequest({
-      req,
-      res,
-      durationMs,
-      error: res.locals?.error,
-    });
+      // Centralized structured request logging
+      observability.logRequest({
+        req,
+        res,
+        durationMs,
+        error: res.locals?.error,
+      });
+    }
   });
 
   next();

@@ -20,16 +20,37 @@
  * // { username: 'johndoe', password: '***MASKED***', profile: { email: '***MASKED***' } }
  */
 export function maskSensitiveData(obj, maskFields = []) {
+  // If it's null or not an object, return as-is
   if (obj === null || typeof obj !== "object") return obj;
 
+  // If it's a Buffer, Date, RegExp, or similar, return as-is
+  if (Buffer.isBuffer(obj) || obj instanceof Date || obj instanceof RegExp)
+    return obj;
+
+  // Only clone objects/arrays to mask nested fields
   const clone = Array.isArray(obj) ? [] : {};
 
   for (const key of Object.keys(obj)) {
     if (maskFields.includes(key)) {
+      // Mask only if the key is in maskFields
       clone[key] = "***MASKED***";
     } else {
-      // Recursively mask nested objects/arrays
-      clone[key] = maskSensitiveData(obj[key], maskFields);
+      // Leave everything else unchanged
+      const value = obj[key];
+
+      // If the value is an object/array, recurse
+      if (
+        value &&
+        typeof value === "object" &&
+        !Buffer.isBuffer(value) &&
+        !(value instanceof Date) &&
+        !(value instanceof RegExp)
+      ) {
+        clone[key] = maskSensitiveData(value, maskFields);
+      } else {
+        // Primitive or special type, leave as-is
+        clone[key] = value;
+      }
     }
   }
 

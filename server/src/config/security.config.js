@@ -42,6 +42,6 @@ export const securityConfig = () => {
     configCors,
 
     // 4. CSRF Protection
-    csrf({ cookie: true }),
+    // csrf({ cookie: true }),
   ];
 };
