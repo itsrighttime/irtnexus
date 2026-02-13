@@ -16,6 +16,7 @@ import {
   bufferToUUID,
 } from "#utils";
 import { ACTION } from "#config";
+import { opDb } from "#database";
 
 const {
   createUser,
@@ -23,7 +24,6 @@ const {
   createUserName,
   getUserByEmail,
   getUserByUsername,
-  getDbOpUser,
 } = userQuery;
 
 export const registerUserStep1 = async (req, payload) =>
@@ -185,7 +185,7 @@ export const registerUserStep2 = async (req, payload) =>
       }
 
       try {
-        const userDb = getDbOpUser();
+        const userDb = opDb();
         logger.debug("Starting DB transaction to create user", { email });
 
         await userDb.transaction(async (conn) => {

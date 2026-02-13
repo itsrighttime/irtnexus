@@ -1,10 +1,7 @@
-TODO : 
+TODO :
 
-- Check and remove other then auditLog mentiod in Observalibility if not in busniess need     
-- Update the Observality this.#logEvent(), should have all the required daat
-- Check requestContextMiddleware to support the logEvent
-- Check executeAction to support logEvent
-- Check to avoid the dual data insertion in audit_log one by middleware and other by excecuteAction
-
-- Need to update the Resource as multiple tables can affectied in the single response 
-- Okay, the problem is with binary UUIDs because we need to proper conversion, convert that UUID to binary and binary to UUID based on the place where we are referring that particular thing because we are, you know, passing into multiple things. So yeah, we are currently focused on MySQL store.
+- Add sampleRate in the AuditAttached.js
+- Need to update the Resource as multiple tables can affected in the single response
+- Create Graphana Dashboard
+- Make Sure to align the auditlogs with schema in the core business logic
+- Security : Make Grafana and Premeteus by protected routes or Something

@@ -7,15 +7,6 @@ import { DatabaseFactory } from "#database";
 const opDb = DatabaseFactory.userOp();
 
 /**
- * Returns the default user database connection.
- *
- * @returns {Object} Database connection instance
- */
-export const getDbOpUser = () => {
-  return opDb;
-};
-
-/**
  * Creates a new user record.
  *
  * @param {Object} params

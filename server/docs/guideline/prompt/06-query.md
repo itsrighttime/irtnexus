@@ -29,8 +29,8 @@ All queries must support both normal and transactional execution by accepting a 
 export const insertUser = async (payload, conn) => {
   const { name, email } = payload;
   const sql = `INSERT INTO users (name, email) VALUES (?, ?)`;
-  const [result] = await (conn || db).execute(sql, [name, email]);
-  return extractRows([result]);
+  const result = await (conn || db).execute(sql, [name, email]);
+  return extractRows(result);
 };
 ```
 
@@ -40,8 +40,8 @@ export const insertUser = async (payload, conn) => {
 export const getUserById = async (payload, conn) => {
   const { userId } = payload;
   const sql = `SELECT * FROM users WHERE id = ?`;
-  const [rows] = await (conn || db).execute(sql, [userId]);
-  return extractRows([rows]);
+  const rows = await (conn || db).execute(sql, [userId]);
+  return extractRows(rows);
 };
 ```
 
@@ -51,8 +51,8 @@ export const getUserById = async (payload, conn) => {
 export const updateUserEmail = async (payload, conn) => {
   const { userId, email } = payload;
   const sql = `UPDATE users SET email = ? WHERE id = ?`;
-  const [result] = await (conn || db).execute(sql, [email, userId]);
-  return extractRows([result]);
+  const result = await (conn || db).execute(sql, [email, userId]);
+  return extractRows(result);
 };
 ```
 
