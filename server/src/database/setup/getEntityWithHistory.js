@@ -5,17 +5,20 @@ import { bufferToUUID } from "#utils";
 /* Multi-Tenant Entity With History                    */
 /* -------------------------------------------------- */
 
-export async function getEntityWithHistory({
-  table,
-  historyTable,
-  idField,
-  tenantId,
-  idValue,
-  order = "ASC", // ASC = oldest first
-  limit = 100, // pagination support
-  offset = 0,
-}) {
-  const db = DatabaseFactory.userReport(); // read-only user
+export async function getEntityWithHistory(
+  {
+    table,
+    historyTable,
+    idField,
+    tenantId,
+    idValue,
+    order = "ASC", // ASC = oldest first
+    limit = 100, // pagination support
+    offset = 0,
+  },
+  conn = null,
+) {
+  const db = conn ?? DatabaseFactory.userReport(); // read-only user
 
   /* -------------------- Fetch Current -------------------- */
 

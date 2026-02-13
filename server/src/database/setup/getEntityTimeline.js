@@ -1,14 +1,11 @@
 import { DatabaseFactory } from "#database/setup/DatabaseFactory.js";
 import { bufferToUUID } from "#utils";
 
-export async function getEntityTimeline({
-  table,
-  historyTable,
-  idField,
-  tenantId,
-  idValue,
-}) {
-  const db = DatabaseFactory.userReport();
+export async function getEntityTimeline(
+  { table, historyTable, idField, tenantId, idValue },
+  conn = null,
+) {
+  const db = conn ?? DatabaseFactory.userReport();
 
   // Fetch history in chronological order
   const historyRows = await db.select(

@@ -1,7 +1,6 @@
 import { DatabaseFactory } from "#database/setup/DatabaseFactory.js";
 import { generateBinaryUUID, logger, bufferToUUID } from "#utils";
 
-
 /* -------------------------------------------------- */
 /* Dynamic Operational DB Resolver                     */
 /* -------------------------------------------------- */
@@ -56,19 +55,22 @@ function buildChangedOnlyDiff(oldRow = {}, newData = {}) {
 /* Generic Mutate With Audit                           */
 /* -------------------------------------------------- */
 
-export async function mutateWithAudit({
-  action, // create | update | delete | restore
-  table,
-  historyTable,
-  idField,
-  idValue,
-  tenantId = null,
-  data = {},
-  changedBy,
-}) {
+export async function mutateWithAudit(
+  {
+    action, // create | update | delete | restore
+    table,
+    historyTable,
+    idField,
+    idValue,
+    tenantId = null,
+    data = {},
+    changedBy,
+  },
+  conn = null,
+) {
   const opDb = resolveOpDb(table);
 
-  return opDb.transaction(async (conn) => {
+  const executeMutation = async (connection) => {
     let diff = {};
     let changedData = {};
 
@@ -91,7 +93,7 @@ export async function mutateWithAudit({
         "NOW()",
       ];
 
-      await conn.execute(
+      await connection.execute(
         `INSERT INTO ${table} (${columns.join(", ")})
          VALUES (${placeholders.join(", ")})`,
         [...values, ...Object.values(data)],
@@ -105,7 +107,7 @@ export async function mutateWithAudit({
     /* ================= UPDATE ================= */
 
     if (action === "update") {
-      const oldRow = await fetchExistingRow(conn, {
+      const oldRow = await fetchExistingRow(connection, {
         table,
         idField,
         idValue,
@@ -118,14 +120,14 @@ export async function mutateWithAudit({
       changedData = result.changedData;
 
       if (Object.keys(changedData).length === 0) {
-        return; // nothing changed → no audit row
+        return;
       }
 
       const updateClause = Object.keys(changedData)
         .map((col) => `${col} = ?`)
         .join(", ");
 
-      await conn.execute(
+      await connection.execute(
         `UPDATE ${table}
          SET ${updateClause}
          WHERE ${idField} = ?`,
@@ -136,11 +138,13 @@ export async function mutateWithAudit({
     /* ================= DELETE / RESTORE ================= */
 
     if (action === "delete" || action === "restore") {
-      const oldRow = await fetchExistingRow(conn, {
+      const oldRow = await fetchExistingRow(connection, {
         table,
         idField,
         idValue,
       });
+
+      if (!oldRow) throw new Error("Record not found");
 
       const newValue = action === "delete";
 
@@ -155,7 +159,7 @@ export async function mutateWithAudit({
         },
       };
 
-      await conn.execute(
+      await connection.execute(
         `UPDATE ${table}
          SET is_deleted = ?
          WHERE ${idField} = ?`,
@@ -163,12 +167,10 @@ export async function mutateWithAudit({
       );
     }
 
-    /* -------------------------------------------------- */
-    /* Insert Audit Row ONLY if something changed         */
-    /* -------------------------------------------------- */
+    /* ================= AUDIT INSERT ================= */
 
     if (Object.keys(diff).length > 0) {
-      await conn.execute(
+      await connection.execute(
         `INSERT INTO ${historyTable}
          (history_id, tenant_id, ${idField},
           changed_columns, changed_by, action_type, timestamp)
@@ -187,5 +189,13 @@ export async function mutateWithAudit({
     logger.info(
       `${action.toUpperCase()} audited for ${table} → ${bufferToUUID(idValue)}`,
     );
-  });
+  };
+
+  // If connection exists → use it
+  if (conn) {
+    return executeMutation(conn);
+  }
+
+  // Otherwise create new transaction
+  return opDb.transaction(executeMutation);
 }

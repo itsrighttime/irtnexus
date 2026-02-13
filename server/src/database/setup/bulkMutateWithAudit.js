@@ -96,19 +96,22 @@ async function fetchExistingRows(conn, table, idField, idValues) {
  * @param {string|null} params.tenantId - Optional tenant ID for multi-tenant setups.
  * @param {string} params.changedBy - Identifier for the user making changes.
  */
-export async function bulkMutateWithAudit({
-  actions, // [{ action, idValue, data }]
-  table,
-  historyTable,
-  idField,
-  tenantId = null,
-  changedBy,
-}) {
+export async function bulkMutateWithAudit(
+  {
+    actions, // [{ action, idValue, data }]
+    table,
+    historyTable,
+    idField,
+    tenantId = null,
+    changedBy,
+  },
+  conn = null,
+) {
   if (!actions.length) return; // Nothing to process
 
   const opDb = resolveOpDb(table); // Get DB connection dynamically
 
-  await opDb.transaction(async (conn) => {
+  const executeMutation = async (connection) => {
     const auditRows = [];
 
     // -------------------- Fetch old rows for update/delete/restore --------------------
@@ -122,7 +125,7 @@ export async function bulkMutateWithAudit({
       .map((a) => a.idValue);
 
     const oldRows = await fetchExistingRows(
-      conn,
+      connection,
       table,
       idField,
       updateOrDeleteIds,
@@ -149,7 +152,7 @@ export async function bulkMutateWithAudit({
       ]);
 
       // Execute bulk insert
-      await conn.execute(
+      await connection.execute(
         `INSERT INTO ${table} (${columns.join(",")}) VALUES ${placeholders}`,
         values,
       );
@@ -213,7 +216,7 @@ export async function bulkMutateWithAudit({
           updates.flatMap((u) => [u.id, u.value]),
         );
 
-        await conn.execute(
+        await connection.execute(
           `UPDATE ${table} SET ${setClauses} WHERE ${idField} IN (${allIds.map(() => "?").join(",")})`,
           [...values, ...allIds],
         );
@@ -231,7 +234,7 @@ export async function bulkMutateWithAudit({
       }));
 
       const ids = idMap.map((i) => i.id);
-      await conn.execute(
+      await connection.execute(
         `UPDATE ${table} SET is_deleted = CASE ${idField} ${idMap.map(() => "WHEN ? THEN ?").join(" ")} ELSE is_deleted END WHERE ${idField} IN (${ids.map(() => "?").join(",")})`,
         [...idMap.flatMap((i) => [i.id, i.value]), ...ids],
       );
@@ -258,12 +261,20 @@ export async function bulkMutateWithAudit({
       const placeholders = auditRows
         .map(() => "(?, ?, ?, ?, ?, ?, NOW())")
         .join(", ");
-      await conn.execute(
+      await connection.execute(
         `INSERT INTO ${historyTable} (history_id, tenant_id, ${idField}, changed_columns, changed_by, action_type, timestamp) VALUES ${placeholders}`,
         auditRows.flat(),
       );
     }
 
     logger.info(`Bulk audited ${actions.length} actions for ${table}`);
-  });
+  };
+
+  // If connection exists → use it
+  if (conn) {
+    return executeMutation(conn);
+  }
+
+  // Otherwise create new transaction
+  return opDb.transaction(executeMutation);
 }

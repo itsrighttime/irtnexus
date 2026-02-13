@@ -1,15 +1,11 @@
 import { bufferToUUID } from "#utils";
 import { DatabaseFactory } from "./DatabaseFactory";
 
-export async function getTenantAuditFeed({
-  historyTable,
-  idField,
-  tenantId,
-  limit = 100,
-  offset = 0,
-  order = "DESC",
-}) {
-  const db = DatabaseFactory.userReport();
+export async function getTenantAuditFeed(
+  { historyTable, idField, tenantId, limit = 100, offset = 0, order = "DESC" },
+  conn = null,
+) {
+  const db = conn ?? DatabaseFactory.userReport();
 
   const rows = await db.select(
     `SELECT history_id,

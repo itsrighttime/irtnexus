@@ -1,11 +1,8 @@
-export async function getEntityStateAt({
-  historyTable,
-  idField,
-  tenantId,
-  idValue,
-  atTimestamp,
-}) {
-  const db = DatabaseFactory.userReport();
+export async function getEntityStateAt(
+  { historyTable, idField, tenantId, idValue, atTimestamp },
+  conn = null,
+) {
+  const db = conn ?? DatabaseFactory.userReport();
 
   const historyRows = await db.select(
     `SELECT changed_columns
