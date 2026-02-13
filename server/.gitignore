@@ -33,4 +33,4 @@ dist-ssr
 email-previews/
 backups/
 
-/prometheus/data/
+/prometheus/
