@@ -1,7 +1,6 @@
 import crypto from "crypto";
 import { BaseAuthStrategy } from "./baseAuth.js";
 import { authQuery } from "#queries";
-import { opDb } from "#database";
 
 const { createCredential, findActiveCredential, revokeCredential } = authQuery;
 
@@ -16,7 +15,7 @@ export class MagicLinkStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* SETUP - generate a magic link                         */
   /* ===================================================== */
-  async setup(userId, payload) {
+  async setup(userId, payload, conn = null) {
     const { tenantId, changedBy } = payload;
 
     if (!tenantId || !changedBy) {
@@ -30,16 +29,16 @@ export class MagicLinkStrategy extends BaseAuthStrategy {
     const token = crypto.randomBytes(32).toString("hex");
     const expiresAt = new Date(Date.now() + this.linkExpiryMinutes * 60 * 1000);
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       // Revoke any existing active magic links
       const existing = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (existing) {
         await revokeCredential(
           { tenantId, credentialId: existing.credential_id, changedBy },
-          conn,
+          trx,
         );
       }
 
@@ -53,7 +52,7 @@ export class MagicLinkStrategy extends BaseAuthStrategy {
           changedBy,
           metadata: { token, expiresAt: expiresAt.toISOString() },
         },
-        conn,
+        trx,
       );
 
       return {
@@ -69,51 +68,56 @@ export class MagicLinkStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* AUTHENTICATE                                          */
   /* ===================================================== */
-  async authenticate(userId, payload) {
+  async authenticate(userId, payload, conn = null) {
     const { tenantId, token } = payload;
 
     if (!tenantId || !token) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const credential = await findActiveCredential({
-      tenantId,
-      userId,
-      credentialType: this.credentialType,
-    });
+    const result = await this.withTransaction(conn, async (trx) => {
+      const credential = await findActiveCredential(
+        {
+          tenantId,
+          userId,
+          credentialType: this.credentialType,
+        },
+        trx,
+      );
 
-    if (!credential) {
-      return { success: false, code: "INVALID_LINK" };
-    }
+      if (!credential) {
+        return { success: false, code: "INVALID_LINK" };
+      }
 
-    const { token: storedToken, expiresAt } = credential.metadata || {};
+      const { token: storedToken, expiresAt } = credential.metadata || {};
 
-    if (storedToken !== token) {
-      return { success: false, code: "INVALID_LINK" };
-    }
+      if (storedToken !== token) {
+        return { success: false, code: "INVALID_LINK" };
+      }
 
-    if (new Date() > new Date(expiresAt)) {
-      return { success: false, code: "LINK_EXPIRED" };
-    }
+      if (new Date() > new Date(expiresAt)) {
+        return { success: false, code: "LINK_EXPIRED" };
+      }
 
-    // Magic link is single-use → revoke immediately
-    await opDb.transaction(async (conn) => {
+      // Magic link is single-use → revoke immediately
       await revokeCredential(
         { tenantId, credentialId: credential.credential_id, changedBy: userId },
-        conn,
+        trx,
       );
+
+      return {
+        success: true,
+        code: "AUTH_SUCCESS",
+        data: {
+          userId,
+          tenantId,
+          credentialId: credential.credential_id,
+          method: this.credentialType,
+        },
+      };
     });
 
-    return {
-      success: true,
-      code: "AUTH_SUCCESS",
-      data: {
-        userId,
-        tenantId,
-        credentialId: credential.credential_id,
-        method: this.credentialType,
-      },
-    };
+    return result;
   }
 
   /* ===================================================== */
@@ -130,24 +134,24 @@ export class MagicLinkStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* REVOKE                                                */
   /* ===================================================== */
-  async revoke(userId, payload) {
+  async revoke(userId, payload, conn = null) {
     const { tenantId, changedBy } = payload;
 
     if (!tenantId || !changedBy) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
 
       if (!credential) return { success: false, code: "CREDENTIAL_NOT_FOUND" };
 
       await revokeCredential(
         { tenantId, credentialId: credential.credential_id, changedBy },
-        conn,
+        trx,
       );
 
       return {

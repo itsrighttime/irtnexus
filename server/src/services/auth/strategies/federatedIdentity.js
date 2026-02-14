@@ -1,6 +1,5 @@
 import { BaseAuthStrategy } from "./baseAuth.js";
 import { authQuery } from "#queries";
-import { opDb } from "#database";
 
 const {
   createCredential,
@@ -19,7 +18,7 @@ export class FederatedIdentityStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* SETUP - register federated identity                  */
   /* ===================================================== */
-  async setup(userId, payload) {
+  async setup(userId, payload, conn = null) {
     const { tenantId, provider, externalUserId, changedBy } = payload;
 
     if (!tenantId || !provider || !externalUserId || !changedBy) {
@@ -31,16 +30,16 @@ export class FederatedIdentityStrategy extends BaseAuthStrategy {
       };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       // Revoke existing federated identity for this provider
       const existing = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (existing) {
         await revokeCredential(
           { tenantId, credentialId: existing.credential_id, changedBy },
-          conn,
+          trx,
         );
       }
 
@@ -53,7 +52,7 @@ export class FederatedIdentityStrategy extends BaseAuthStrategy {
           changedBy,
           metadata: { provider, externalUserId },
         },
-        conn,
+        trx,
       );
 
       return {
@@ -69,7 +68,7 @@ export class FederatedIdentityStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* AUTHENTICATE - validate federated login              */
   /* ===================================================== */
-  async authenticate(userId, payload) {
+  async authenticate(userId, payload, conn = null) {
     const { tenantId, provider, externalUserId } = payload;
 
     if (!tenantId || !provider || !externalUserId) {
@@ -80,7 +79,7 @@ export class FederatedIdentityStrategy extends BaseAuthStrategy {
       tenantId,
       userId,
       credentialType: this.credentialType,
-    });
+    }, conn);
 
     if (!credential) {
       return { success: false, code: "CREDENTIAL_NOT_FOUND" };
@@ -109,17 +108,17 @@ export class FederatedIdentityStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* UPDATE - update federated identity mapping          */
   /* ===================================================== */
-  async update(userId, payload) {
+  async update(userId, payload, conn = null) {
     const { tenantId, provider, externalUserId, changedBy } = payload;
 
     if (!tenantId || !provider || !externalUserId || !changedBy) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (!credential) return { success: false, code: "CREDENTIAL_NOT_FOUND" };
 
@@ -130,7 +129,7 @@ export class FederatedIdentityStrategy extends BaseAuthStrategy {
           data: { metadata: { provider, externalUserId } },
           changedBy,
         },
-        conn,
+        trx,
       );
 
       return {
@@ -146,22 +145,22 @@ export class FederatedIdentityStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* REVOKE / DELETE                                     */
   /* ===================================================== */
-  async revoke(userId, payload) {
+  async revoke(userId, payload, conn = null) {
     const { tenantId, changedBy } = payload;
 
     if (!tenantId || !changedBy)
       return { success: false, code: "INVALID_INPUT" };
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (!credential) return { success: false, code: "CREDENTIAL_NOT_FOUND" };
 
       await revokeCredential(
         { tenantId, credentialId: credential.credential_id, changedBy },
-        conn,
+        trx,
       );
 
       return {

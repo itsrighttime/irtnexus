@@ -1,7 +1,6 @@
 import { totp } from "otplib";
 import { BaseAuthStrategy } from "./baseAuth.js";
 import { authQuery } from "#queries";
-import { opDb } from "#database";
 import { crypto } from "crypto";
 
 const { createCredential, findActiveCredential, revokeCredential } = authQuery;
@@ -18,7 +17,7 @@ export class TotpStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* SETUP - generate a TOTP secret for the user          */
   /* ===================================================== */
-  async setup(userId, payload) {
+  async setup(userId, payload, conn = null) {
     const { tenantId, changedBy, issuer = "MyApp" } = payload;
 
     if (!tenantId || !changedBy) {
@@ -31,16 +30,16 @@ export class TotpStrategy extends BaseAuthStrategy {
 
     const secret = totp.generateSecret();
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       // Revoke existing TOTP credentials
       const existing = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (existing) {
         await revokeCredential(
           { tenantId, credentialId: existing.credential_id, changedBy },
-          conn,
+          trx,
         );
       }
 
@@ -54,7 +53,7 @@ export class TotpStrategy extends BaseAuthStrategy {
           changedBy,
           metadata: { secret, issuer, lastUsed: null },
         },
-        conn,
+        trx,
       );
 
       return {
@@ -70,42 +69,45 @@ export class TotpStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* AUTHENTICATE - verify user-provided TOTP code        */
   /* ===================================================== */
-  async authenticate(userId, payload) {
+  async authenticate(userId, payload, conn = null) {
     const { tenantId, token } = payload;
 
     if (!tenantId || !token) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const credential = await findActiveCredential({
-      tenantId,
-      userId,
-      credentialType: this.credentialType,
-    });
+    const result = await this.withTransaction(conn, async (trx) => {
+      const credential = await findActiveCredential(
+        {
+          tenantId,
+          userId,
+          credentialType: this.credentialType,
+        },
+        trx,
+      );
 
-    if (!credential) {
-      return { success: false, code: "CREDENTIAL_NOT_FOUND" };
-    }
+      if (!credential) {
+        return { success: false, code: "CREDENTIAL_NOT_FOUND" };
+      }
 
-    const { secret, lastUsed } = credential.metadata || {};
+      const { secret, lastUsed } = credential.metadata || {};
 
-    if (!secret) {
-      return { success: false, code: "TOTP_NOT_SETUP" };
-    }
+      if (!secret) {
+        return { success: false, code: "TOTP_NOT_SETUP" };
+      }
 
-    // Prevent reuse of same token in same interval
-    if (lastUsed === token) {
-      return { success: false, code: "TOTP_ALREADY_USED" };
-    }
+      // Prevent reuse of same token in same interval
+      if (lastUsed === token) {
+        return { success: false, code: "TOTP_ALREADY_USED" };
+      }
 
-    const isValid = totp.check(token, secret);
+      const isValid = totp.check(token, secret);
 
-    if (!isValid) {
-      return { success: false, code: "INVALID_TOTP" };
-    }
+      if (!isValid) {
+        return { success: false, code: "INVALID_TOTP" };
+      }
 
-    // Update lastUsed to prevent reuse
-    await opDb.transaction(async (conn) => {
+      // Update lastUsed to prevent reuse
       await authQuery.updateCredential(
         {
           tenantId,
@@ -113,26 +115,28 @@ export class TotpStrategy extends BaseAuthStrategy {
           data: { metadata: { ...credential.metadata, lastUsed: token } },
           changedBy: userId,
         },
-        conn,
+        trx,
       );
+
+      return {
+        success: true,
+        code: "AUTH_SUCCESS",
+        data: {
+          userId,
+          tenantId,
+          credentialId: credential.credential_id,
+          method: this.credentialType,
+        },
+      };
     });
 
-    return {
-      success: true,
-      code: "AUTH_SUCCESS",
-      data: {
-        userId,
-        tenantId,
-        credentialId: credential.credential_id,
-        method: this.credentialType,
-      },
-    };
+    return result;
   }
 
   /* ===================================================== */
   /* UPDATE - TOTP secret rotation                        */
   /* ===================================================== */
-  async update(userId, payload) {
+  async update(userId, payload, conn = null) {
     const { tenantId, changedBy } = payload;
 
     if (!tenantId || !changedBy) {
@@ -142,10 +146,10 @@ export class TotpStrategy extends BaseAuthStrategy {
     // Simply generate a new TOTP secret and replace existing
     const secret = totp.generateSecret();
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
 
       if (!credential) {
@@ -161,7 +165,7 @@ export class TotpStrategy extends BaseAuthStrategy {
           },
           changedBy,
         },
-        conn,
+        trx,
       );
 
       return {
@@ -177,24 +181,24 @@ export class TotpStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* REVOKE / DELETE                                      */
   /* ===================================================== */
-  async revoke(userId, payload) {
+  async revoke(userId, payload, conn = null) {
     const { tenantId, changedBy } = payload;
 
     if (!tenantId || !changedBy) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
 
       if (!credential) return { success: false, code: "CREDENTIAL_NOT_FOUND" };
 
       await revokeCredential(
         { tenantId, credentialId: credential.credential_id, changedBy },
-        conn,
+        trx,
       );
 
       return {
@@ -205,10 +209,6 @@ export class TotpStrategy extends BaseAuthStrategy {
     });
 
     return result;
-  }
-
-  async delete(userId, payload) {
-    return this.revoke(userId, payload);
   }
 
   async verify() {

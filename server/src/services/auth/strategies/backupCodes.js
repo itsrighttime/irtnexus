@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import { BaseAuthStrategy } from "./baseAuth.js";
 import { authQuery } from "#queries";
-import { opDb } from "#database";
 import { generateBinaryUUID } from "#utils";
 
 const {
@@ -22,7 +21,7 @@ export class BackupCodesStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* SETUP - create backup codes for user                 */
   /* ===================================================== */
-  async setup(userId, payload) {
+  async setup(userId, payload, conn = null) {
     const { tenantId, codes = [], changedBy } = payload;
 
     if (!tenantId || !changedBy || codes.length === 0) {
@@ -37,16 +36,16 @@ export class BackupCodesStrategy extends BaseAuthStrategy {
       codes.map((c) => bcrypt.hash(c, this.saltRounds)),
     );
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       // Revoke any existing backup codes
       const existing = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (existing) {
         await revokeCredential(
           { tenantId, credentialId: existing.credential_id, changedBy },
-          conn,
+          trx,
         );
       }
 
@@ -61,7 +60,7 @@ export class BackupCodesStrategy extends BaseAuthStrategy {
             codes: hashedCodes.map((h) => ({ hash: h, used: false })),
           },
         },
-        conn,
+        trx,
       );
 
       return {
@@ -77,42 +76,45 @@ export class BackupCodesStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* AUTHENTICATE - use a backup code                     */
   /* ===================================================== */
-  async authenticate(userId, payload) {
+  async authenticate(userId, payload, conn = null) {
     const { tenantId, code } = payload;
 
     if (!tenantId || !code) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const credential = await findActiveCredential({
-      tenantId,
-      userId,
-      credentialType: this.credentialType,
-    });
+    const result = await this.withTransaction(conn, async (trx) => {
+      const credential = await findActiveCredential(
+        {
+          tenantId,
+          userId,
+          credentialType: this.credentialType,
+        },
+        trx,
+      );
 
-    if (!credential) {
-      return { success: false, code: "CREDENTIAL_NOT_FOUND" };
-    }
-
-    const metadata = credential.metadata || {};
-    const codes = metadata.codes || [];
-
-    // Find first unused code that matches
-    let matchedIndex = -1;
-    for (let i = 0; i < codes.length; i++) {
-      if (!codes[i].used && (await bcrypt.compare(code, codes[i].hash))) {
-        matchedIndex = i;
-        break;
+      if (!credential) {
+        return { success: false, code: "CREDENTIAL_NOT_FOUND" };
       }
-    }
 
-    if (matchedIndex === -1) {
-      return { success: false, code: "INVALID_CODE" };
-    }
+      const metadata = credential.metadata || {};
+      const codes = metadata.codes || [];
 
-    // Mark code as used
-    codes[matchedIndex].used = true;
-    await opDb.transaction(async (conn) => {
+      // Find first unused code that matches
+      let matchedIndex = -1;
+      for (let i = 0; i < codes.length; i++) {
+        if (!codes[i].used && (await bcrypt.compare(code, codes[i].hash))) {
+          matchedIndex = i;
+          break;
+        }
+      }
+
+      if (matchedIndex === -1) {
+        return { success: false, code: "INVALID_CODE" };
+      }
+
+      // Mark code as used
+      codes[matchedIndex].used = true;
       await updateCredential(
         {
           tenantId,
@@ -120,26 +122,28 @@ export class BackupCodesStrategy extends BaseAuthStrategy {
           data: { metadata: { ...metadata, codes } },
           changedBy: userId,
         },
-        conn,
+        trx,
       );
+
+      return {
+        success: true,
+        code: "AUTH_SUCCESS",
+        data: {
+          userId,
+          tenantId,
+          credentialId: credential.credential_id,
+          method: this.credentialType,
+        },
+      };
     });
 
-    return {
-      success: true,
-      code: "AUTH_SUCCESS",
-      data: {
-        userId,
-        tenantId,
-        credentialId: credential.credential_id,
-        method: this.credentialType,
-      },
-    };
+    return result;
   }
 
   /* ===================================================== */
   /* UPDATE - replace backup codes entirely              */
   /* ===================================================== */
-  async update(userId, payload) {
+  async update(userId, payload, conn = null) {
     const { tenantId, codes = [], changedBy } = payload;
 
     if (!tenantId || !changedBy || codes.length === 0) {
@@ -150,10 +154,10 @@ export class BackupCodesStrategy extends BaseAuthStrategy {
       codes.map((c) => bcrypt.hash(c, this.saltRounds)),
     );
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
 
       if (!credential) return { success: false, code: "CREDENTIAL_NOT_FOUND" };
@@ -169,7 +173,7 @@ export class BackupCodesStrategy extends BaseAuthStrategy {
           },
           changedBy,
         },
-        conn,
+        trx,
       );
 
       return {
@@ -185,22 +189,22 @@ export class BackupCodesStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* REVOKE / DELETE                                     */
   /* ===================================================== */
-  async revoke(userId, payload) {
+  async revoke(userId, payload, conn = null) {
     const { tenantId, changedBy } = payload;
 
     if (!tenantId || !changedBy)
       return { success: false, code: "INVALID_INPUT" };
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (!credential) return { success: false, code: "CREDENTIAL_NOT_FOUND" };
 
       await revokeCredential(
         { tenantId, credentialId: credential.credential_id, changedBy },
-        conn,
+        trx,
       );
 
       return {
@@ -212,7 +216,6 @@ export class BackupCodesStrategy extends BaseAuthStrategy {
 
     return result;
   }
-
 
   async verify() {
     return {

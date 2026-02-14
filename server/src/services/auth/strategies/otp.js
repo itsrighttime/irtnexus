@@ -1,7 +1,6 @@
 import crypto from "crypto";
 import { BaseAuthStrategy } from "./baseAuth.js";
 import { authQuery } from "#queries";
-import { opDb } from "#database";
 
 const { createCredential, findActiveCredential, revokeCredential } = authQuery;
 
@@ -17,7 +16,7 @@ export class OtpStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* SETUP - generate OTP                                   */
   /* ===================================================== */
-  async setup(userId, payload) {
+  async setup(userId, payload, conn = null) {
     const { tenantId, channel = "email", changedBy } = payload;
 
     if (!tenantId || !changedBy) {
@@ -35,16 +34,16 @@ export class OtpStrategy extends BaseAuthStrategy {
       .padStart(this.otpLength, "0");
     const expiresAt = new Date(Date.now() + this.otpExpiryMinutes * 60 * 1000);
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       // Revoke any existing active OTPs for this user/channel
       const existing = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (existing) {
         await revokeCredential(
           { tenantId, credentialId: existing.credential_id, changedBy },
-          conn,
+          trx,
         );
       }
 
@@ -58,7 +57,7 @@ export class OtpStrategy extends BaseAuthStrategy {
           changedBy,
           metadata: { code, channel, expiresAt: expiresAt.toISOString() },
         },
-        conn,
+        trx,
       );
 
       return {
@@ -74,53 +73,55 @@ export class OtpStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* AUTHENTICATE / VERIFY OTP                               */
   /* ===================================================== */
-  async authenticate(userId, payload) {
+  async authenticate(userId, payload, conn = null) {
     const { tenantId, code, channel = "email" } = payload;
 
     if (!tenantId || !code) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const credential = await findActiveCredential({
-      tenantId,
-      userId,
-      credentialType: this.credentialType,
-    });
+    const result = await this.withTransaction(conn, async (trx) => {
+      const credential = await findActiveCredential({
+        tenantId,
+        userId,
+        credentialType: this.credentialType,
+      }, trx);
 
-    if (!credential) {
-      return { success: false, code: "INVALID_OTP" };
-    }
+      if (!credential) {
+        return { success: false, code: "INVALID_OTP" };
+      }
 
-    const metadata = credential.metadata || {};
-    const { code: storedCode, channel: storedChannel, expiresAt } = metadata;
+      const metadata = credential.metadata || {};
+      const { code: storedCode, channel: storedChannel, expiresAt } = metadata;
 
-    if (storedCode !== code || storedChannel !== channel) {
-      return { success: false, code: "INVALID_OTP" };
-    }
+      if (storedCode !== code || storedChannel !== channel) {
+        return { success: false, code: "INVALID_OTP" };
+      }
 
-    if (new Date() > new Date(expiresAt)) {
-      return { success: false, code: "OTP_EXPIRED" };
-    }
+      if (new Date() > new Date(expiresAt)) {
+        return { success: false, code: "OTP_EXPIRED" };
+      }
 
-    // Single-use → revoke OTP immediately
-    await opDb.transaction(async (conn) => {
+      // Single-use → revoke OTP immediately
       await revokeCredential(
         { tenantId, credentialId: credential.credential_id, changedBy: userId },
-        conn,
+        trx,
       );
+
+      return {
+        success: true,
+        code: "AUTH_SUCCESS",
+        data: {
+          userId,
+          tenantId,
+          credentialId: credential.credential_id,
+          method: this.credentialType,
+          channel,
+        },
+      };
     });
 
-    return {
-      success: true,
-      code: "AUTH_SUCCESS",
-      data: {
-        userId,
-        tenantId,
-        credentialId: credential.credential_id,
-        method: this.credentialType,
-        channel,
-      },
-    };
+    return result;
   }
 
   /* ===================================================== */
@@ -137,24 +138,24 @@ export class OtpStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* REVOKE                                                */
   /* ===================================================== */
-  async revoke(userId, payload) {
+  async revoke(userId, payload, conn = null) {
     const { tenantId, changedBy } = payload;
 
     if (!tenantId || !changedBy) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
 
       if (!credential) return { success: false, code: "CREDENTIAL_NOT_FOUND" };
 
       await revokeCredential(
         { tenantId, credentialId: credential.credential_id, changedBy },
-        conn,
+        trx,
       );
 
       return { success: true, code: "OTP_REVOKED", data: { userId, tenantId } };

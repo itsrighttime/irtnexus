@@ -1,6 +1,5 @@
 import { BaseAuthStrategy } from "./baseAuth.js";
 import { authQuery } from "#queries";
-import { opDb } from "#database";
 
 const { createCredential, findActiveCredential, revokeCredential } = authQuery;
 
@@ -14,7 +13,7 @@ export class PasskeyStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* SETUP - register a new passkey credential            */
   /* ===================================================== */
-  async setup(userId, payload) {
+  async setup(userId, payload, conn = null) {
     const { tenantId, publicKey, changedBy, deviceName, userHandle, rpId } =
       payload;
 
@@ -27,16 +26,16 @@ export class PasskeyStrategy extends BaseAuthStrategy {
       };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       // Revoke any existing active passkeys for this user
       const existing = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (existing) {
         await revokeCredential(
           { tenantId, credentialId: existing.credential_id, changedBy },
-          conn,
+          trx,
         );
       }
 
@@ -50,7 +49,7 @@ export class PasskeyStrategy extends BaseAuthStrategy {
           changedBy,
           metadata: { deviceName, userHandle, rpId },
         },
-        conn,
+        trx,
       );
 
       return {
@@ -66,18 +65,21 @@ export class PasskeyStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* AUTHENTICATE - verify user using public key          */
   /* ===================================================== */
-  async authenticate(userId, payload) {
+  async authenticate(userId, payload, conn = null) {
     const { tenantId, publicKey, userHandle } = payload;
 
     if (!tenantId || !publicKey || !userHandle) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const credential = await findActiveCredential({
-      tenantId,
-      userId,
-      credentialType: this.credentialType,
-    });
+    const credential = await findActiveCredential(
+      {
+        tenantId,
+        userId,
+        credentialType: this.credentialType,
+      },
+      conn,
+    );
 
     if (!credential) {
       return { success: false, code: "CREDENTIAL_NOT_FOUND" };
@@ -121,24 +123,24 @@ export class PasskeyStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* REVOKE - deactivate a passkey                          */
   /* ===================================================== */
-  async revoke(userId, payload) {
+  async revoke(userId, payload, conn = null) {
     const { tenantId, changedBy } = payload;
 
     if (!tenantId || !changedBy) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
 
       if (!credential) return { success: false, code: "CREDENTIAL_NOT_FOUND" };
 
       await revokeCredential(
         { tenantId, credentialId: credential.credential_id, changedBy },
-        conn,
+        trx,
       );
 
       return {
@@ -149,13 +151,6 @@ export class PasskeyStrategy extends BaseAuthStrategy {
     });
 
     return result;
-  }
-
-  /* ===================================================== */
-  /* DELETE - alias for revoke                              */
-  /* ===================================================== */
-  async delete(userId, payload) {
-    return this.revoke(userId, payload);
   }
 
   async verify() {

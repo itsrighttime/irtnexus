@@ -1,6 +1,5 @@
 import { BaseAuthStrategy } from "./baseAuth.js";
 import { authQuery } from "#queries";
-import { opDb } from "#database";
 import { generateBinaryUUID } from "#utils";
 
 const {
@@ -20,7 +19,7 @@ export class SsoStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* SETUP - register SSO identity for user              */
   /* ===================================================== */
-  async setup(userId, payload) {
+  async setup(userId, payload, conn = null) {
     const { tenantId, idp, externalUserId, changedBy } = payload;
 
     if (!tenantId || !idp || !externalUserId || !changedBy) {
@@ -31,16 +30,16 @@ export class SsoStrategy extends BaseAuthStrategy {
       };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       // Revoke existing SSO credential for this IDP
       const existing = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (existing) {
         await revokeCredential(
           { tenantId, credentialId: existing.credential_id, changedBy },
-          conn,
+          trx,
         );
       }
 
@@ -53,7 +52,7 @@ export class SsoStrategy extends BaseAuthStrategy {
           changedBy,
           metadata: { idp, externalUserId },
         },
-        conn,
+        trx,
       );
 
       return {
@@ -69,18 +68,21 @@ export class SsoStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* AUTHENTICATE - verify SSO login                     */
   /* ===================================================== */
-  async authenticate(userId, payload) {
+  async authenticate(userId, payload, conn = null) {
     const { tenantId, idp, externalUserId } = payload;
 
     if (!tenantId || !idp || !externalUserId) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const credential = await findActiveCredential({
-      tenantId,
-      userId,
-      credentialType: this.credentialType,
-    });
+    const credential = await findActiveCredential(
+      {
+        tenantId,
+        userId,
+        credentialType: this.credentialType,
+      },
+      conn,
+    );
 
     if (!credential) {
       return { success: false, code: "CREDENTIAL_NOT_FOUND" };
@@ -106,17 +108,17 @@ export class SsoStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* UPDATE - update SSO mapping                          */
   /* ===================================================== */
-  async update(userId, payload) {
+  async update(userId, payload, conn = null) {
     const { tenantId, idp, externalUserId, changedBy } = payload;
 
     if (!tenantId || !idp || !externalUserId || !changedBy) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (!credential) return { success: false, code: "CREDENTIAL_NOT_FOUND" };
 
@@ -127,7 +129,7 @@ export class SsoStrategy extends BaseAuthStrategy {
           data: { metadata: { idp, externalUserId } },
           changedBy,
         },
-        conn,
+        trx,
       );
 
       return {
@@ -143,22 +145,22 @@ export class SsoStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* REVOKE / DELETE                                     */
   /* ===================================================== */
-  async revoke(userId, payload) {
+  async revoke(userId, payload, conn = null) {
     const { tenantId, changedBy } = payload;
 
     if (!tenantId || !changedBy)
       return { success: false, code: "INVALID_INPUT" };
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (!credential) return { success: false, code: "CREDENTIAL_NOT_FOUND" };
 
       await revokeCredential(
         { tenantId, credentialId: credential.credential_id, changedBy },
-        conn,
+        trx,
       );
 
       return { success: true, code: "SSO_REVOKED", data: { userId, tenantId } };

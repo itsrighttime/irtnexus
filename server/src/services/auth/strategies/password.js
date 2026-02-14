@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import { BaseAuthStrategy } from "./baseAuth.js";
 import { authQuery } from "#queries";
-import { opDb } from "#database";
 
 const {
   createCredential,
@@ -22,7 +21,7 @@ export class PasswordStrategy extends BaseAuthStrategy {
   /* SETUP                                                 */
   /* ===================================================== */
 
-  async setup(userId, payload) {
+  async setup(userId, payload, conn = null) {
     const { tenantId, password, changedBy } = payload;
 
     if (!tenantId || !password || !changedBy) {
@@ -38,14 +37,14 @@ export class PasswordStrategy extends BaseAuthStrategy {
 
     const passwordHash = await bcrypt.hash(password, this.saltRounds);
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const existing = await findActiveCredential(
         {
           tenantId,
           userId,
           credentialType: this.credentialType,
         },
-        conn,
+        trx,
       );
 
       if (existing) {
@@ -55,7 +54,7 @@ export class PasswordStrategy extends BaseAuthStrategy {
             credentialId: existing.credential_id,
             changedBy,
           },
-          conn,
+          trx,
         );
       }
 
@@ -67,7 +66,7 @@ export class PasswordStrategy extends BaseAuthStrategy {
           secretHash: passwordHash,
           changedBy,
         },
-        conn,
+        trx,
       );
       return {
         success: true,
@@ -83,7 +82,7 @@ export class PasswordStrategy extends BaseAuthStrategy {
   /* AUTHENTICATE                                          */
   /* ===================================================== */
 
-  async authenticate(userId, payload) {
+  async authenticate(userId, payload, conn = null) {
     const { tenantId, password } = payload;
 
     if (!tenantId || !password) {
@@ -97,7 +96,7 @@ export class PasswordStrategy extends BaseAuthStrategy {
       tenantId,
       userId: userId,
       credentialType: this.credentialType,
-    });
+    }, conn);
 
     if (!credential) {
       return {
@@ -131,7 +130,7 @@ export class PasswordStrategy extends BaseAuthStrategy {
   /* UPDATE                                                */
   /* ===================================================== */
 
-  async update(userId, payload) {
+  async update(userId, payload, conn = null) {
     const { tenantId, oldPassword, newPassword, changedBy } = payload;
 
     if (!tenantId || !oldPassword || !newPassword || !changedBy) {
@@ -141,14 +140,14 @@ export class PasswordStrategy extends BaseAuthStrategy {
       };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         {
           tenantId,
           userId,
           credentialType: this.credentialType,
         },
-        conn,
+        trx,
       );
 
       if (!credential) {
@@ -179,7 +178,7 @@ export class PasswordStrategy extends BaseAuthStrategy {
           data: { secret_hash: newHash },
           changedBy,
         },
-        conn,
+        trx,
       );
 
       return {
@@ -195,7 +194,7 @@ export class PasswordStrategy extends BaseAuthStrategy {
   /* REVOKE                                                */
   /* ===================================================== */
 
-  async revoke(userId, payload) {
+  async revoke(userId, payload, conn = null) {
     const { tenantId, changedBy } = payload;
 
     if (!tenantId || !changedBy) {
@@ -205,14 +204,14 @@ export class PasswordStrategy extends BaseAuthStrategy {
       };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         {
           tenantId,
           userId,
           credentialType: this.credentialType,
         },
-        conn,
+        trx,
       );
 
       if (!credential) {
@@ -228,7 +227,7 @@ export class PasswordStrategy extends BaseAuthStrategy {
           credentialId: credential.credential_id,
           changedBy,
         },
-        conn,
+        trx,
       );
 
       return {

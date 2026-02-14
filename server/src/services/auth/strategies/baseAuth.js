@@ -1,3 +1,5 @@
+import { opDb } from "#database";
+
 export class BaseAuthStrategy {
   constructor() {
     this.type = "primary"; // or "secondary"
@@ -24,4 +26,15 @@ export class BaseAuthStrategy {
     throw new Error("update() Not implemented");
   }
 
+  async withTransaction(externalConn, callback) {
+    if (externalConn) {
+      // Already inside a transaction
+      return callback(externalConn);
+    }
+
+    // Start a new transaction
+    return opDb.transaction(async (conn) => {
+      return callback(conn);
+    });
+  }
 }

@@ -1,6 +1,5 @@
 import { BaseAuthStrategy } from "./baseAuth.js";
 import { authQuery } from "#queries";
-import { opDb } from "#database";
 
 const {
   createCredential,
@@ -19,7 +18,7 @@ export class PushStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* SETUP - register a push device for user             */
   /* ===================================================== */
-  async setup(userId, payload) {
+  async setup(userId, payload, conn = null) {
     const { tenantId, deviceToken, changedBy, deviceName, platform } = payload;
 
     if (!tenantId || !deviceToken || !changedBy) {
@@ -30,16 +29,16 @@ export class PushStrategy extends BaseAuthStrategy {
       };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       // Revoke existing active push credential
       const existing = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
       if (existing) {
         await revokeCredential(
           { tenantId, credentialId: existing.credential_id, changedBy },
-          conn,
+          trx,
         );
       }
 
@@ -58,7 +57,7 @@ export class PushStrategy extends BaseAuthStrategy {
             status: "active",
           },
         },
-        conn,
+        trx,
       );
 
       return {
@@ -74,32 +73,38 @@ export class PushStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* AUTHENTICATE - trigger push notification            */
   /* ===================================================== */
-  async authenticate(userId, payload) {
+  async authenticate(userId, payload, conn = null) {
     const { tenantId, deviceToken } = payload;
 
     if (!tenantId || !deviceToken) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const credential = await findActiveCredential({
-      tenantId,
-      userId,
-      credentialType: this.credentialType,
-    });
+    const result = await this.withTransaction(conn, async (trx) => {
+      const credential = await findActiveCredential(
+        {
+          tenantId,
+          userId,
+          credentialType: this.credentialType,
+        },
+        trx,
+      );
 
-    if (!credential) {
-      return { success: false, code: "CREDENTIAL_NOT_FOUND" };
-    }
+      if (!credential) {
+        return { success: false, code: "CREDENTIAL_NOT_FOUND" };
+      }
 
-    const metadata = credential.metadata || {};
+      const metadata = credential.metadata || {};
 
-    if (metadata.deviceToken !== deviceToken || metadata.status !== "active") {
-      return { success: false, code: "INVALID_CREDENTIALS" };
-    }
+      if (
+        metadata.deviceToken !== deviceToken ||
+        metadata.status !== "active"
+      ) {
+        return { success: false, code: "INVALID_CREDENTIALS" };
+      }
 
-    // Simulate push notification sent
-    const now = new Date().toISOString();
-    await opDb.transaction(async (conn) => {
+      // Simulate push notification sent
+      const now = new Date().toISOString();
       await updateCredential(
         {
           tenantId,
@@ -107,33 +112,38 @@ export class PushStrategy extends BaseAuthStrategy {
           data: { metadata: { ...metadata, lastPushAt: now } },
           changedBy: userId,
         },
-        conn,
+        trx,
       );
+
+      return {
+        success: true,
+        code: "PUSH_TRIGGERED",
+        message: "Push notification sent, waiting for approval",
+        data: { userId, tenantId, credentialId: credential.credential_id },
+      };
     });
 
-    return {
-      success: true,
-      code: "PUSH_TRIGGERED",
-      message: "Push notification sent, waiting for approval",
-      data: { userId, tenantId, credentialId: credential.credential_id },
-    };
+    return result;
   }
 
   /* ===================================================== */
   /* VERIFY - user approves push                          */
   /* ===================================================== */
-  async verify(userId, payload) {
+  async verify(userId, payload, conn = null) {
     const { tenantId, deviceToken } = payload;
 
     if (!tenantId || !deviceToken) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const credential = await findActiveCredential({
-      tenantId,
-      userId,
-      credentialType: this.credentialType,
-    });
+    const credential = await findActiveCredential(
+      {
+        tenantId,
+        userId,
+        credentialType: this.credentialType,
+      },
+      conn,
+    );
 
     if (!credential) {
       return { success: false, code: "CREDENTIAL_NOT_FOUND" };
@@ -161,17 +171,17 @@ export class PushStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* UPDATE - update device info                           */
   /* ===================================================== */
-  async update(userId, payload) {
+  async update(userId, payload, conn = null) {
     const { tenantId, deviceToken, deviceName, platform, changedBy } = payload;
 
     if (!tenantId || !deviceToken || !changedBy) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
 
       if (!credential) return { success: false, code: "CREDENTIAL_NOT_FOUND" };
@@ -190,7 +200,7 @@ export class PushStrategy extends BaseAuthStrategy {
           data: { metadata },
           changedBy,
         },
-        conn,
+        trx,
       );
 
       return {
@@ -206,24 +216,24 @@ export class PushStrategy extends BaseAuthStrategy {
   /* ===================================================== */
   /* REVOKE / DELETE                                     */
   /* ===================================================== */
-  async revoke(userId, payload) {
+  async revoke(userId, payload, conn = null) {
     const { tenantId, changedBy } = payload;
 
     if (!tenantId || !changedBy) {
       return { success: false, code: "INVALID_INPUT" };
     }
 
-    const result = await opDb.transaction(async (conn) => {
+    const result = await this.withTransaction(conn, async (trx) => {
       const credential = await findActiveCredential(
         { tenantId, userId, credentialType: this.credentialType },
-        conn,
+        trx,
       );
 
       if (!credential) return { success: false, code: "CREDENTIAL_NOT_FOUND" };
 
       await revokeCredential(
         { tenantId, credentialId: credential.credential_id, changedBy },
-        conn,
+        trx,
       );
 
       return {
