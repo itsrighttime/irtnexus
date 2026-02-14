@@ -1,5 +1,5 @@
 import { bufferToUUID } from "#utils";
-import { DatabaseFactory } from "./DatabaseFactory";
+import { DatabaseFactory } from "./DatabaseFactory.js";
 
 export async function getTenantAuditFeed(
   { historyTable, idField, tenantId, limit = 100, offset = 0, order = "DESC" },

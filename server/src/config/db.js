@@ -50,9 +50,43 @@ const TABLES = {
   USERS: ["users", "user_permissions"],
   AUTH: ["auth_credentials", "user_keys"],
   CONTACTS: ["user_names", "user_emails", "user_phones", "user_addresses"],
-  TENANTS: ["tenants"],
-  AUDIT: ["audit_logs"],
-  BILLING: ["wallets", "invoices", "transactions", "billing_accounts"],
+  TENANTS: [
+    "tenants",
+    "tenant_settings",
+    "tenant_branding",
+    "tenant_domains",
+    "tenant_security_policies",
+    "platform_plans",
+  ],
+  SUBS: [
+    "platform_plans",
+    "platform_plan_pricing",
+    "platform_features",
+    "platform_feature_pricing",
+    "platform_subscriptions",
+    "platform_subscription_addons",
+  ],
+  AUDIT: [
+    "audit_logs",
+    "platform_ledger_transactions",
+    "platform_payment_transactions",
+    "platform_invoice_items",
+    "platform_invoice_taxes",
+    "ledger_transactions",
+    "journal_entries",
+    "journal_lines",
+    "payment_transactions",
+    "invoice_items",
+    "invoice_taxes",
+  ],
+  BILLING: [
+    "platform_wallets",
+    "platform_invoices",
+    "chart_of_accounts",
+    "wallets",
+    "tax_codes",
+    "invoices",
+  ],
 };
 
 // Helper to include history tables automatically
@@ -68,15 +102,22 @@ function withHistory(tables) {
  */
 export const DB_TABLES_USER_MAP = {
   AUDIT: [
-    TABLES.AUDIT,
+    ...TABLES.AUDIT,
     ...withHistory([
       ...TABLES.USERS,
       ...TABLES.AUTH,
       ...TABLES.CONTACTS,
       ...TABLES.TENANTS,
+      ...TABLES.SUBS,
     ]),
   ],
-  OP: [...TABLES.USERS, ...TABLES.AUTH, ...TABLES.CONTACTS, ...TABLES.TENANTS],
+  OP: [
+    ...TABLES.USERS,
+    ...TABLES.AUTH,
+    ...TABLES.CONTACTS,
+    ...TABLES.TENANTS,
+    ...TABLES.SUBS,
+  ],
   REPORT: ["*"], // Access to all tables
   BILLING: [
     // "wallets", "invoices", "transactions", "billing_accounts"
@@ -100,6 +141,16 @@ export const DB_TABLES_USER_MAP = {
  * Useful for organizing SQL scripts, migrations, or seed data.
  */
 export const DATABASES_TABLE_FOLDERS = [
-  { name: process.env.DB_NAME, folders: ["01_org", "02_user", "03_audit"] },
+  {
+    name: process.env.DB_NAME,
+    folders: [
+      "00_formost",
+      "01_org",
+      "02_user",
+      "03_audit",
+      "04_subs",
+      "05_erp",
+    ],
+  },
   // { name: process.env.REPORT_DB_NAME, folders: ["01_reporting"] }, // Optional reporting database
 ];

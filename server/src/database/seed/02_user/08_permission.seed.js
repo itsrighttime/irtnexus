@@ -28,24 +28,23 @@ export default async function seed() {
       const permissionId = generateBinaryUUID();
       // Insert into user_permissions
       await opUser.execute(
-        `INSERT INTO user_permissions (permission_id, user_id, tenant_id, module, action, created_at)
-       VALUES (?, ?, ?, ?, ?, NOW())`,
+        `INSERT INTO user_permissions (permission_id, user_id, tenant_id, module, action)
+       VALUES (?, ?, ?, ?, ?)`,
         [permissionId, DEF_USER_ID, DEF_TENANT_ID, module, action],
       );
 
       await auditUser.execute(
-        `INSERT INTO history_user_permissions (history_id, tenant_id, user_id, changed_columns, changed_by, action_type, timestamp)
-        VALUES (?, ?, ?, ?, ?, ?, NOW())`,
+        `INSERT INTO history_user_permissions (history_id, tenant_id, changed_columns, changed_by, action_type)
+        VALUES (?, ?, ?, ?, ?)`,
         [
           generateBinaryUUID(),
           DEF_TENANT_ID,
-          DEF_USER_ID,
           JSON.stringify({
             module: { old: null, new: module },
             action: { old: null, new: action },
             granted: { old: null, new: true },
           }),
-          "system_seed",
+          DEF_USER_ID,
           "create",
         ],
       );

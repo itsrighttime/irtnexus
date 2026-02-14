@@ -1,3 +1,5 @@
+import { DatabaseFactory } from "./DatabaseFactory.js";
+
 export async function getEntityStateAt(
   { historyTable, idField, tenantId, idValue, atTimestamp },
   conn = null,
