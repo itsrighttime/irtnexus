@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { observability } from "#services";
+import { observability } from "#core";
 import { logger } from "./logger.js";
 import { RESPONSE } from "./sendResponse.js";
 

@@ -1,10 +1,5 @@
 export * as userService from "./user/user.service.js";
 
-export {
-  observability,
-  prometheusRegistry,
-} from "./monitoring/audit/AuditAttached.js";
-
 /**
  *
  * TODO :

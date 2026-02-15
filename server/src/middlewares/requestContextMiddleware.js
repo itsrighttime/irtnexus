@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { observability } from "#services";
+import { observability } from "#core";
 import { HEADERS } from "#config";
 import { generateBinaryUUID, logger } from "#utils";
 

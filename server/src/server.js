@@ -9,7 +9,7 @@ import {
   requestContextMiddleware,
   authMiddleware,
 } from "#middlewares";
-import { prometheusRegistry } from "#services";
+import { prometheusRegistry } from "#core";
 
 const app = express();
 const server = http.createServer(app);
