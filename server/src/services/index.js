@@ -1,4 +1,3 @@
-export { otpManager, reservationManager } from "./redis/redis.instance.js";
 export * as userService from "./user/user.service.js";
 
 export {

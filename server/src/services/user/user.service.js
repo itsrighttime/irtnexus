@@ -1,10 +1,6 @@
 import { userQuery } from "#queries";
 
-import {
-  otpManager,
-  otpMeta,
-  reservationManager,
-} from "../redis/redis.instance.js";
+import { otpManager, otpMeta, reservationManager } from "#core";
 import { translate } from "#translations";
 import {
   generateBinaryUUID,

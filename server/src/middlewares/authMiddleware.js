@@ -1,6 +1,6 @@
 // src/middlewares/authMiddleware.js
 import { redis } from "#config";
-import { logger } from "#utils";
+import { logger, REDIS_PREFIX } from "#utils";
 
 export const authMiddleware = async (req, res, next) => {
   try {
@@ -13,7 +13,7 @@ export const authMiddleware = async (req, res, next) => {
     }
 
     // 2. Verify session in Redis
-    const sessionData = await redis.get(`sess:${sessionId}`);
+    const sessionData = await redis.get(`${REDIS_PREFIX.SESSION}${sessionId}`);
     if (!sessionData) {
       return res.status(401).json({ message: "Unauthorized: Invalid session" });
     }

@@ -1,7 +1,6 @@
 // src/middlewares/securityMiddleware.js
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-import csrf from "csurf";
 import { configCors } from "#config";
 
 /**
@@ -40,8 +39,5 @@ export const securityConfig = () => {
 
     // 3. CORS configuration
     configCors,
-
-    // 4. CSRF Protection
-    // csrf({ cookie: true }),
   ];
 };
