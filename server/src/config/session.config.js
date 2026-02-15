@@ -1,8 +1,7 @@
 import session from "express-session";
 import { RedisStore } from "connect-redis";
 import { redis } from "./redis.config.js";
-
-// const RedisSessionStore = RedisStore(session);
+import { REDIS_PREFIX } from "#utils";
 
 export const sessionConfig = () =>
   session({
@@ -12,7 +11,7 @@ export const sessionConfig = () =>
 
     store: new RedisStore({
       client: redis, // your ioredis instance
-      prefix: "sess:",
+      prefix: REDIS_PREFIX.SESSION,
       disableTouch: false,
     }),
 

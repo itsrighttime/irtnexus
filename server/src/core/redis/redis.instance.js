@@ -2,6 +2,7 @@ import { redis } from "#config/redis.config.js";
 import { OtpManager } from "./otp/OtpManager.js";
 import { RedisStore } from "./storage/RedisOtpStore.js";
 import { ReservationManager } from "./registration/ReservationManager.js";
+import { RedisService } from "./RedisService.js";
 
 /**
  * OTP Configuration Metadata
@@ -28,7 +29,7 @@ export const otpMeta = {
  * - maxAttempts: Maximum OTP validation attempts allowed
  */
 export const otpManager = new OtpManager({
-  store: new RedisStore(redis),
+  store: new RedisService("otp:v1:"),
   ttl: otpMeta.ttl,
   resendCooldown: otpMeta.resendCooldown,
   maxAttempts: otpMeta.maxAttempts,
@@ -43,6 +44,6 @@ export const otpManager = new OtpManager({
  * - ttl: Reservation expiration time (same as OTP TTL by default)
  */
 export const reservationManager = new ReservationManager({
-  store: new RedisStore(redis),
+  store: new RedisService("reserve:v1:"),
   ttl: otpMeta.ttl,
 });
