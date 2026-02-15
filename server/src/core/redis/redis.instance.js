@@ -1,6 +1,5 @@
 import { redis } from "#config/redis.config.js";
 import { OtpManager } from "./otp/OtpManager.js";
-import { RedisStore } from "./storage/RedisOtpStore.js";
 import { ReservationManager } from "./registration/ReservationManager.js";
 import { RedisService } from "./RedisService.js";
 
