@@ -23,7 +23,7 @@ export const redis = new Redis({
   enableReadyCheck: true,
 
   // Identifier for monitoring and logs
-  connectionName: "irt-dev",
+  connectionName: "irtnexus",
   maxRetriesPerRequest: 3,
   enableOfflineQueue: false,
 

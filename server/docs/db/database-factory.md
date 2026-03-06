@@ -52,7 +52,7 @@ export default {
       username: "report_user",
       host: "localhost",
       password: "secret",
-      database: "irt-dev",
+      database: "irtnexus",
     },
   ],
 };
@@ -197,7 +197,7 @@ guessDatabase(username);
 Default behavior:
 
 ```js
-return "irt-dev";
+return "irtnexus";
 ```
 
 You can customize this to route specific users to different schemas.

@@ -95,13 +95,13 @@ import { userV2PublicPaths } from "./user/v2/public.js";
 
 export const swaggerSpecV1 = {
   openapi: "3.0.1",
-  info: { title: "irt-dev API v1", version: "1.0.0" },
+  info: { title: "irtnexus API v1", version: "1.0.0" },
   paths: { ...userV1PublicPaths },
 };
 
 export const swaggerSpecV2 = {
   openapi: "3.0.1",
-  info: { title: "irt-dev API v2", version: "2.0.0" },
+  info: { title: "irtnexus API v2", version: "2.0.0" },
   paths: { ...userV2PublicPaths },
 };
 ```
@@ -123,7 +123,7 @@ export const swaggerSpecV2 = {
    - Can support `Accept` header versioning if path-based versioning is insufficient:
 
      ```
-     Accept: application/vnd.irt-dev.v1+json
+     Accept: application/vnd.irtnexus.v1+json
      ```
 
 ## Deprecation & Removal Strategy

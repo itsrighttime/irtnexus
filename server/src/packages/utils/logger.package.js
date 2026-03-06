@@ -10,12 +10,12 @@ dotenv.config();
 const allowedTypes = process.env.LOG_TYPES?.split(",") || ["error", "warn"];
 
 // Initialize a single logger manager instance for the product
-const loggerManager = createLoggerManager("irt-dev");
+const loggerManager = createLoggerManager("irtnexus");
 
 // ----------- UTILITY METHODS -----------
 
 const getTrackingCode = (codeType, code) =>
-  getTrackingCodeHelper("irt-dev", codeType, code);
+  getTrackingCodeHelper("irtnexus", codeType, code);
 
 // ----------- LOG WRAPPER -----------
 
@@ -64,7 +64,7 @@ const fileLogger = {
 
 const createFolderLogger = (folderName, fileName) => {
   const rawFolderLogger = loggerManager.folderLogger(
-    `irt-dev/${folderName}`,
+    `irtnexus/${folderName}`,
     fileName
   );
 

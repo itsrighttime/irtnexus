@@ -8,7 +8,7 @@ export const SidebarHeader = ({ collapsed, toggleCollapsed }) => {
   return (
     <div className={styles.header}>
       <div className={styles.logo}>
-        {!collapsed && <span className={styles.logoText}>irt-dev</span>}
+        {!collapsed && <span className={styles.logoText}>irtnexus</span>}
       </div>
 
       <button className={styles.collapseBtn} onClick={toggleCollapsed}>

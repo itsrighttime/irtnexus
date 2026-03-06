@@ -32,7 +32,7 @@ export const sendOtpEmail = async (email, name, otp, otp_validity = "5") => {
 
     await emailService.sendEmail({
       to: email,
-      subject: "irt-dev Account Confirmation - Your OTP Code",
+      subject: "irtnexus Account Confirmation - Your OTP Code",
       html: htmlContent,
       css: cssContent,
       variables,

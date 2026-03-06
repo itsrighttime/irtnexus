@@ -87,7 +87,7 @@ import { components } from "./common-schemas.js";
 export const swaggerSpec = {
   openapi: "3.0.1",
   info: {
-    title: "irt-dev API",
+    title: "irtnexus API",
     version: "1.0.0",
   },
   servers: [{ url: "http://localhost:5001" }],

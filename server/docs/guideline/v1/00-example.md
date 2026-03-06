@@ -2,7 +2,7 @@
 
 ## API: `POST /v1/public/users/send-otp`
 
-This API demonstrates the **complete enforced request lifecycle** in irt-dev.
+This API demonstrates the **complete enforced request lifecycle** in irtnexus.
 
 ## 0. Server Bootstrap (Framework-Enforced)
 

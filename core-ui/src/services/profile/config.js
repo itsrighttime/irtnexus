@@ -138,7 +138,7 @@ const signals = [
 ];
 
 /**
- * irt-dev — Canonical User Profile (Dummy Data)
+ * irtnexus — Canonical User Profile (Dummy Data)
  * Version: canonical-v1
  *
  * This file represents WHO the user is.
@@ -328,7 +328,7 @@ const profileConfig = {
 
     lastVerificationEvent: {
       date: "2025-09-18",
-      issuer: "irt-dev Identity Services",
+      issuer: "irtnexus Identity Services",
       level: "high",
     },
   },

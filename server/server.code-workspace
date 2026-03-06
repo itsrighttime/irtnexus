@@ -18,8 +18,8 @@
 				"driver": "MySQL",
 				"username": "root",
 				"password": "root",
-				"name": "irt-dev",
-				"database": "irt-dev"
+				"name": "irtnexus",
+				"database": "irtnexus"
 			}
 		]
 	}

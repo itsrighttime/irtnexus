@@ -16,7 +16,7 @@
 				"server": "localhost",
 				"port": 3306,
 				"driver": "MySQL",
-				"name": "irt-dev",
+				"name": "irtnexus",
 				"username": "root",
 				"database": "irt_dev_db",
 				"password": "root"

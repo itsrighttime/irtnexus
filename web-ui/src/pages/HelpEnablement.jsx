@@ -11,7 +11,7 @@ import styles from "./HelpEnablement.module.css";
 
 export const HelpEnablement = () => {
   const guides = [
-    { id: 1, title: "Getting Started with irt-dev", category: "Basics" },
+    { id: 1, title: "Getting Started with irtnexus", category: "Basics" },
     { id: 2, title: "Setting up MFA on Mobile", category: "Security" },
     { id: 3, title: "Requesting Access to Resources", category: "Access" },
     { id: 4, title: "Understanding your Risk Score", category: "Security" },
