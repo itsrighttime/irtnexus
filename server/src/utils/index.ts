@@ -1,3 +1,5 @@
+export { loadFile } from "./loadFile";
+
 export { response, STATUS, HTTP_STATUS } from "./response";
 
 export { globalErrorHandler } from "./globalErrorHandler.logger";
