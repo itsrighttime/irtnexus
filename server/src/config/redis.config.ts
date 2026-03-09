@@ -23,12 +23,7 @@ const redisOptions: RedisOptions = {
   // Retry strategy with exponential backoff capped at 2s
   retryStrategy(times) {
     const delay = Math.min(times * 50, 2000);
-    logger.warn({
-      message: "Redis reconnect attempt",
-      attempt: times,
-      delay,
-      code: "00011",
-    });
+    logger.warn("Redis reconnect attempt", { attempt: times, delay }, "00011");
     return delay;
   },
 
@@ -51,11 +46,8 @@ export const redis = new Redis(redisOptions);
 export const connectRedis = async (): Promise<void> => {
   try {
     await redis.connect();
-    logger.info({
-      message: "Connected to Redis",
-      code: "00010",
-    });
-  } catch (error) {
+    logger.info("Connected to Redis", {}, "00010");
+  } catch (error: any) {
     handleError(error, {
       code: "0000F",
       isTrusted: false, // Redis is critical
@@ -80,10 +72,7 @@ redis.on("error", (error: Error) => {
 export const disconnectRedis = async (): Promise<void> => {
   try {
     await redis.quit();
-    logger.info({
-      message: "Redis connection closed",
-      code: "00013",
-    });
+    logger.info("Redis connection closed", {}, "00013");
   } catch (error) {
     logger.error({
       message: "Error while disconnecting Redis",

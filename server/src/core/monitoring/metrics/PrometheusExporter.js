@@ -1,5 +1,4 @@
 import client from "prom-client";
-import express from "express";
 
 /**
  * PrometheusExporter

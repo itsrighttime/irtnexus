@@ -17,7 +17,7 @@ export const registerSession = async (app: FastifyInstance): Promise<void> => {
     process.env.SESSION_SECRET || randomBytes(32).toString("hex");
 
   await app.register(fastifySecureSession, {
-    key: Buffer.from(secretKey, "hex"),
+    key: secretKey,
     cookie: {
       path: "/",
       httpOnly: true,

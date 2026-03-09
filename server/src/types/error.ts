@@ -6,3 +6,9 @@ export interface HandleErrorOptions {
 }
 
 export type ErrorLike = Error & { message?: string };
+
+export interface AppError extends Error {
+  statusCode?: number;
+  details?: any;
+  options?: Record<string, any>;
+}

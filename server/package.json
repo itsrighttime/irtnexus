@@ -5,11 +5,11 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "dev": "nodemon --exec tsx src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "migrate": "ts-node src/migrate.ts",
-    "seed": "ts-node src/seed.ts",
+    "migrate": "npx ts-node src/migrate.ts",
+    "seed": "npx ts-node src/seed.ts",
     "setup": "pnpm migrate && pnpm seed"
   },
   "keywords": [
@@ -135,7 +135,7 @@
     "@types/node": "^25.3.5",
     "@types/pg": "^8.18.0",
     "nodemon": "^3.1.14",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

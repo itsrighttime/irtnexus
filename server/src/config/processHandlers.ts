@@ -21,7 +21,8 @@ const gracefulShutdown = async (exitCode: number): Promise<void> => {
     // Exit the process with the provided code
     process.exit(exitCode);
   } catch (shutdownError) {
-    logger.error("Error during shutdown", shutdownError);
+    logger.error("Error during shutdown");
+    logger.error(shutdownError);
     process.exit(1); // Force exit with error code if cleanup fails
   }
 };
@@ -39,7 +40,8 @@ const handleProcessError = async (
   error: unknown,
   isFatal: boolean,
 ): Promise<void> => {
-  logger.error(isFatal ? "Critical Error:" : "Process Error:", error);
+  logger.error(isFatal ? "Critical Error:" : "Process Error:");
+  logger.error(error);
 
   // Delegate to centralized error handler
   await errorHandler.handleError(error);
