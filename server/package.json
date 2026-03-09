@@ -1,88 +1,91 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "iRtNexus backend server",
+  "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "migrate": "node src/migrate.js",
-    "seed": "node src/seed.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "migrate": "ts-node src/migrate.ts",
+    "seed": "ts-node src/seed.ts",
     "setup": "pnpm migrate && pnpm seed"
   },
-  "keywords": [],
+  "keywords": [
+    "iRtNexus",
+    "backend",
+    "fastify",
+    "typescript"
+  ],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.12.4",
   "dependencies": {
+    "@fastify/cors": "^11.2.0",
+    "@fastify/helmet": "^13.0.2",
+    "@fastify/rate-limit": "^10.3.0",
+    "@fastify/secure-session": "^8.3.0",
+    "@fastify/swagger": "^9.7.0",
     "@itsrighttime/broadcast": "^0.0.8",
     "@itsrighttime/socket-io": "^0.0.5",
     "@itsrighttime/utils": "^0.0.21",
-    "async_hooks": "^1.0.0",
-    "bcrypt": "^6.0.0",
-    "bcryptjs": "^3.0.3",
-    "connect-redis": "^9.0.0",
-    "cors": "^2.8.6",
+    "argon2": "^0.44.0",
+    "bullmq": "^5.70.4",
     "dotenv": "^17.3.1",
-    "express": "^5.2.1",
-    "express-mysql-session": "^3.0.3",
-    "express-rate-limit": "^8.2.1",
-    "express-session": "^1.19.0",
-    "helmet": "^8.1.0",
-    "i18n": "^0.15.3",
-    "ioredis": "^5.9.3",
-    "kafkajs": "^2.2.4",
-    "moment": "^2.30.1",
-    "mysql2": "^3.17.1",
-    "node-forge": "^1.3.3",
-    "prom-client": "^15.1.3",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.11"
+    "fastify": "^5.8.2",
+    "i18next": "^25.8.14",
+    "i18next-fs-backend": "^2.6.1",
+    "ioredis": "^5.10.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.1.0",
+    "neo4j-driver": "^6.0.1",
+    "pg": "^8.20.0",
+    "pino": "^10.3.1",
+    "prom-client": "^15.1.3"
   },
   "imports": {
     "#config": [
-      "./src/config/index.js"
+      "./src/config/index.ts"
     ],
     "#controllers": [
-      "./src/controllers/index.js"
+      "./src/controllers/index.ts"
     ],
     "#database": [
-      "./src/database/index.js"
+      "./src/database/index.ts"
     ],
     "#core": [
-      "./src/core/index.js"
+      "./src/core/index.ts"
     ],
     "#middlewares": [
-      "./src/middlewares/index.js"
+      "./src/middlewares/index.ts"
     ],
     "#packages": [
-      "./src/packages/index.js"
+      "./src/packages/index.ts"
     ],
     "#queries": [
-      "./src/queries/index.js"
+      "./src/queries/index.ts"
     ],
     "#routes": [
-      "./src/routes/index.js"
+      "./src/routes/index.ts"
     ],
     "#services": [
-      "./src/services/index.js"
+      "./src/services/index.ts"
     ],
     "#sessions": [
-      "./src/sessions/index.js"
+      "./src/sessions/index.ts"
     ],
     "#translations": [
-      "./src/translations/index.js"
+      "./src/translations/index.ts"
+    ],
+    "#types": [
+      "./src/types/index.ts"
     ],
     "#utils": [
-      "./src/utils/index.js"
+      "./src/utils/index.ts"
     ],
     "#validations": [
-      "./src/validations/index.js"
+      "./src/validations/index.ts"
     ],
     "#config/*": [
       "./src/config/*"
@@ -117,11 +120,22 @@
     "#translations/*": [
       "./src/translations/*"
     ],
+    "#types/*": [
+      "./src/types/*"
+    ],
     "#utils/*": [
       "./src/utils/*"
     ],
     "#validations/*": [
       "./src/validations/*"
     ]
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.3.5",
+    "@types/pg": "^8.18.0",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

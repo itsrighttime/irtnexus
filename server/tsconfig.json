@@ -1,0 +1,51 @@
+{
+  "compilerOptions": {
+    /* JavaScript / TypeScript Target */
+    "target": "ES2020",                     // modern JS features
+    "module": "CommonJS",                   // Node.js modules
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowJs": false,                        // JS no longer needed
+    "strict": true,                          // enable all strict type checks
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "outDir": "dist",                        // compiled JS output
+    "rootDir": "src",
+    "baseUrl": "src",
+
+    /* Path Aliases */
+    "paths": {
+      "#config": ["config/index"],
+      "#controllers": ["controllers/index"],
+      "#database": ["database/index"],
+      "#core": ["core/index"],
+      "#middlewares": ["middlewares/index"],
+      "#packages": ["packages/index"],
+      "#queries": ["queries/index"],
+      "#routes": ["routes/index"],
+      "#services": ["services/index"],
+      "#sessions": ["sessions/index"],
+      "#translations": ["translations/index"],
+      "#types": ["types/index"],
+      "#utils": ["utils/index"],
+      "#validations": ["validations/index"],
+      "#config/*": ["config/*"],
+      "#controllers/*": ["controllers/*"],
+      "#database/*": ["database/*"],
+      "#core/*": ["core/*"],
+      "#middlewares/*": ["middlewares/*"],
+      "#packages/*": ["packages/*"],
+      "#queries/*": ["queries/*"],
+      "#routes/*": ["routes/*"],
+      "#services/*": ["services/*"],
+      "#sessions/*": ["sessions/*"],
+      "#translations/*": ["translations/*"],
+      "#types/*": ["types/*"],
+      "#utils/*": ["utils/*"],
+      "#validations/*": ["validations/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
