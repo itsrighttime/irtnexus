@@ -20,6 +20,17 @@
 				"username": "root",
 				"database": "irt_dev_db",
 				"password": "root"
+			},
+			{
+				"ssh": "Disabled",
+				"previewLimit": 50,
+				"server": "localhost",
+				"port": 5432,
+				"driver": "PostgreSQL",
+				"name": "postgres irt_dev_db ",
+				"database": "postgres",
+				"username": "postgres",
+				"password": "root"
 			}
 		]
 	}

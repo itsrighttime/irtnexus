@@ -1,16 +1,22 @@
 import fs from "fs";
 import path from "path";
-import { DATABASES_TABLE_FOLDERS, pool } from "#config";
-import { syncDropUsers, syncUsers } from "#database";
 import { execSync } from "child_process";
+import { PoolClient } from "pg";
+import {
+  DATABASES_TABLE_FOLDERS,
+  syncDropUsers,
+  syncUsers,
+  defaultPool,
+  pgPool,
+} from "#database";
 import { logger } from "#utils";
 
 const MIGRATION_TABLE = "_migrations"; // Tracks executed files
 
 /**
- * Backup a database to a SQL file
+ * Backup a PostgreSQL database to a SQL file
  */
-async function backupDatabase(dbName) {
+async function backupDatabase(dbName: string): Promise<string> {
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const backupFile = `./backups/${dbName}_${timestamp}.sql`;
 
@@ -19,28 +25,29 @@ async function backupDatabase(dbName) {
   logger.info(`Backing up database '${dbName}' → ${backupFile}`);
   try {
     execSync(
-      `mysqldump -u${process.env.DB_USER} -p${process.env.DB_PASS} ${dbName} > ${backupFile}`,
+      `pg_dump -U ${process.env.DB_USER} -h ${process.env.DB_HOST} -p ${process.env.DB_PORT || 5432} -F c ${dbName} -f ${backupFile}`,
+      { stdio: "inherit", env: process.env },
     );
     logger.info(`Backup completed: ${backupFile}`);
-  } catch (err) {
-    logger.error("Backup failed:");
-    logger.error(err);
+  } catch (err: any) {
+    logger.error("Backup failed:", err);
     process.exit(1);
   }
+
   return backupFile;
 }
 
 /**
  * Ensure migration tracking table exists
  */
-async function ensureMigrationTable(connection) {
-  await connection.query(`
-    CREATE TABLE IF NOT EXISTS \`${MIGRATION_TABLE}\` (
-      id INT AUTO_INCREMENT PRIMARY KEY,
+async function ensureMigrationTable(client: PoolClient) {
+  await client.query(`
+    CREATE TABLE IF NOT EXISTS ${MIGRATION_TABLE} (
+      id SERIAL PRIMARY KEY,
       db_name VARCHAR(255),
       file_name VARCHAR(255),
       executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE KEY unique_file (db_name, file_name)
+      UNIQUE (db_name, file_name)
     );
   `);
 }
@@ -48,20 +55,28 @@ async function ensureMigrationTable(connection) {
 /**
  * Check if a file was already executed
  */
-async function isExecuted(connection, dbName, fileName) {
-  const [rows] = await connection.query(
-    `SELECT 1 FROM \`${MIGRATION_TABLE}\` WHERE db_name = ? AND file_name = ?`,
+async function isExecuted(
+  client: PoolClient,
+  dbName: string,
+  fileName: string,
+): Promise<boolean> {
+  const res = await client.query(
+    `SELECT 1 FROM ${MIGRATION_TABLE} WHERE db_name = $1 AND file_name = $2`,
     [dbName, fileName],
   );
-  return rows.length > 0;
+  return (res.rowCount ?? 0) > 0;
 }
 
 /**
  * Record executed migration
  */
-async function recordMigration(connection, dbName, fileName) {
-  await connection.query(
-    `INSERT INTO \`${MIGRATION_TABLE}\` (db_name, file_name) VALUES (?, ?)`,
+async function recordMigration(
+  client: PoolClient,
+  dbName: string,
+  fileName: string,
+) {
+  await client.query(
+    `INSERT INTO ${MIGRATION_TABLE} (db_name, file_name) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
     [dbName, fileName],
   );
 }
@@ -69,9 +84,14 @@ async function recordMigration(connection, dbName, fileName) {
 /**
  * Execute migration files
  */
-async function executeMigrations(connection, dbName, folders, mode) {
-  await connection.query(`USE \`${dbName}\`;`);
-  await ensureMigrationTable(connection);
+async function executeMigrations(
+  client: PoolClient,
+  dbName: string,
+  folders: string[],
+  mode: string,
+) {
+  await client.query(`SET search_path TO public;`);
+  await ensureMigrationTable(client);
 
   for (const folder of folders) {
     const folderPath = path.resolve(`src/database/migrate/${folder}`);
@@ -83,7 +103,7 @@ async function executeMigrations(connection, dbName, folders, mode) {
     logger.info(`Found ${sqlFiles.length} files in folder '${folder}'`);
 
     for (const file of sqlFiles) {
-      if (mode === "--soft" && (await isExecuted(connection, dbName, file))) {
+      if (mode === "--soft" && (await isExecuted(client, dbName, file))) {
         logger.info(`Skipping already executed file: ${file}`);
         continue;
       }
@@ -92,12 +112,11 @@ async function executeMigrations(connection, dbName, folders, mode) {
       logger.info(`Executing: ${file}`);
 
       try {
-        await connection.query(sql);
+        await client.query(sql);
         logger.info(`Executed: ${file}`);
-        await recordMigration(connection, dbName, file);
-      } catch (err) {
+        await recordMigration(client, dbName, file);
+      } catch (err: any) {
         logger.error(`Error executing ${file}: ${err.message}`);
-        logger.error(err);
         process.exit(1);
       }
     }
@@ -106,16 +125,16 @@ async function executeMigrations(connection, dbName, folders, mode) {
 
 /**
  * Main migration runner
- * @param {string} mode "--hard" or "--soft"
  */
-async function runMigrations(mode = "--soft") {
+async function runMigrations(mode: "--soft" | "--hard" = "--soft") {
   if (!["--soft", "--hard"].includes(mode)) {
     logger.error("Invalid migration mode. Use '--soft' or '--hard'.");
     process.exit(1);
   }
 
-  const connection = await pool.getConnection();
-  logger.info("Connected to MySQL server");
+  const client = await pgPool.connect();
+  const defaultClient = await defaultPool.connect();
+  logger.info("Connected to PostgreSQL server");
   logger.info(`Migration mode: ${mode.toUpperCase()}`);
 
   for (const { name: dbName, folders } of DATABASES_TABLE_FOLDERS) {
@@ -123,7 +142,6 @@ async function runMigrations(mode = "--soft") {
     logger.info(`=== Migrating database: ${dbName} ===`);
 
     if (mode === "--hard") {
-      // Backup before dropping
       await backupDatabase(dbName);
 
       // Drop users and database
@@ -131,35 +149,34 @@ async function runMigrations(mode = "--soft") {
       await syncDropUsers();
 
       logger.info(`Dropping database '${dbName}'...`);
-      await connection.query(`DROP DATABASE IF EXISTS \`${dbName}\`;`);
+      await defaultClient.query(`DROP DATABASE IF EXISTS "${dbName}";`);
 
-      // Create database
       logger.info(`Creating database '${dbName}'...`);
-      await connection.query(`CREATE DATABASE \`${dbName}\`;`);
+      await defaultClient.query(`CREATE DATABASE "${dbName}";`);
     } else {
-      // Soft mode: backup is optional, can skip if desired
+      // Soft mode backup is optional
       await backupDatabase(dbName);
     }
 
-    // Execute migrations
-    await executeMigrations(connection, dbName, folders, mode);
+    // Connect to the target database to run migrations
+    const dbClient = await pgPool.connect();
+    await executeMigrations(dbClient, dbName, folders, mode);
+    dbClient.release();
 
-    // Sync all users
     logger.info("Syncing database users...");
     await syncUsers();
   }
 
   logger.info("##########################################");
   logger.info("All migrations completed successfully!");
-  connection.release();
+  client.release();
   process.exit(0);
 }
 
 // Accept migration mode via command line argument
-// e.g., `node migrate.js --hard` or `node migrate.js --soft`
-const modeArg = process.argv[2] || "--soft";
+const modeArg = (process.argv[2] as "--soft" | "--hard") || "--soft";
 runMigrations(modeArg).catch((err) => {
-  logger.error("Migration failed:");
-  logger.error(err);
+  logger.error("Migration failed:", err);
+
   process.exit(1);
 });

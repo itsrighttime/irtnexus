@@ -13,13 +13,9 @@
  * @param {object} grant - Object containing the GRANT statement as a value
  * @returns {string} - Normalized privileges string
  */
-export function normalizeGrant(grant) {
-  // Extract the first value from the object
-  const _grant = Object.values(grant)[0];
-
-  // Remove the "GRANT" keyword, remove "TO <user>" part, and trim whitespace
-  return _grant
-    .replace(/^GRANT\s+/i, "") // Remove GRANT at start
-    .replace(/\s+TO\s+.*/i, "") // Remove everything after "TO"
-    .trim(); // Trim leading/trailing whitespace
+export function normalizeGrant(grant: string): string {
+  return grant
+    .replace(/^GRANT\s+/i, "")
+    .replace(/\s+TO\s+.*/i, "")
+    .trim();
 }

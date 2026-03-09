@@ -8,8 +8,8 @@
     "dev": "nodemon --exec tsx src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "migrate": "npx ts-node src/migrate.ts",
-    "seed": "npx ts-node src/seed.ts",
+    "migrate": "tsx src/migrate.ts",
+    "seed": "tsx src/seed.ts",
     "setup": "pnpm migrate && pnpm seed"
   },
   "keywords": [

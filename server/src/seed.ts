@@ -1,24 +1,24 @@
 import fs from "fs";
 import path from "path";
-import bcrypt from "bcrypt";
-import { randomUUID } from "crypto";
-import { pool, DATABASES_TABLE_FOLDERS } from "#config";
-import { logger } from "#utils";
 import { pathToFileURL } from "url";
+import { PoolClient } from "pg";
+import { DATABASES_TABLE_FOLDERS } from "#database";
+import { logger } from "#utils";
+import { pgPool } from "#database/config/postgres.pool.js";
 
 const SEED_TABLE = "_seeds";
 
 /**
  * Ensure seed tracking table exists
  */
-async function ensureSeedTable(connection) {
-  await connection.query(`
-    CREATE TABLE IF NOT EXISTS \`${SEED_TABLE}\` (
-      id INT AUTO_INCREMENT PRIMARY KEY,
+async function ensureSeedTable(client: PoolClient) {
+  await client.query(`
+    CREATE TABLE IF NOT EXISTS ${SEED_TABLE} (
+      id SERIAL PRIMARY KEY,
       db_name VARCHAR(255),
       file_name VARCHAR(255),
       executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE KEY unique_seed (db_name, file_name)
+      UNIQUE (db_name, file_name)
     );
   `);
 }
@@ -26,20 +26,28 @@ async function ensureSeedTable(connection) {
 /**
  * Check if seed already ran
  */
-async function isSeedExecuted(connection, dbName, fileName) {
-  const [rows] = await connection.query(
-    `SELECT 1 FROM \`${SEED_TABLE}\` WHERE db_name = ? AND file_name = ?`,
+async function isSeedExecuted(
+  client: PoolClient,
+  dbName: string,
+  fileName: string,
+): Promise<boolean> {
+  const res = await client.query(
+    `SELECT 1 FROM ${SEED_TABLE} WHERE db_name = $1 AND file_name = $2`,
     [dbName, fileName],
   );
-  return rows.length > 0;
+  return (res.rowCount ?? 0) > 0; // null-safe
 }
 
 /**
  * Record executed seed
  */
-async function recordSeed(connection, dbName, fileName) {
-  await connection.query(
-    `INSERT INTO \`${SEED_TABLE}\` (db_name, file_name) VALUES (?, ?)`,
+async function recordSeed(
+  client: PoolClient,
+  dbName: string,
+  fileName: string,
+) {
+  await client.query(
+    `INSERT INTO ${SEED_TABLE} (db_name, file_name) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
     [dbName, fileName],
   );
 }
@@ -47,13 +55,16 @@ async function recordSeed(connection, dbName, fileName) {
 /**
  * Execute seed files
  */
-async function executeSeeds(connection, dbName, folders, mode) {
-  await connection.query(`USE \`${dbName}\`;`);
-  await ensureSeedTable(connection);
+async function executeSeeds(
+  client: PoolClient,
+  dbName: string,
+  folders: string[],
+  mode: string,
+) {
+  await ensureSeedTable(client);
 
   for (const folder of folders) {
     const folderPath = path.resolve(`src/database/seed/${folder}`);
-
     if (!fs.existsSync(folderPath)) continue;
 
     const seedFiles = fs
@@ -64,17 +75,13 @@ async function executeSeeds(connection, dbName, folders, mode) {
     logger.info(`Found ${seedFiles.length} seed files in '${folder}'`);
 
     for (const file of seedFiles) {
-      if (
-        mode === "--soft" &&
-        (await isSeedExecuted(connection, dbName, file))
-      ) {
+      if (mode === "--soft" && (await isSeedExecuted(client, dbName, file))) {
         logger.info(`Skipping seed (already executed): ${file}`);
         continue;
       }
 
       const seedPath = path.join(folderPath, file);
       const seedUrl = pathToFileURL(seedPath).href;
-
       const seedFn = (await import(seedUrl)).default;
 
       if (typeof seedFn !== "function") {
@@ -85,13 +92,13 @@ async function executeSeeds(connection, dbName, folders, mode) {
       logger.info(`Running seed: ${file}`);
 
       try {
-        await connection.beginTransaction();
-        await seedFn(connection);
-        await recordSeed(connection, dbName, file);
-        await connection.commit();
+        await client.query("BEGIN");
+        await seedFn(client);
+        await recordSeed(client, dbName, file);
+        await client.query("COMMIT");
         logger.info(`Seed completed: ${file}`);
-      } catch (err) {
-        await connection.rollback();
+      } catch (err: any) {
+        await client.query("ROLLBACK");
         logger.error(`Seed failed: ${file}`);
         logger.error(err.message);
         logger.error(err);
@@ -104,14 +111,14 @@ async function executeSeeds(connection, dbName, folders, mode) {
 /**
  * Main seeding runner
  */
-async function runSeeds(mode = "--soft") {
+async function runSeeds(mode: "--soft" | "--hard" = "--soft") {
   if (!["--soft", "--hard"].includes(mode)) {
     logger.error("Invalid seed mode. Use '--soft' or '--hard'.");
     process.exit(1);
   }
 
-  const connection = await pool.getConnection();
-  logger.info("Connected to MySQL server for seeding");
+  const client = await pgPool.connect();
+  logger.info("Connected to PostgreSQL server for seeding");
   logger.info(`Seed mode: ${mode.toUpperCase()}`);
 
   for (const { name: dbName, folders } of DATABASES_TABLE_FOLDERS) {
@@ -122,16 +129,16 @@ async function runSeeds(mode = "--soft") {
       logger.warn("Hard mode: seeds will re-run even if previously executed");
     }
 
-    await executeSeeds(connection, dbName, folders, mode);
+    await executeSeeds(client, dbName, folders, mode);
   }
 
   logger.info("##########################################");
   logger.info("All seeds completed successfully!");
-  connection.release();
+  client.release();
   process.exit(0);
 }
 
-const modeArg = process.argv[2] || "--soft";
+const modeArg = (process.argv[2] as "--soft" | "--hard") || "--soft";
 runSeeds(modeArg).catch((err) => {
   logger.error("Seeding failed:");
   logger.error(err);

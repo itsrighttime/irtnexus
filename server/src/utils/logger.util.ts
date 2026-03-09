@@ -30,12 +30,13 @@ export const logger: Logger = {
     const formattedMessage = formatMessage(message);
 
     if (error instanceof Error) {
-      fileLogger.error({
-        message: formattedMessage,
-        error: error.message,
-        stack: error.stack,
-        code,
-      });
+      // fileLogger.error({
+      //   message: formattedMessage,
+      //   error: error.message,
+      //   stack: error.stack,
+      //   code,
+      // });
+      console.error(message, error);
     } else {
       fileLogger.error({
         message: formattedMessage,
