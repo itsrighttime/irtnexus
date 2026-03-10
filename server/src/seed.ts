@@ -99,9 +99,7 @@ async function executeSeeds(
         logger.info(`Seed completed: ${file}`);
       } catch (err: any) {
         await client.query("ROLLBACK");
-        logger.error(`Seed failed: ${file}`);
-        logger.error(err.message);
-        logger.error(err);
+        logger.error(`Seed failed: ${file}`, err);
         process.exit(1);
       }
     }
@@ -140,7 +138,6 @@ async function runSeeds(mode: "--soft" | "--hard" = "--soft") {
 
 const modeArg = (process.argv[2] as "--soft" | "--hard") || "--soft";
 runSeeds(modeArg).catch((err) => {
-  logger.error("Seeding failed:");
-  logger.error(err);
+  logger.error("Seeding failed:", err);
   process.exit(1);
 });

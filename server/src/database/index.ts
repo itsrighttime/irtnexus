@@ -1,4 +1,4 @@
-export { defaultPool, pgPool } from "./config/postgres.pool";
+export { defaultPool, pgPool, DB_MAIN_CONFIG } from "./config/postgres.pool";
 import { DatabaseFactory } from "./setup/DatabaseFactory";
 
 // export { bulkMutateWithAudit } from "./setup/bulkMutateWithAudit";
