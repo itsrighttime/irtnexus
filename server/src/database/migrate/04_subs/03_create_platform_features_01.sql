@@ -1,8 +1,0 @@
-CREATE TABLE platform_features (
-    feature_id BINARY(16) PRIMARY KEY,
-    feature_name VARCHAR(100) NOT NULL,
-    description TEXT NULL,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
