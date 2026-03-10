@@ -11,14 +11,14 @@ export async function rotatePassword(
 ) {
   if (!user.rotatePassword || !user.password) return;
 
-  const sql = `ALTER ROLE "${user.username}" WITH PASSWORD $1`;
+  const sql = `ALTER ROLE "${user.username}" WITH PASSWORD '${user.password}'`;
 
   if (plan) {
     logger.info(`[PLAN] Rotate password for ${user.username}`);
     return;
   }
 
-  await pgPool.query(sql, [user.password]);
+  await pgPool.query(sql);
 
   logger.info(`Password rotated for ${user.username}`);
 }

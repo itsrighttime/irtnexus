@@ -17,7 +17,7 @@ async function ensureSeedTable(client: PoolClient) {
       id SERIAL PRIMARY KEY,
       db_name VARCHAR(255),
       file_name VARCHAR(255),
-      executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      executed_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
       UNIQUE (db_name, file_name)
     );
   `);

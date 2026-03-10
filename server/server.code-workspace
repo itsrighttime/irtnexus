@@ -1,26 +1,37 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"sqltools.connections": [
-			{
-				"mysqlOptions": {
-					"authProtocol": "default",
-					"enableSsl": "Disabled"
-				},
-				"ssh": "Disabled",
-				"previewLimit": 50,
-				"server": "localhost",
-				"port": 3306,
-				"driver": "MySQL",
-				"username": "root",
-				"password": "root",
-				"name": "irtnexus",
-				"database": "irtnexus"
-			}
-		]
-	}
+  "folders": [
+    {
+      "path": ".",
+    },
+  ],
+  "settings": {
+    "sqltools.connections": [
+      {
+        "mysqlOptions": {
+          "authProtocol": "default",
+          "enableSsl": "Disabled",
+        },
+        "ssh": "Disabled",
+        "previewLimit": 50,
+        "server": "localhost",
+        "port": 3306,
+        "driver": "MySQL",
+        "username": "root",
+        "password": "root",
+        "name": "irtnexus",
+        "database": "irtnexus",
+      },
+      {
+        "ssh": "Disabled",
+        "previewLimit": 50,
+        "server": "localhost",
+        "port": 5432,
+        "driver": "PostgreSQL",
+        "name": "postgres irt_dev_db ",
+        "database": "postgres",
+        "username": "postgres",
+        "password": "root",
+      },
+    ],
+  },
 }

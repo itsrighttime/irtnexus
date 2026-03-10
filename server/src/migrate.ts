@@ -2,7 +2,12 @@ import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
 import { Pool, PoolClient } from "pg";
-import { DATABASES_TABLE_FOLDERS, syncUsers, DB_MAIN_CONFIG } from "#database";
+import {
+  DATABASES_TABLE_FOLDERS,
+  syncUsers,
+  syncDropUsers,
+  DB_MAIN_CONFIG,
+} from "#database";
 import { logger } from "#utils";
 
 const MIGRATION_TABLE = "_migrations";
@@ -52,7 +57,7 @@ async function ensureMigrationTable(client: PoolClient) {
       id SERIAL PRIMARY KEY,
       db_name VARCHAR(255),
       file_name VARCHAR(255),
-      executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      executed_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
       UNIQUE (db_name, file_name)
     );
   `);
@@ -177,6 +182,7 @@ async function runMigrations(mode: "--soft" | "--hard" = "--soft") {
 
   for (const { name: dbName, folders } of DATABASES_TABLE_FOLDERS) {
     logger.info("====================================");
+
     logger.info(`Migrating database: ${dbName}`);
 
     await backupDatabase(dbName);
@@ -185,6 +191,8 @@ async function runMigrations(mode: "--soft" | "--hard" = "--soft") {
       await recreateDatabase(dbName);
     }
 
+    logger.info(`Dropping All the users that assigned to these databases.`);
+    await syncDropUsers();
     /*
     |--------------------------------------------------------------------------
     | Connect to target DB

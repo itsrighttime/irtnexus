@@ -1,7 +1,7 @@
 import { TABLES } from "./dbTables";
 
 function withHistory(tables: string[]): string[] {
-  return tables.flatMap((t) => [t, `history_${t}`]);
+  return tables.flatMap((t) => [t, `${t}_versions`]);
 }
 
 export const DB_TABLES_USER_MAP = {
@@ -26,11 +26,11 @@ export const DB_TABLES_USER_MAP = {
 
   REPORT: ["*"],
 
-  BILLING: ["users"],
+  BILLING: ["accounts"],
 
   ADMIN: ["*"],
 
-  INTEGRATION: ["users"],
+  INTEGRATION: ["accounts"],
 
-  READONLY_SENS: ["users"],
+  READONLY_SENS: ["accounts"],
 };

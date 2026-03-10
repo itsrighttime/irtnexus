@@ -5,14 +5,14 @@ export async function createUser(
   user: { username: string; password: string },
   plan = false,
 ) {
-  const sql = `CREATE ROLE "${user.username}" LOGIN PASSWORD $1`;
+  const sql = `CREATE ROLE "${user.username}" LOGIN PASSWORD '${user.password}'`;
 
   if (plan) {
     logger.info(`[PLAN] ${sql}`);
     return;
   }
 
-  await pgPool.query(sql, [user.password]);
+  await pgPool.query(sql);
 
   logger.info(`User ensured: ${user.username}`);
 }
