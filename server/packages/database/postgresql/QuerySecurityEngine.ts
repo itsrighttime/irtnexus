@@ -1,3 +1,4 @@
+import { logger } from "#utils";
 import { RequestContext } from "./types";
 
 export class QuerySecurityEngine {
@@ -78,6 +79,16 @@ export class QuerySecurityEngine {
     const finalSql = this.injectFilters(sql, filters);
 
     params.push(ctx.tenantId);
+
+    logger.silly(
+      `Query rewritten`,
+      {
+        originalSql: sql,
+        rewrittenSql: finalSql,
+        tenantId: ctx.tenantId,
+      },
+      "DB_QUERY_REWRITE",
+    );
 
     return finalSql;
   }
