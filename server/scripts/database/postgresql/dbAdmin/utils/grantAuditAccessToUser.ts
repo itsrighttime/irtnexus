@@ -1,5 +1,5 @@
-import { DB_GLOBAL } from "#config";
-import { DB_TABLES_USER_MAP as TABLE_MAP } from "#database/constant/tablePermissions.js";
+import { DB_GLOBAL } from "#configs";
+import { DB_TABLES_USER_MAP as TABLE_MAP } from "../../constant/tablePermissions.js";
 import { syncPrivileges } from "./privilegeManager";
 
 export async function grantAuditAccessToUser(

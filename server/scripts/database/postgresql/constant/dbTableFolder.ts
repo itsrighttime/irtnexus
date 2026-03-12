@@ -1,4 +1,4 @@
-import { DB_ENV } from "#config";
+import { DB_ENV } from "#configs";
 
 export const DATABASES_TABLE_FOLDERS = [
   {

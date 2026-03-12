@@ -1,4 +1,4 @@
-import { pgPool } from "#database/config/postgres.pool.js";
+import { pgPool } from "../../config/postgres.pool.js";
 import { logger } from "#utils";
 
 export async function syncPrivileges(

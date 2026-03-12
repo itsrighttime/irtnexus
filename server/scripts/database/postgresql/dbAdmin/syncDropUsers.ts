@@ -1,5 +1,5 @@
 import { dropUser } from "./utils/userManager.js";
-import { DB_USERS } from "#database/config/user.config.js";
+import { DB_USERS } from "../config/user.config.js";
 
 export async function syncDropUsers({ plan = false } = {}) {
   const need_deletion = DB_USERS.map((u) => ({

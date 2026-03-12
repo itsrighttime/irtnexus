@@ -1,4 +1,4 @@
-import { DB_ENV as ENV } from "#config";
+import { DB_ENV as ENV } from "#configs";
 import { Pool } from "pg";
 
 const DB_MAIN_CONFIG = {

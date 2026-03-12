@@ -1,5 +1,5 @@
-import { DB_ENV } from "#config";
-import { DbUserCredential } from "#types";
+import { DB_ENV } from "#configs";
+import { DbUserCredential } from "../types/database";
 
 export const DB_USER_PASS: Record<string, DbUserCredential> = {
   AUDIT: {

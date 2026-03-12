@@ -1,6 +1,8 @@
-import { DB_GLOBAL } from "#config";
-import { DB_USER_PASS } from "#database/constant/dbRoles.js";
-import { DB_TABLES_USER_MAP as TABLE_MAP } from "#database/constant/tablePermissions.js";
+import { DB_GLOBAL } from "#configs";
+import { DB_USER_PASS } from "../constant/dbRoles.js";
+import { DB_TABLES_USER_MAP as TABLE_MAP } from "../constant/tablePermissions.js";
+
+
 
 // import { DB_GLOBAL, DB_USER_PASS, DB_TABLES_USER_MAP } from "#config";
 
