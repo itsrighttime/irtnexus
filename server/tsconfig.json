@@ -41,6 +41,17 @@
       "#configs": ["configs/index.ts"]
     }
   },
-  "include": ["apps", "modules", "packages", "configs", "tools", "tests"],
+  "include": [
+    "apps",
+    "configs",
+    "infra",
+    "libs",
+    "modules",
+    "packages",
+    "scripts",
+    "tools",
+    "tests",
+    "types"
+  ],
   "exclude": ["node_modules", "dist"]
 }
