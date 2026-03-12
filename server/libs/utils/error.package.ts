@@ -9,7 +9,7 @@ import {
   NotFoundError,
 } from "@itsrighttime/utils";
 import { UtilsLogger } from "./logger.package";
-import { HandleErrorOptions, ErrorLike } from "#types";
+import { HandleErrorOptions, ErrorLike } from "./error.types";
 
 const { getTrackingCode, codeTypes, loggerMessageFormater } = UtilsLogger;
 
