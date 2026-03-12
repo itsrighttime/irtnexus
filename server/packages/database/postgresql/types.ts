@@ -14,6 +14,7 @@ export interface BaseRepositoryOptions {
   tableName: string;
   versionTableName: string;
   asyncVersioning?: boolean;
+  asyncWrites?: boolean;
 }
 
 export interface RequestContext {

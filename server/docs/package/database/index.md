@@ -30,6 +30,7 @@ const projectRepo = new BaseRepository<Project>({
   tableName: "projects",
   versionTableName: "projects_version",
   asyncVersioning: false, // default, can be set to true for high-throughput
+  asyncWrites: false, // default, can be set to true for high-throughput
 });
 ```
 

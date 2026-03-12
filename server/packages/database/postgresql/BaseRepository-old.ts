@@ -1,6 +1,6 @@
 import { PoolClient, QueryResultRow } from "pg";
-import { pool, replicaPool } from "./connection"; // replicaPool for read replicas
-import { versionQueue, writeQueue } from "./queue"; // separate async queues
+import { pool } from "./connection";
+import { versionQueue } from "./queue";
 import { BaseRepositoryOptions, VersionEntry, RequestContext } from "./types";
 import { QuerySecurityEngine } from "./QuerySecurityEngine";
 import { logger } from "#utils";
@@ -9,16 +9,12 @@ export class BaseRepository<T extends QueryResultRow> {
   protected tableName: string;
   protected versionTableName: string;
   protected asyncVersioning: boolean;
-  protected asyncWrites: boolean; // NEW: enable async/eventual writes
 
   constructor(options: BaseRepositoryOptions) {
     this.tableName = options.tableName;
     this.versionTableName = options.versionTableName;
     this.asyncVersioning = options.asyncVersioning ?? false;
-    this.asyncWrites = options.asyncWrites ?? false;
   }
-
-  /** ----------------- Transaction Management ----------------- */
 
   private txnBegin = async (release: boolean, db: PoolClient) => {
     if (release) {
@@ -56,9 +52,7 @@ export class BaseRepository<T extends QueryResultRow> {
     }
   };
 
-  /** ----------------- Get Client (Primary or Replica) ----------------- */
-
-  private async getClient(client?: PoolClient, readReplica = false) {
+  private async getClient(client?: PoolClient) {
     if (client) {
       logger.debug(
         `Using existing transaction client`,
@@ -69,42 +63,27 @@ export class BaseRepository<T extends QueryResultRow> {
       return { client, release: false };
     }
 
-    const newClient = readReplica
-      ? await replicaPool.connect()
-      : await pool.connect();
+    const newClient = await pool.connect();
 
     logger.debug(
-      `Acquired new ${readReplica ? "replica" : "primary"} DB client`,
+      `Acquired new DB client`,
       { table: this.tableName },
       "DB_CLIENT_NEW",
     );
 
-    return { client: newClient, release: true };
+    return {
+      client: newClient,
+      release: true,
+    };
   }
 
-  /** ----------------- CREATE ----------------- */
+  /** CREATE */
 
   async create(
     record: Partial<T>,
     ctx: RequestContext,
     client?: PoolClient,
   ): Promise<T> {
-    if (this.asyncWrites) {
-      // Push write to async queue → eventual consistency
-      await writeQueue.add("insertRecord", {
-        table: this.tableName,
-        data: record,
-        context: ctx,
-      });
-      logger.info(
-        `Async write queued`,
-        { table: this.tableName, record },
-        "DB_ASYNC_CREATE",
-      );
-      return { id: -1 } as any; // placeholder id
-    }
-
-    // Strong consistent write (default)
     const { client: db, release } = await this.getClient(client);
 
     try {
@@ -167,7 +146,7 @@ export class BaseRepository<T extends QueryResultRow> {
     }
   }
 
-  /** ----------------- UPDATE ----------------- */
+  /** UPDATE */
 
   async update(
     id: number,
@@ -175,25 +154,21 @@ export class BaseRepository<T extends QueryResultRow> {
     ctx: RequestContext,
     client?: PoolClient,
   ): Promise<T> {
-    if (this.asyncWrites) {
-      await writeQueue.add("updateRecord", {
-        table: this.tableName,
-        id,
-        updates,
-        context: ctx,
-      });
-      logger.info(
-        `Async update queued`,
-        { table: this.tableName, id, updates },
-        "DB_ASYNC_UPDATE",
-      );
-      return { id } as any; // placeholder
-    }
-
     const { client: db, release } = await this.getClient(client);
 
     try {
       await this.txnBegin(release, db);
+
+      logger.debug(
+        `Executing UPDATE`,
+        {
+          table: this.tableName,
+          id,
+          updates,
+          tenantId: ctx.tenantId,
+        },
+        "DB_UPDATE_START",
+      );
 
       const setClauses = Object.keys(updates)
         .map((key, i) => `${key}=$${i + 1}`)
@@ -238,7 +213,8 @@ export class BaseRepository<T extends QueryResultRow> {
 
       return updated;
     } catch (err: any) {
-      logger.error(`Update failed`, err, "DB_UPDATE_ERROR");
+      logger.error(`Updation failed`, err, "DB_UPDATE_ERROR");
+
       await this.txnRollback(release, db, err);
       throw err;
     } finally {
@@ -246,31 +222,27 @@ export class BaseRepository<T extends QueryResultRow> {
     }
   }
 
-  /** ----------------- DELETE ----------------- */
+  /** SOFT DELETE */
 
   async delete(
     id: number,
     ctx: RequestContext,
     client?: PoolClient,
   ): Promise<void> {
-    if (this.asyncWrites) {
-      await writeQueue.add("deleteRecord", {
-        table: this.tableName,
-        id,
-        context: ctx,
-      });
-      logger.info(
-        `Async delete queued`,
-        { table: this.tableName, id },
-        "DB_ASYNC_DELETE",
-      );
-      return;
-    }
-
     const { client: db, release } = await this.getClient(client);
 
     try {
       await this.txnBegin(release, db);
+
+      logger.debug(
+        `Executing SOFT DELETE`,
+        {
+          table: this.tableName,
+          id,
+          userId: ctx.userId,
+        },
+        "DB_DELETE_START",
+      );
 
       const { rows } = await db.query<T>(
         `SELECT * FROM ${this.tableName}
@@ -299,7 +271,6 @@ export class BaseRepository<T extends QueryResultRow> {
         performedAt: new Date(),
       });
 
-      await this.txnCommit(release, db);
       logger.warn(
         `Record soft deleted`,
         {
@@ -309,6 +280,8 @@ export class BaseRepository<T extends QueryResultRow> {
         },
         "DB_SOFT_DELETE_SUCCESS",
       );
+
+      await this.txnCommit(release, db);
     } catch (err: any) {
       logger.error(`Deletion failed`, err, "DB_SOFT_DELETE_ERROR");
       await this.txnRollback(release, db, err);
@@ -318,14 +291,11 @@ export class BaseRepository<T extends QueryResultRow> {
     }
   }
 
-  /** ----------------- READ ----------------- */
+  /** FIND BY ID */
 
-  async findById(
-    id: number,
-    client?: PoolClient,
-    readReplica = false,
-  ): Promise<T | null> {
-    const { client: db, release } = await this.getClient(client, readReplica);
+  async findById(id: number, client?: PoolClient): Promise<T | null> {
+    const { client: db, release } = await this.getClient(client);
+
     try {
       const { rows } = await db.query<T>(
         `SELECT *
@@ -347,9 +317,9 @@ export class BaseRepository<T extends QueryResultRow> {
     params: any[] = [],
     ctx: RequestContext,
     client?: PoolClient,
-    readReplica = false,
   ): Promise<R[]> {
-    const { client: db, release } = await this.getClient(client, readReplica);
+    const { client: db, release } = await this.getClient(client);
+
     try {
       const finalSql = QuerySecurityEngine.rewrite(sql, ctx, params);
 
@@ -382,14 +352,10 @@ export class BaseRepository<T extends QueryResultRow> {
     }
   }
 
-  /** ----------------- VERSIONING ----------------- */
+  /** VERSIONING */
 
   private async handleVersioning(client: PoolClient, entry: VersionEntry<T>) {
     if (this.asyncVersioning) {
-      await versionQueue.add("versioning", {
-        table: this.versionTableName,
-        entry,
-      });
       logger.debug(
         `Queued async versioning`,
         {
@@ -399,6 +365,21 @@ export class BaseRepository<T extends QueryResultRow> {
         },
         "DB_VERSION_ASYNC",
       );
+      await versionQueue.add("versioning", {
+        table: this.versionTableName,
+        entry,
+      });
+
+      logger.debug(
+        `Writing version entry`,
+        {
+          table: this.versionTableName,
+          recordId: entry.recordId,
+          operation: entry.operation,
+        },
+        "DB_VERSION_SYNC",
+      );
+
       return;
     }
 
@@ -432,3 +413,43 @@ export class BaseRepository<T extends QueryResultRow> {
     );
   }
 }
+
+/*
+
+import { BaseRepository } from "@irt/database/postgres/BaseRepository";
+import { withTransaction } from "@irt/database/postgres/transaction";
+
+interface Project {
+  id: number;
+  name: string;
+  status: string;
+}
+
+const projectRepo = new BaseRepository<Project>({
+  tableName: "projects",
+  versionTableName: "projects_version",
+});
+
+await projectRepo.create(
+  { name: "Alpha", status: "OPEN" },
+  { userId: "user_123" }
+);
+
+await withTransaction(async (tx) => {
+
+  const project = await projectRepo.create(
+    { name: "Mega Project", status: "OPEN" },
+    { userId: "user_1" },
+    tx
+  );
+
+  await projectRepo.update(
+    project.id,
+    { status: "ACTIVE" },
+    { userId: "user_1" },
+    tx
+  );
+
+});
+
+*/
