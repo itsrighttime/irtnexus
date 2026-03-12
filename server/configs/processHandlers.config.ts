@@ -1,5 +1,5 @@
 // src/core/processHandlers.ts
-import { UtilsError } from "#packages";
+import { UtilsError } from "#libs";
 import { logger } from "#utils";
 
 const { errorHandler } = UtilsError;
@@ -20,9 +20,8 @@ const gracefulShutdown = async (exitCode: number): Promise<void> => {
 
     // Exit the process with the provided code
     process.exit(exitCode);
-  } catch (shutdownError) {
-    logger.error("Error during shutdown");
-    logger.error(shutdownError);
+  } catch (shutdownError: any) {
+    logger.error("Error during shutdown", shutdownError);
     process.exit(1); // Force exit with error code if cleanup fails
   }
 };
@@ -37,11 +36,10 @@ const gracefulShutdown = async (exitCode: number): Promise<void> => {
  * @param isFatal - True if the error is critical and should terminate the process
  */
 const handleProcessError = async (
-  error: unknown,
+  error: any,
   isFatal: boolean,
 ): Promise<void> => {
-  logger.error(isFatal ? "Critical Error:" : "Process Error:");
-  logger.error(error);
+  logger.error(isFatal ? "Critical Error:" : "Process Error:", error);
 
   // Delegate to centralized error handler
   await errorHandler.handleError(error);

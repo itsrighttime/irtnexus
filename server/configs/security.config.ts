@@ -1,7 +1,7 @@
 // src/middlewares/securityMiddleware.ts
 import fastifyHelmet from "@fastify/helmet";
 import fastifyRateLimit from "@fastify/rate-limit";
-import { registerCors } from "#config";
+import { registerCors } from "#configs";
 import { FastifyInstance } from "fastify";
 
 /**

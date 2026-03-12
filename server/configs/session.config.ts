@@ -1,7 +1,7 @@
 // src/middlewares/sessionMiddleware.ts
 import fastifySecureSession from "@fastify/secure-session";
 import type { FastifyInstance, FastifyRequest } from "fastify";
-import { redis } from "#config";
+import { redis } from "#configs";
 import { randomBytes } from "crypto";
 
 /**

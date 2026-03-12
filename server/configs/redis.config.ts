@@ -1,6 +1,6 @@
 // src/database/redis.ts
 import Redis, { RedisOptions } from "ioredis";
-import { UtilsError } from "#packages";
+import { UtilsError } from "#libs";
 import { logger } from "#utils";
 
 const { handleError } = UtilsError;
@@ -59,11 +59,7 @@ export const connectRedis = async (): Promise<void> => {
  * Redis error listener
  */
 redis.on("error", (error: Error) => {
-  logger.error({
-    message: "Redis error",
-    code: "00012",
-  });
-  logger.error(error);
+  logger.error("Redis error", error);
 });
 
 /**
@@ -73,11 +69,7 @@ export const disconnectRedis = async (): Promise<void> => {
   try {
     await redis.quit();
     logger.info("Redis connection closed", {}, "00013");
-  } catch (error) {
-    logger.error({
-      message: "Error while disconnecting Redis",
-      code: "00014",
-    });
-    logger.error(error);
+  } catch (error: any) {
+    logger.error("Error while disconnecting Redis", error);
   }
 };
