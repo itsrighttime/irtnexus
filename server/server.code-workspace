@@ -9,7 +9,7 @@
       {
         "mysqlOptions": {
           "authProtocol": "default",
-          "enableSsl": "Disabled",
+          "enableSsl": "Disabled"
         },
         "ssh": "Disabled",
         "previewLimit": 50,
@@ -19,7 +19,7 @@
         "username": "root",
         "password": "root",
         "name": "irtnexus",
-        "database": "irtnexus",
+        "database": "irtnexus"
       },
       {
         "ssh": "Disabled",
@@ -28,10 +28,10 @@
         "port": 5432,
         "driver": "PostgreSQL",
         "name": "postgres irt_dev_db ",
-        "database": "postgres",
+        "database": "irt_dev_db",
         "username": "postgres",
-        "password": "root",
-      },
+        "password": "root"
+      }
     ],
   },
 }
