@@ -1,0 +1,21 @@
+CREATE TABLE hardware_keys (
+    key_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    account_id UUID NOT NULL REFERENCES accounts(account_id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(tenant_id) ON DELETE CASCADE,
+    key_type VARCHAR(50), -- 'FIDO U2F', 'FIDO2'
+    connection_type VARCHAR(20), -- 'USB', 'NFC', 'Bluetooth'
+    device_info JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+--
+--
+CREATE TABLE hardware_keys_versions (
+    version_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    key_id UUID NOT NULL REFERENCES hardware_keys(key_id),
+    tenant_id UUID NOT NULL REFERENCES tenants(tenant_id),
+    version_number INT NOT NULL,
+    data_snapshot JSONB NOT NULL,
+    changed_by UUID NULL REFERENCES accounts(account_id),
+    change_reason TEXT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

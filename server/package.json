@@ -8,8 +8,10 @@
     "dev": "nodemon --exec tsx src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "migrate": "tsx src/migrate.ts",
-    "seed": "tsx src/seed.ts",
+    "migrate-old": "tsx src/migrate.ts",
+    "seed-old": "tsx src/seed.ts",
+    "migrate": "tsx scripts/database/postgresql/migrate.ts",
+    "seed": "tsx scripts/database/postgresql/seed.ts",
     "setup": "pnpm migrate && pnpm seed"
   },
   "keywords": [
