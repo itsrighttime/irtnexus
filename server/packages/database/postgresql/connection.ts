@@ -14,10 +14,10 @@ export const pool = new Pool(DB_MAIN_CONFIG);
 
 // Read replica pool
 export const replicaPool = new Pool({
-  connectionString: process.env.DB_REPLICA_URL, // replica DB URL
-  max: 20, // max connections for replica
+  ...DB_MAIN_CONFIG,
+  max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 5000,
 });
 
 replicaPool.on("error", (err) => {
