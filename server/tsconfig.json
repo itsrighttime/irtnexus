@@ -11,41 +11,36 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "outDir": "dist", // compiled JS output
-    "rootDir": "src",
-    "baseUrl": "src",
+    "baseUrl": ".",
 
     /* Path Aliases */
     "paths": {
-      "#config": ["config/index"],
-      "#controllers": ["controllers/index"],
-      "#database": ["database/index"],
-      "#core": ["core/index"],
-      "#middlewares": ["middlewares/index"],
-      "#packages": ["packages/index"],
-      "#queries": ["queries/index"],
-      "#routes": ["routes/index"],
-      "#services": ["services/index"],
-      "#sessions": ["sessions/index"],
-      "#translations": ["translations/index"],
-      "#types": ["types/index"],
-      "#utils": ["utils/index"],
-      "#validations": ["validations/index"],
-      "#config/*": ["config/*"],
-      "#controllers/*": ["controllers/*"],
-      "#database/*": ["database/*"],
-      "#core/*": ["core/*"],
-      "#middlewares/*": ["middlewares/*"],
+      "#apps/*": ["apps/*"],
+      "#modules/*": ["modules/*"],
       "#packages/*": ["packages/*"],
-      "#queries/*": ["queries/*"],
-      "#routes/*": ["routes/*"],
-      "#services/*": ["services/*"],
-      "#sessions/*": ["sessions/*"],
-      "#translations/*": ["translations/*"],
-      "#types/*": ["types/*"],
-      "#utils/*": ["utils/*"],
-      "#validations/*": ["validations/*"]
+
+      "#auth/*": ["packages/auth/*"],
+      "#database/*": ["packages/database/*"],
+      "#rbac/*": ["packages/rbac/*"],
+      "#tenant/*": ["packages/tenant/*"],
+      "#event-bus/*": ["packages/event-bus/*"],
+      "#logger/*": ["packages/logger/*"],
+      "#cache/*": ["packages/cache/*"],
+      "#queue/*": ["packages/queue/*"],
+
+      "#projects/*": ["modules/projects/*"],
+      "#hr/*": ["modules/hr/*"],
+      "#payroll/*": ["modules/payroll/*"],
+      "#partner/*": ["modules/partner/*"],
+      "#legal/*": ["modules/legal/*"],
+
+      "#configs/*": ["configs/*"],
+      "#tools/*": ["tools/*"],
+      "#utils": ["packages/utils/index.ts"],
+      "#libs": ["libs/index.ts"],
+      "#configs": ["configs/index.ts"]
     }
   },
-  "include": ["src"],
+  "include": ["apps", "modules", "packages", "configs", "tools", "tests"],
   "exclude": ["node_modules", "dist"]
 }

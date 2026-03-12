@@ -42,94 +42,74 @@
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.1.0",
     "neo4j-driver": "^6.0.1",
+    "node-cache": "^5.1.2",
     "pg": "^8.20.0",
     "pino": "^10.3.1",
     "prom-client": "^15.1.3"
   },
   "imports": {
-    "#config": [
-      "./src/config/index.ts"
+    "#apps/*": [
+      "apps/*"
     ],
-    "#controllers": [
-      "./src/controllers/index.ts"
-    ],
-    "#database": [
-      "./src/database/index.ts"
-    ],
-    "#core": [
-      "./src/core/index.ts"
-    ],
-    "#middlewares": [
-      "./src/middlewares/index.ts"
-    ],
-    "#packages": [
-      "./src/packages/index.ts"
-    ],
-    "#queries": [
-      "./src/queries/index.ts"
-    ],
-    "#routes": [
-      "./src/routes/index.ts"
-    ],
-    "#services": [
-      "./src/services/index.ts"
-    ],
-    "#sessions": [
-      "./src/sessions/index.ts"
-    ],
-    "#translations": [
-      "./src/translations/index.ts"
-    ],
-    "#types": [
-      "./src/types/index.ts"
-    ],
-    "#utils": [
-      "./src/utils/index.ts"
-    ],
-    "#validations": [
-      "./src/validations/index.ts"
-    ],
-    "#config/*": [
-      "./src/config/*"
-    ],
-    "#controllers/*": [
-      "./src/controllers/*"
-    ],
-    "#database/*": [
-      "./src/database/*"
-    ],
-    "#core/*": [
-      "./src/core/*"
-    ],
-    "#middlewares/*": [
-      "./src/middlewares/*"
+    "#modules/*": [
+      "modules/*"
     ],
     "#packages/*": [
-      "./src/packages/*"
+      "packages/*"
     ],
-    "#queries/*": [
-      "./src/queries/*"
+    "#auth/*": [
+      "packages/auth/*"
     ],
-    "#routes/*": [
-      "./src/routes/*"
+    "#database/*": [
+      "packages/database/*"
     ],
-    "#services/*": [
-      "./src/services/*"
+    "#rbac/*": [
+      "packages/rbac/*"
     ],
-    "#sessions/*": [
-      "./src/sessions/*"
+    "#tenant/*": [
+      "packages/tenant/*"
     ],
-    "#translations/*": [
-      "./src/translations/*"
+    "#event-bus/*": [
+      "packages/event-bus/*"
     ],
-    "#types/*": [
-      "./src/types/*"
+    "#logger/*": [
+      "packages/logger/*"
     ],
-    "#utils/*": [
-      "./src/utils/*"
+    "#cache/*": [
+      "packages/cache/*"
     ],
-    "#validations/*": [
-      "./src/validations/*"
+    "#queue/*": [
+      "packages/queue/*"
+    ],
+    "#projects/*": [
+      "modules/projects/*"
+    ],
+    "#hr/*": [
+      "modules/hr/*"
+    ],
+    "#payroll/*": [
+      "modules/payroll/*"
+    ],
+    "#partner/*": [
+      "modules/partner/*"
+    ],
+    "#legal/*": [
+      "modules/legal/*"
+    ],
+    "#configs/*": [
+      "configs/*"
+    ],
+    "#tools/*": [
+      "tools/*"
+    ],
+    "#utils": [
+      "packages/utils/index.ts"
+    ],
+    "#libs": [
+      "libs/index.ts"
+    ],
+    "#configs": [
+      "configs/index.ts"
     ]
   },
   "devDependencies": {
