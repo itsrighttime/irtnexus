@@ -189,10 +189,11 @@ async function runMigrations(mode: "--soft" | "--hard" = "--soft") {
 
     if (mode === "--hard") {
       await recreateDatabase(dbName);
+
+      logger.info(`Dropping All the users that assigned to these databases.`);
+      await syncDropUsers();
     }
 
-    logger.info(`Dropping All the users that assigned to these databases.`);
-    await syncDropUsers();
     /*
     |--------------------------------------------------------------------------
     | Connect to target DB

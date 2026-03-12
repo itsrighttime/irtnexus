@@ -5,7 +5,18 @@ export async function createUser(
   user: { username: string; password: string },
   plan = false,
 ) {
-  const sql = `CREATE ROLE "${user.username}" LOGIN PASSWORD '${user.password}'`;
+  const sql = `
+      DO
+      $$
+      BEGIN
+         IF NOT EXISTS (
+            SELECT FROM pg_catalog.pg_roles WHERE rolname = '${user.username}'
+         ) THEN
+            CREATE ROLE "${user.username}" LOGIN PASSWORD '${user.password}';
+         END IF;
+      END
+      $$;
+    `;
 
   if (plan) {
     logger.info(`[PLAN] ${sql}`);
