@@ -1,13 +1,13 @@
 export interface LifecycleMethods {
-  delete(fileId: string): Promise<void>;
+  delete(fileId: string): Promise<boolean>;
 
-  softDelete(fileId: string): Promise<void>;
+  softDelete(fileId: string): Promise<boolean>;
 
-  purge(fileId: string): Promise<void>;
+  purge(fileId: string): Promise<boolean>;
 
-  archive(fileId: string): Promise<void>;
+  archive(fileId: string): Promise<boolean>;
 
-  restore(fileId: string): Promise<void>;
+  restore(fileId: string): Promise<boolean>;
 
-  cleanupExpired(): Promise<void>;
+  cleanupExpired(options?: { before?: Date }): Promise<number>;
 }

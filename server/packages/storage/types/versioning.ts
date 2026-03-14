@@ -1,9 +1,9 @@
-import { FileRecord, UploadOptions } from "./storage.types";
+import { FileRecord, Readable, UploadOptions } from "./storage.types";
 
 export interface VersioningMethods {
   addVersion(
     fileId: string,
-    newFile: Buffer,
+    newFile: Buffer | Readable,
     options?: UploadOptions,
   ): Promise<FileRecord>;
 

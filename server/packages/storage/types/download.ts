@@ -1,9 +1,9 @@
-import { StreamOptions } from "node:fs";
 import {
   DownloadOptions,
   FileMetadata,
   Readable,
   SignedUrlOptions,
+  StreamOptions,
 } from "./storage.types";
 
 export interface DownloadMethods {

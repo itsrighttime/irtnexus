@@ -12,7 +12,8 @@
     "seed-old": "tsx src/seed.ts",
     "migrate": "tsx scripts/database/postgresql/migrate.ts",
     "seed": "tsx scripts/database/postgresql/seed.ts",
-    "setup": "pnpm migrate && pnpm seed"
+    "setup": "pnpm migrate && pnpm seed",
+    "test": "tsx tests/unit/index.js"
   },
   "keywords": [
     "iRtNexus",

@@ -41,4 +41,9 @@ export interface FileMetadata {
   metadata?: Record<string, any>;
 }
 
-
+export interface StorageCapabilities {
+  multipart?: boolean;
+  versioning?: boolean;
+  processing?: boolean;
+  encryption?: boolean;
+}

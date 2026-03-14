@@ -1,7 +1,9 @@
-export interface SecurityMethods {
-  encrypt(fileId: string): Promise<void>;
+import { Readable } from "./storage.types";
 
-  decrypt(fileId: string): Promise<Buffer>;
+export interface SecurityMethods {
+  encrypt(fileId: string): Promise<boolean>;
+
+  decrypt(fileId: string): Promise<Readable>;
 
   setPermissions(fileId: string, permissions: string[]): Promise<void>;
 
