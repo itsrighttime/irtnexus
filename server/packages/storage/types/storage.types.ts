@@ -2,7 +2,8 @@ export type { Readable } from "stream";
 
 export interface UploadOptions {
   filename?: string;
-  mimeType?: string;
+  mimeType?: string[] | string;
+  category?: string[] | string;
   folder?: string;
   metadata?: Record<string, any>;
   public?: boolean;
@@ -25,11 +26,15 @@ export interface SignedUrlOptions {
 export interface FileRecord {
   id: string;
   filename: string;
+  extension: string;
+  category: string;
   mimeType: string;
+  path: string;
   size: number;
   url?: string;
   createdAt: Date;
   metadata?: Record<string, any>;
+  public?: boolean;
 }
 
 export interface FileMetadata {

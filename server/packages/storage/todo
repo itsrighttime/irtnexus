@@ -1,0 +1,5 @@
+# TODO 
+
+#### File: uploadFile.ts
+ const type = detectFileType(buffer);
+ - Reduce search space, need to pass the options like category, the function is already implmented with such optimization with single catagory at a time 
