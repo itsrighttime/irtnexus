@@ -1,7 +1,7 @@
-import { AzureStorageDriver } from "#packages/storage/drivers/azure/AzureStorageDriver.js"
+import { StorageDriverFactory } from "#packages/storage";
 
-export const t = ""
+export const t = "";
 
-const t1 = new AzureStorageDriver()
+const t1 = StorageDriverFactory.createDriver();
 
-await t1.delete("Ids");
+await t1.softDelete("Ids");

@@ -47,3 +47,5 @@ export interface StorageCapabilities {
   processing?: boolean;
   encryption?: boolean;
 }
+
+export type StorageDriverType = "s3" | "local" | "gcs" | "azure";

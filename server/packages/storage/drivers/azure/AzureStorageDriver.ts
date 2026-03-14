@@ -1,5 +1,5 @@
+import { StorageDriver } from "../../types/storage";
 import {
-  StorageDriver,
   UploadOptions,
   FileRecord,
   DownloadOptions,
@@ -7,7 +7,7 @@ import {
   SignedUrlOptions,
   FileMetadata,
   Readable,
-} from "#packages/storage";
+} from "../../types/storage.types";
 import { download } from "./download/download";
 import { generateSignedUrl } from "./download/generateSignedUrl";
 import { getMetadata } from "./download/getMetadata";
