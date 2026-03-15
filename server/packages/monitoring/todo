@@ -1,0 +1,7 @@
+TODO :
+
+- Add sampleRate in the AuditAttached.js
+- Need to update the Resource as multiple tables can affected in the single response
+- Create Graphana Dashboard
+- Make Sure to align the auditlogs with schema in the core business logic
+- Security : Make Grafana and Premeteus by protected routes or Something
