@@ -8,12 +8,13 @@ export async function fastifyUploadAdapter(
   options?: UploadOptions,
 ) {
   logger.debug("[fastifyUploadAdapter] Starting upload adapter");
+
   const driver = StorageDriverFactory.createDriver();
   logger.debug("[fastifyUploadAdapter] Storage driver initialized");
 
-  const results = [];
+  const files = [];
+  const fields: Record<string, any> = {};
 
-  // Iterate over multipart parts
   const parts = request.parts();
   logger.debug("[fastifyUploadAdapter] Beginning to process multipart parts");
 
@@ -37,31 +38,20 @@ export async function fastifyUploadAdapter(
       });
       logger.debug(`[fastifyUploadAdapter] File uploaded: `, record);
 
-      results.push(record);
+      files.push(record);
     } else if (part.type === "field") {
       logger.debug(
         `[fastifyUploadAdapter] Reading field part: fieldname=${part.fieldname}, value=${part.value}`,
       );
-
-      options = {
-        ...options,
-        metadata: {
-          ...(options?.metadata || {}),
-          [part.fieldname]: part.value,
-        },
-      };
-
-      logger.debug(
-        `[fastifyUploadAdapter] Metadata updated: `,
-        options.metadata,
-      );
+      fields[part.fieldname] = part.value;
     } else {
       logger.debug(`[fastifyUploadAdapter] Unknown part type: ${part}`);
     }
   }
 
   logger.debug(
-    `[fastifyUploadAdapter] Upload adapter finished, total files uploaded=${results.length}`,
+    `[fastifyUploadAdapter] Upload adapter finished, total files uploaded=${files.length}`,
   );
-  return results;
+
+  return { files, fields };
 }

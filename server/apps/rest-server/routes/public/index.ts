@@ -14,14 +14,7 @@ export const publicRoutes: FastifyPluginAsync = async (fastify) => {
   });
   fastify.post("/", async (request, reply) => {
     try {
-      const files = await fastifyUploadAdapter(request, {
-        folder: "uploads",
-        public: false,
-        // optional: allowed categories or MIME types
-        category: ["image", "document", "video"],
-      });
-
-      return { success: true, files };
+      return { success: true, data: request.body };
     } catch (err) {
       reply.code(400);
       return { error: (err as Error).message };
