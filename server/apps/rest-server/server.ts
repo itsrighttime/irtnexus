@@ -3,7 +3,7 @@ import multipart from "@fastify/multipart";
 import "dotenv/config";
 import { registerSecurity, registerSession } from "#configs";
 import { publicRoutes, privateRoutes } from "#apps/rest-server/routes";
-import { globalErrorHandler, logger } from "#utils";
+import { generateUUID, globalErrorHandler, logger } from "#utils";
 import {
   languagePlugin,
   requestContextPlugin,
@@ -38,6 +38,15 @@ export const createServer = async (): Promise<FastifyInstance> => {
   app.addHook("onRequest", async (req, _reply) => {
     // Store request start time in the request object
     (req as any).startTime = Date.now();
+    (req as any).context = { // TODO : Extract this from tocken
+      actor: {
+        tenantId: req.headers["x-tenant-id"] as string | undefined,
+        userId: req.headers["x-user-id"] as string | undefined,
+        userRole: req.headers["x-user-role"] as string | undefined,
+      },
+      requestId: (req.headers["x-request-id"] as string) || generateUUID(),
+      traceId: (req.headers["x-trace-id"] as string) || generateUUID(),
+    };
   });
 
   app.addHook("onResponse", async (req, reply) => {
