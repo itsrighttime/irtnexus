@@ -1,13 +1,14 @@
 import { Worker } from "bullmq";
 import { BaseEvent } from "../types/event";
 import { connectionToRedis, eventQueue } from "./bullmq-queues";
+import { logger } from "#utils";
 
 // Worker to process asynchronous jobs emitted from the EventBus
 export const eventWorker = new Worker(
   "eventJobs",
   async (job) => {
     const event: BaseEvent = job.data;
-    console.log(
+    logger.debug(
       `[Worker] Processing event ${event.eventType} for tenant ${event.tenantId}`,
     );
 
@@ -15,18 +16,18 @@ export const eventWorker = new Worker(
     switch (event.eventType) {
       case "PayrollProcessed":
         // Call payroll microservice logic
-        console.log("Running payroll calculations for", event.payload);
+        logger.debug("[Worker] Running payroll calculations for", event.payload);
         break;
       case "CommissionCalculated":
         // Trigger finance commission logic
-        console.log("Processing commission for", event.payload);
+        logger.debug("[Worker] Processing commission for", event.payload);
         break;
       case "NotificationCreated":
         // Trigger email/notification service
-        console.log("Sending notification to", event.payload);
+        logger.debug("[Worker] Sending notification to", event.payload);
         break;
       default:
-        console.log("No handler for this event, skipping.");
+        logger.debug("[Worker] No handler for this event, skipping.");
     }
 
     return { success: true };
@@ -35,7 +36,7 @@ export const eventWorker = new Worker(
 );
 eventWorker.on("completed", (job) => {
   if (!job) return;
-  console.log(`[Worker] Job completed: ${job.id}`);
+  logger.debug(`[Worker] Job completed: ${job.id}`);
 });
 
 eventWorker.on("failed", (job, err) => {
