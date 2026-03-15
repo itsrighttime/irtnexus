@@ -2,7 +2,7 @@ export { REDIS_PREFIX } from "./redis.const.js";
 export { registerSecurity } from "./security.config.js";
 export { HEADERS } from "./header.config.js";
 export { registerProcessHandlers } from "./processHandlers.config.js";
-export { redis, connectRedis } from "./redis.config.js";
+export { redis, connectRedis, redisOptions } from "./redis.config.js";
 export { DB_ENV, DB_GLOBAL } from "./db.config.js";
 export { registerCors } from "./cors.config.js";
 export { emailConfig } from "./email.config.js";
