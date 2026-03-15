@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --exec tsx src/server.ts",
+    "dev": "nodemon --exec tsx apps/rest-server/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "migrate-old": "tsx src/migrate.ts",
@@ -27,6 +27,7 @@
   "dependencies": {
     "@fastify/cors": "^11.2.0",
     "@fastify/helmet": "^13.0.2",
+    "@fastify/multipart": "^9.4.0",
     "@fastify/rate-limit": "^10.3.0",
     "@fastify/secure-session": "^8.3.0",
     "@fastify/swagger": "^9.7.0",
@@ -102,6 +103,9 @@
     ],
     "#tools/*": [
       "tools/*"
+    ],
+    "#types": [
+      "types/index.ts"
     ],
     "#utils": [
       "packages/utils/index.ts"

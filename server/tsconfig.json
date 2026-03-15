@@ -36,6 +36,7 @@
 
       "#configs/*": ["configs/*"],
       "#tools/*": ["tools/*"],
+      "#types": ["types/index.ts"],
       "#utils": ["packages/utils/index.ts"],
       "#libs": ["libs/index.ts"],
       "#configs": ["configs/index.ts"]

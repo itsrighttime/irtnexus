@@ -1,3 +1,4 @@
+export { REDIS_PREFIX } from "./redis.const.js";
 export { registerSecurity } from "./security.config.js";
 export { HEADERS } from "./header.config.js";
 export { registerProcessHandlers } from "./processHandlers.config.js";

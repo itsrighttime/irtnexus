@@ -1,0 +1,13 @@
+`TODO:`
+
+**Middleware**
+
+> Optimize preHandler hooks Currently, preHandler hooks (languagePlugin, requestContextPlugin, authPlugin) are being registered at multiple levels: global, plugin-level, and route-level. This may cause some hooks to execute multiple times for certain routes (especially public APIs).
+
+#### Plan:
+
+- Review global vs plugin-level hooks
+- Ensure authPlugin only runs for private routes
+- Consider using fastify-plugin to prevent duplicate hook registrations
+- Possibly move truly global hooks to `onRequest` to avoid preHandler duplication
+  Status: Low priority – revisit later for optimization
