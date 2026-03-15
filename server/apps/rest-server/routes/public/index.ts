@@ -1,4 +1,5 @@
 // src/routes/public.routes.ts
+import { fastifyUploadAdapter } from "#packages/storage";
 import { FastifyPluginAsync } from "fastify";
 
 export const publicRoutes: FastifyPluginAsync = async (fastify) => {
@@ -10,6 +11,21 @@ export const publicRoutes: FastifyPluginAsync = async (fastify) => {
       success: true,
       data: "You are using Public API",
     };
+  });
+  fastify.post("/", async (request, reply) => {
+    try {
+      const files = await fastifyUploadAdapter(request, {
+        folder: "uploads",
+        public: false,
+        // optional: allowed categories or MIME types
+        category: ["image", "document", "video"],
+      });
+
+      return { success: true, files };
+    } catch (err) {
+      reply.code(400);
+      return { error: (err as Error).message };
+    }
   });
 
   // Mount user routes under /users

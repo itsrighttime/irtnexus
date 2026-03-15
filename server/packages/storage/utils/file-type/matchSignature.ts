@@ -1,4 +1,4 @@
-import { Signature } from "./types";
+import { Signature } from "../../types/types";
 
 export function matchSignature(buffer: Buffer, signature: Signature): boolean {
   const offset = signature.offset ?? 0;

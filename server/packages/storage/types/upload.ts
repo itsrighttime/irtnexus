@@ -11,4 +11,6 @@ export interface UploadMethods {
     buffer: Buffer,
     options?: UploadOptions,
   ): Promise<FileRecord>;
+
+  // abortMultipartUpload(uploadId: string): Promise<void>;
 }

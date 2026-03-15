@@ -1,8 +1,8 @@
+export { fastifyUploadAdapter } from "./multer/fastifyUploadAdapter";
 export { StorageDriverFactory } from "./drivers/StorageDriverFactory";
+export type { StorageDriver } from "./types/storage.js";
 
-export { StorageDriver } from "./types/storage";
-
-export {
+export type {
   UploadOptions,
   DownloadOptions,
   StreamOptions,

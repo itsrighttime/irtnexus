@@ -1,5 +1,5 @@
 import { FILE_CATGORIES as FC } from "#packages/storage/types/category.js";
-import { FileTypeDefinition } from "./types";
+import { FileTypeDefinition } from "../../types/types";
 
 export const FILE_SIGNATURES_BY_CATEGORY: Record<string, FileTypeDefinition[]> =
   {
@@ -80,7 +80,7 @@ export const FILE_SIGNATURES_BY_CATEGORY: Record<string, FileTypeDefinition[]> =
         category: FC.image,
         extension: "svg",
         mime: "image/svg+xml",
-        signatures: [],
+        signatures: [{ bytes: [0x3c, 0x73, 0x76, 0x67], offset: 0 }],
       }, // text-based, no magic number
     ],
 
@@ -196,7 +196,7 @@ export const FILE_SIGNATURES_BY_CATEGORY: Record<string, FileTypeDefinition[]> =
         category: FC.audio,
         extension: "aac",
         mime: "audio/aac",
-        signatures: [],
+        signatures: [{ bytes: [0x49, 0x44, 0x33], offset: 0 }],
       },
       {
         category: FC.audio,
@@ -226,7 +226,15 @@ export const FILE_SIGNATURES_BY_CATEGORY: Record<string, FileTypeDefinition[]> =
         category: FC.audio,
         extension: "wma",
         mime: "audio/x-ms-wma",
-        signatures: [],
+        signatures: [
+          {
+            bytes: [
+              0x30, 0x26, 0xb2, 0x75, 0x8e, 0x66, 0xcf, 0x11, 0xa6, 0xd9, 0x00,
+              0xaa, 0x00, 0x62, 0xce, 0x6c,
+            ],
+            offset: 0,
+          },
+        ],
       },
     ],
 
@@ -244,7 +252,7 @@ export const FILE_SIGNATURES_BY_CATEGORY: Record<string, FileTypeDefinition[]> =
         category: FC.document,
         extension: "txt",
         mime: "text/plain",
-        signatures: [],
+        signatures: [{ bytes: [0xfe, 0xff] }],
       },
       {
         category: FC.document,
@@ -262,7 +270,15 @@ export const FILE_SIGNATURES_BY_CATEGORY: Record<string, FileTypeDefinition[]> =
         category: FC.document,
         extension: "log",
         mime: "text/plain",
-        signatures: [],
+        signatures: [
+          {
+            bytes: [
+              0x2a, 0x2a, 0x2a, 0x20, 0x20, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6c,
+              0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x20, 0x53, 0x74, 0x61, 0x72,
+              0x74, 0x65, 0x64, 0x20,
+            ],
+          },
+        ],
       },
     ],
 
@@ -330,66 +346,66 @@ export const FILE_SIGNATURES_BY_CATEGORY: Record<string, FileTypeDefinition[]> =
     // 6 Code / Text-Based (no reliable magic numbers)
     // =====================
     [FC.code]: [
-      {
-        category: FC.code,
-        extension: "json",
-        mime: "application/json",
-        signatures: [],
-      },
-      {
-        category: FC.code,
-        extension: "yaml",
-        mime: "application/x-yaml",
-        signatures: [],
-      },
-      {
-        category: FC.code,
-        extension: "yml",
-        mime: "application/x-yaml",
-        signatures: [],
-      },
-      {
-        category: FC.code,
-        extension: "xml",
-        mime: "application/xml",
-        signatures: [],
-      },
-      {
-        category: FC.code,
-        extension: "toml",
-        mime: "application/toml",
-        signatures: [],
-      },
-      {
-        category: FC.code,
-        extension: "ini",
-        mime: "text/plain",
-        signatures: [],
-      },
-      {
-        category: FC.code,
-        extension: "env",
-        mime: "text/plain",
-        signatures: [],
-      },
-      {
-        category: FC.code,
-        extension: "js",
-        mime: "application/javascript",
-        signatures: [],
-      },
-      {
-        category: FC.code,
-        extension: "ts",
-        mime: "application/typescript",
-        signatures: [],
-      },
-      {
-        category: FC.code,
-        extension: "py",
-        mime: "text/x-python",
-        signatures: [],
-      },
+      // {
+      //   category: FC.code,
+      //   extension: "json",
+      //   mime: "application/json",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.code,
+      //   extension: "yaml",
+      //   mime: "application/x-yaml",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.code,
+      //   extension: "yml",
+      //   mime: "application/x-yaml",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.code,
+      //   extension: "xml",
+      //   mime: "application/xml",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.code,
+      //   extension: "toml",
+      //   mime: "application/toml",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.code,
+      //   extension: "ini",
+      //   mime: "text/plain",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.code,
+      //   extension: "env",
+      //   mime: "text/plain",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.code,
+      //   extension: "js",
+      //   mime: "application/javascript",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.code,
+      //   extension: "ts",
+      //   mime: "application/typescript",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.code,
+      //   extension: "py",
+      //   mime: "text/x-python",
+      //   signatures: [],
+      // },
     ],
 
     // =====================
@@ -418,7 +434,7 @@ export const FILE_SIGNATURES_BY_CATEGORY: Record<string, FileTypeDefinition[]> =
         category: FC.archive,
         extension: "tar",
         mime: "application/x-tar",
-        signatures: [],
+        signatures: [{ bytes: [0x75, 0x73, 0x74, 0x61, 0x72, 0x00] }],
       },
       {
         category: FC.archive,
@@ -450,42 +466,42 @@ export const FILE_SIGNATURES_BY_CATEGORY: Record<string, FileTypeDefinition[]> =
     // 8 Dataset
     // =====================
     [FC.dataset]: [
-      {
-        category: FC.dataset,
-        extension: "csv",
-        mime: "text/csv",
-        signatures: [],
-      },
-      {
-        category: FC.dataset,
-        extension: "tsv",
-        mime: "text/tab-separated-values",
-        signatures: [],
-      },
-      {
-        category: FC.dataset,
-        extension: "parquet",
-        mime: "application/parquet",
-        signatures: [],
-      },
-      {
-        category: FC.dataset,
-        extension: "avro",
-        mime: "application/avro",
-        signatures: [],
-      },
-      {
-        category: FC.dataset,
-        extension: "sqlite",
-        mime: "application/x-sqlite3",
-        signatures: [],
-      },
-      {
-        category: FC.dataset,
-        extension: "db",
-        mime: "application/x-sqlite3",
-        signatures: [],
-      },
+      // {
+      //   category: FC.dataset,
+      //   extension: "csv",
+      //   mime: "text/csv",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.dataset,
+      //   extension: "tsv",
+      //   mime: "text/tab-separated-values",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.dataset,
+      //   extension: "parquet",
+      //   mime: "application/parquet",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.dataset,
+      //   extension: "avro",
+      //   mime: "application/avro",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.dataset,
+      //   extension: "sqlite",
+      //   mime: "application/x-sqlite3",
+      //   signatures: [],
+      // },
+      // {
+      //   category: FC.dataset,
+      //   extension: "db",
+      //   mime: "application/x-sqlite3",
+      //   signatures: [],
+      // },
     ],
 
     // =====================

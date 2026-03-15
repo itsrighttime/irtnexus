@@ -1,6 +1,10 @@
 import { FILE_SIGNATURES_BY_CATEGORY } from "./fileSignature";
 import { matchSignature } from "./matchSignature";
-import { DetectedFileType, DetectionOptions, FileCategory } from "./types";
+import {
+  DetectedFileType,
+  DetectionOptions,
+  FileCategory,
+} from "../../types/types";
 
 export function detectFileType(
   buffer: Buffer,
@@ -30,7 +34,7 @@ export function detectFileType(
 
   // 3 Check signatures
   for (const type of candidates) {
-    if (!type.signatures) continue;
+    if (!type.signatures || type.signatures.length === 0) continue;
     const matches = type.signatures.every((sig) => matchSignature(buffer, sig));
     if (matches) {
       return {

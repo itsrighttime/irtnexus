@@ -1,9 +1,11 @@
+import { FileCategory } from "./types";
+
 export type { Readable } from "stream";
 
 export interface UploadOptions {
   filename?: string;
   mimeType?: string[] | string;
-  category?: string[] | string;
+  category?: FileCategory[] | FileCategory;
   folder?: string;
   metadata?: Record<string, any>;
   public?: boolean;
@@ -27,7 +29,7 @@ export interface FileRecord {
   id: string;
   filename: string;
   extension: string;
-  category: string;
+  category: FileCategory;
   mimeType: string;
   path: string;
   size: number;

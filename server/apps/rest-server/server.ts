@@ -1,4 +1,5 @@
 import Fastify, { FastifyInstance } from "fastify";
+import multipart from "@fastify/multipart";
 import "dotenv/config";
 import { registerSecurity, registerSession } from "#configs";
 import { publicRoutes, privateRoutes } from "#apps/rest-server/routes";
@@ -21,6 +22,15 @@ export const createServer = async (): Promise<FastifyInstance> => {
   app.register(registerSecurity); // Must be a FastifyPluginAsync
   app.addHook("preHandler", languagePlugin);
   app.addHook("preHandler", requestContextPlugin);
+
+  // Register Multer
+  app.register(multipart, {
+    attachFieldsToBody: false, // optional, allows access to text fields
+    limits: {
+      fileSize: 100 * 1024 * 1024, // 100 MB max per file
+      files: 10, // max 10 files per request
+    },
+  });
 
   // ----------------------------
   // Metrics / Observability

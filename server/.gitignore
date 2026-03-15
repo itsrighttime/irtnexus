@@ -34,3 +34,5 @@ email-previews/
 backups/
 
 /prometheus/
+
+/storage
