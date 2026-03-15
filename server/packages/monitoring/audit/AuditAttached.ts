@@ -8,17 +8,17 @@ import { PrometheusExporter } from "../metrics/PrometheusExporter";
 import { auditServiceName } from "../observability/utils/servieName";
 
 /**
- * Initialize the audit chain.
- * This ensures that each audit event will include a
- * cryptographic link to the previous event.
- */
-const auditChain = new AuditChain();
-
-/**
  * Initialize the persistent audit store.
  * This handles writing audit events into MySQL.
  */
 const auditStore = new PostgresAuditStore();
+
+/**
+ * Initialize the audit chain.
+ * This ensures that each audit event will include a
+ * cryptographic link to the previous event.
+ */
+const auditChain = new AuditChain(auditStore);
 
 /**
  * MySQL-based audit emitter.

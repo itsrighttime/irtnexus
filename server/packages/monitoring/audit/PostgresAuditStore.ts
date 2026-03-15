@@ -1,8 +1,11 @@
 import { DB_ENV as ENV } from "#configs";
 import { Pool } from "pg";
-import { logger } from "#utils";
-import { randomUUID } from "crypto";
-import { AuditEventInput, AuditHashRow, ChainedAuditEvent } from "../observability/types";
+import { logger, uuidToBuffer } from "#utils";
+import {
+  AuditEventInput,
+  AuditHashRow,
+  ChainedAuditEvent,
+} from "../observability/types";
 
 const DB_MAIN_CONFIG = {
   host: ENV.DB_HOST,
@@ -13,8 +16,6 @@ const DB_MAIN_CONFIG = {
   max: 10,
 };
 
-const pool = new Pool(DB_MAIN_CONFIG);
-
 /**
  * PostgresAuditStore
  *
@@ -22,7 +23,7 @@ const pool = new Pool(DB_MAIN_CONFIG);
  * Designed for hash-chained audit logs.
  */
 export class PostgresAuditStore {
-  private pool = pool;
+  private pool = new Pool(DB_MAIN_CONFIG);
 
   async getLastHash(): Promise<string | undefined> {
     const { rows } = await this.pool.query<AuditHashRow>(
@@ -38,7 +39,6 @@ export class PostgresAuditStore {
   async append(event: ChainedAuditEvent): Promise<void> {
     const sql = `
       INSERT INTO audit_logs (
-        id,
         tenant_id,
         account_id,
         user_role,
@@ -61,26 +61,25 @@ export class PostgresAuditStore {
       )
       VALUES (
         $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,
-        $11,$12,$13,$14,$15,$16,$17,$18,$19,$20
+        $11,$12,$13,$14,$15,$16,$17,$18,$19
       )
     `;
 
     const params = [
-      event.id ?? randomUUID(),
-      event.tenantId ?? null,
-      event.accountId ?? null,
+      event.tenantId ? uuidToBuffer(event.tenantId as string) : null,
+      event.accountId ? uuidToBuffer(event.accountId as string) : null,
       event.userRole ?? null,
       event.eventType ?? "UNKNOWN",
       event.eventVersion ?? 1,
-      event.requestId ?? null,
-      event.traceId ?? null,
+      event.accountId ? uuidToBuffer(event.requestId as string) : null,
+      event.accountId ? uuidToBuffer(event.traceId as string) : null,
       event.httpMethod ?? null,
       event.httpPath ?? null,
       event.ipAddress ?? null,
       event.userAgent ?? null,
       event.resource ?? null,
       event.outcome ?? null,
-      event.metadata ?? null,
+      { ...(event.metadata || {}), eventId: event.id },
       event.performance ?? null,
       event.audit ?? true,
       event.previousHash ?? null,

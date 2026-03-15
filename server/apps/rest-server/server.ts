@@ -9,7 +9,7 @@ import {
   requestContextPlugin,
   authPlugin,
 } from "#apps/rest-server/middlewares";
-// import { metricsPlugin } from "#core/metrics";
+import { observability, prometheusRegistry } from "#packages/monitoring";
 
 export const createServer = async (): Promise<FastifyInstance> => {
   // const app = Fastify({logger: true});
@@ -35,7 +35,27 @@ export const createServer = async (): Promise<FastifyInstance> => {
   // ----------------------------
   // Metrics / Observability
   // ----------------------------
-  // app.register(metricsPlugin, { prefix: "/metrics" });
+  app.addHook("onRequest", async (req, _reply) => {
+    // Store request start time in the request object
+    (req as any).startTime = Date.now();
+  });
+
+  app.addHook("onResponse", async (req, reply) => {
+    const durationMs = Date.now() - ((req as any).startTime || Date.now());
+    const error =
+      reply.statusCode >= 400 ? new Error("Request failed") : undefined;
+
+    observability.logRequest({ req, res: reply, durationMs, error });
+  });
+
+  app.get("/metrics", async (_req, reply) => {
+    try {
+      reply.header("Content-Type", prometheusRegistry.contentType);
+      reply.send(await prometheusRegistry.metrics());
+    } catch (err) {
+      reply.status(500).send(err);
+    }
+  });
 
   // ----------------------------
   // Public Routes
