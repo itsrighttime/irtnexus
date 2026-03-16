@@ -26,12 +26,12 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
-      "@components": ["src/components"],
-      "@layouts": ["src/layouts"],
-      "@pages": ["src/pages"],
-      "@routes": ["src/routes"],
-      "@stores": ["src/stores"],
-      "@widgets": ["src/widgets"]
+      // "@components": ["src/components"],
+      // "@layouts": ["src/layouts"],
+      // "@pages": ["src/pages"],
+      // "@routes": ["src/routes"],
+      // "@stores": ["src/stores"],
+      // "@widgets": ["src/widgets"]
     }
   },
   "include": ["src"]

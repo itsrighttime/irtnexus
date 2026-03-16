@@ -26,17 +26,18 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
-      "@api": ["src/api"],
-      "@assets": ["src/assets"],
-      "@configs": ["src/configs"],
-      "@constants": ["src/constants"],
-      "@contexts": ["src/contexts"],
-      "@hooks": ["src/hooks"],
-      "@services": ["src/services"],
-      "@stores": ["src/stores"],
-      "@translations": ["src/translations"],
-      "@utils": ["src/utils"],
-      "@widgets": ["src/widgets"]
+      // "@api": ["src/api"],
+      // "@assets": ["src/assets"],
+      // "@configs": ["src/configs"],
+      // "@constants": ["src/constants"],
+      // "@contexts": ["src/contexts"],
+      // "@hooks": ["src/hooks"],
+      // "@services": ["src/services"],
+      // "@stores": ["src/stores"],
+      // "@translations": ["src/translations"],
+      // "@utils": ["src/utils"],
+      // "@widgets": ["src/widgets"],
+      // "@types": ["src/types"]
     }
   },
   "include": ["src"]
