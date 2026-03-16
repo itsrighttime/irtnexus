@@ -5,9 +5,4 @@ export { delay } from "./delay";
 export { redirectUrlWithBack } from "./redirectToUrl";
 export { redirectURL } from "./redirectURL";
 export { setDocumentTitle } from "./setDocumentTitle";
-export {
-  logger,
-  codeTypes,
-  getTrackingCode,
-  setAllowedTypes,
-} from "./logger/logger.util";
+export { logger, codeTypes, getTrackingCode, setAllowedTypes, } from "./logger/logger.util";

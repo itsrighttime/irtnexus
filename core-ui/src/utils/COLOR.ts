@@ -53,4 +53,3 @@ export const BRAND_COLORS = {
   V_SKY_BLUE: "var(--colorSkyBlue)",
 } as const;
 
-type BrandColorKey = keyof typeof BRAND_COLORS;

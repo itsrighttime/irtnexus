@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 
-type AlertType = "success" | "warning" | "error" | "info" | string;
+export type AlertType = "success" | "warning" | "error" | "info" | string;
 
 export interface AlertItem {
   id: string;

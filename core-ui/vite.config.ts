@@ -1,38 +1,35 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+// import dts from "vite-plugin-dts";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    // dts({
+    //   rollupTypes: true,
+    //   exclude: ["vite.config.ts", "node_modules/**"], // exclude config
+    // }),
+  ],
   resolve: {
-    alias: [
-      { find: "@", replacement: path.resolve(__dirname, "src") },
-
-      // { find: "@api", replacement: path.resolve(__dirname, "src/api") },
-      // { find: "@assets", replacement: path.resolve(__dirname, "src/assets") },
-      // { find: "@configs", replacement: path.resolve(__dirname, "src/configs") },
-      // {
-      //   find: "@constants",
-      //   replacement: path.resolve(__dirname, "src/constants"),
-      // },
-      // {
-      //   find: "@contexts",
-      //   replacement: path.resolve(__dirname, "src/contexts"),
-      // },
-      // { find: "@hooks", replacement: path.resolve(__dirname, "src/hooks") },
-      // {
-      //   find: "@services",
-      //   replacement: path.resolve(__dirname, "src/services"),
-      // },
-      // { find: "@stores", replacement: path.resolve(__dirname, "src/stores") },
-      // {
-      //   find: "@translations",
-      //   replacement: path.resolve(__dirname, "src/translations"),
-      // },
-      // { find: "@utils", replacement: path.resolve(__dirname, "src/utils") },
-      // { find: "@widgets", replacement: path.resolve(__dirname, "src/widgets") },
-      // { find: "@types", replacement: path.resolve(__dirname, "src/types") },
-    ],
+    alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
+  },
+  build: {
+    lib: {
+      entry: path.resolve(__dirname, "src/index.ts"),
+      name: "CoreUi",
+      formats: ["es", "cjs", "umd"],
+      fileName: (format) => `core-ui.${format}.js`,
+    },
+    rollupOptions: {
+      external: ["react", "react-dom"],
+      output: {
+        globals: {
+          react: "React",
+          "react-dom": "ReactDOM",
+        },
+      },
+    },
   },
 });

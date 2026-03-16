@@ -1,8 +1,6 @@
 import axios, { AxiosError } from "axios";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
-import { UtilsLogger } from "./logger/logger.util.js";
-
-const logger = UtilsLogger.logger;
+import { logger } from "./logger/logger.util";
 
 interface APICallerOptions {
   endpoint?: string;

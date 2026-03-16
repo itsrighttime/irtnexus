@@ -37,7 +37,7 @@ interface ErrorLogEntry extends LogEntry {
   error?: any;
 }
 
-const getTrackingCode = (codeType: CodeType, code: string): string =>
+export const getTrackingCode = (codeType: CodeType, code: string): string =>
   getTrackingCodeHelper(SERVICE_NAME, codeType, code);
 
 const logWrapper =
@@ -57,26 +57,11 @@ const errorLogWrapper =
     logFn({ error, message, context, code: getTrackingCode(type, code) });
   };
 
-const logger = {
+export const logger = {
   info: logWrapper(loggerManager.info, codeTypes.info),
   warn: logWrapper(loggerManager.warn, codeTypes.warn),
   verbose: logWrapper(loggerManager.verbose, codeTypes.verbose),
   debug: logWrapper(loggerManager.debug, codeTypes.debug),
   silly: logWrapper(loggerManager.silly, codeTypes.silly),
   error: errorLogWrapper(loggerManager.error, codeTypes.error),
-};
-
-/**
- * UtilsLogger
- *
- * Configurable logging utility for UI components with:
- * - Predefined log levels: info, warn, error, verbose, debug, silly
- * - Consumer-defined allowed types
- * - Tracking code generation per log entry
- */
-export const UtilsLogger = {
-  logger,
-  codeTypes,
-  getTrackingCode,
-  setAllowedTypes,
 };
