@@ -1,0 +1,36 @@
+.loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--color-background);
+}
+
+.top {
+  /* position: relative; */
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.loadingTextWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+}
+
+.loadingText,
+.text {
+  font-weight: var(--font-weight-bold);
+  color: var(--color);
+  font-size: calc(var(--font-size-md));
+  text-wrap: nowrap;
+  text-align: center;
+}
+
+.loadingText {
+  width: 20px;
+  text-align: left;
+}

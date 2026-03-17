@@ -1,10 +1,9 @@
-import { TestCalendar, TestIconGallery } from "@/tests";
+import { TestCalendar, TestIconGallery, TestLoading } from "@/tests";
 
 export function Test() {
   return (
     <>
-      <TestCalendar />
-      <TestIconGallery />
+      <TestLoading />
     </>
   );
 }
