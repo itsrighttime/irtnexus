@@ -1,0 +1,26 @@
+.container {
+  background-color: var(--color-border-light);
+  height: var(--height);
+  width: var(--width);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+
+.icon svg {
+  height: var(--iconSize);
+  width: var(--iconSize);
+  color: var(--color-text-muted);
+}
+
+.icon svg path {
+  color: var(--color-text-muted);
+}
+
+.container p {
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}

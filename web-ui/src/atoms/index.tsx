@@ -1,3 +1,5 @@
+export { ErrorPage } from "./error/ErrorPage";
+export { IconError } from "./error/IconError";
 export { Loading } from "./loading/Loading";
 export { LoadingChat } from "./loading/LoadingChat";
 export { SecondaryLoading } from "./loading/SecondaryLoading";

@@ -1,9 +1,9 @@
-import { TestCalendar, TestIconGallery, TestLoading } from "@/tests";
+import { TestErrorPage } from "@/tests";
 
 export function Test() {
   return (
     <>
-      <TestLoading />
+      <TestErrorPage />
     </>
   );
 }

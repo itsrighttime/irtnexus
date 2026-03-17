@@ -1,3 +1,4 @@
+export { TestErrorPage } from "./atoms/TestErrorPage";
 export { TestLoading } from "./atoms/TestLoading";
 export { TestCalendar } from "./atoms/TestCalendar";
 export { TestTooltip } from "./atoms/TestTooltip";
