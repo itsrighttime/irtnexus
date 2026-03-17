@@ -1,0 +1,127 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+
+  border: none;
+  cursor: pointer;
+  user-select: none;
+
+  transition: all var(--transition-fast);
+  font-weight: var(--font-weight-medium);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Variants */
+
+.primary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.secondary {
+  background: transparent;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.tertiary {
+  background: transparent;
+  color: var(--color-primary);
+}
+
+.ghost {
+  background: transparent;
+}
+
+.destructive {
+  background: var(--color-error);
+  color: white;
+}
+
+/* Sizes */
+
+.small {
+  padding: 6px 10px;
+  font-size: var(--font-size-sm);
+}
+
+.medium {
+  padding: 8px 14px;
+  font-size: var(--font-size-md);
+}
+
+.large {
+  padding: 12px 18px;
+  font-size: var(--font-size-lg);
+}
+
+/* Radius */
+
+.radius-none {
+  border-radius: var(--radius-none);
+}
+
+.radius-sm {
+  border-radius: var(--radius-sm);
+}
+
+.radius-md {
+  border-radius: var(--radius-md);
+}
+
+.radius-lg {
+  border-radius: var(--radius-lg);
+}
+
+/* Layout */
+
+.iconOnly {
+  padding: 8px;
+  aspect-ratio: 1;
+}
+
+.block {
+  width: 100%;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.label {
+  display: inline-flex;
+}
+
+/* Disabled */
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+
+.spinner {
+  width: 16px;
+  height: 16px;
+
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+
+  border-radius: 50%;
+
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,8 +1,12 @@
-import { myFunction } from "core-ui";
+import { TestButton } from "./tests";
+import "./App.css";
 
 function App() {
-  myFunction();
-  return <>Web-UI</>;
+  return (
+    <>
+      <TestButton />
+    </>
+  );
 }
 
 export default App;
