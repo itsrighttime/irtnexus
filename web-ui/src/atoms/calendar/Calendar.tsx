@@ -18,7 +18,7 @@ import {
 import { Button } from "../button/Button";
 import { PRESETS } from "@/templates/index.js";
 import type { CalendarProps, CalendarView } from "./Calendar.types.ts";
-// import { Loading } from "../../../SpecialPages/js/Loading.jsx"; // TODO
+import { Loading } from "../loading/Loading.tsx";
 
 const { arrowLeftIcon, arrowRightIcon } = Icons;
 
@@ -132,8 +132,7 @@ export const Calendar: React.FC<CalendarProps> = ({
 
       <Suspense
         fallback={
-          //   <Loading color={color} windowHeight="200px" windowWidth="100%" />
-          <></>
+          <Loading color={color} windowHeight="200px" windowWidth="100%" />
         }
       >
         {view === "calendar" && (
