@@ -1,11 +1,10 @@
-import { TestButton, TestCreateAtoms } from "./tests";
 import "./App.css";
+import { Test } from "./Test";
 
 function App() {
   return (
     <>
-      <TestButton />
-      <TestCreateAtoms />
+      <Test />
     </>
   );
 }
