@@ -21,6 +21,11 @@
 .calendarHeader h2 {
   margin: 0;
   cursor: pointer;
+  font-size: calc(var(--font-size-lg));
+}
+
+.calendarBox.isSmall .calendarHeader h2 {
+  font-size: calc(var(--font-size-xs));
 }
 
 .calendarBody {
@@ -61,11 +66,11 @@
 }
 
 .calendarDays.isSmall div {
-  font-size: calc(var(--font-size-xs) * 0.8);
+  font-size: calc(var(--font-size-xs));
 }
 
 .calendar.isSmall div {
-  font-size: calc(var(--font-size-xs) * 0.9);
+  font-size: calc(var(--font-size-xs));
   padding: 2px 0;
 }
 

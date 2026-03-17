@@ -1,6 +1,6 @@
 "use client";
 
-import type { JSX } from "react";
+import { useState, type JSX } from "react";
 import styles from "./CalendarBox.module.css";
 import type { RenderMonthsProps } from "./Calendar.types";
 
@@ -12,6 +12,7 @@ export const RenderMonths: React.FC<RenderMonthsProps> = ({
   restrictionEndDate,
 }) => {
   const months: JSX.Element[] = [];
+  const [clicked, setClicked] = useState<number>(-1);
 
   const formatMonth = (month: number, year: number): string =>
     `${month.toString().padStart(2, "0")}-${year}`;
@@ -32,15 +33,21 @@ export const RenderMonths: React.FC<RenderMonthsProps> = ({
       (year === restrictionEndDate.getFullYear() &&
         i <= restrictionEndDate.getMonth());
 
+    const isClicked = i === clicked;
     const isWithinRange = startMonthCondition && endMonthCondition;
 
     months.push(
       <div
         key={i}
-        className={`${styles.contentBox} ${!isWithinRange ? styles.restrictedCells : ""}`}
+        className={`${styles.contentBox}
+        ${isClicked && isWithinRange ? styles.currentCell : ""}
+         ${!isWithinRange ? styles.restrictedCells : ""}`}
         onClick={
           isWithinRange
-            ? () => handleMonthClick(formatMonth(i, year))
+            ? () => {
+                handleMonthClick(formatMonth(i, year));
+                setClicked(i);
+              }
             : undefined
         }
       >

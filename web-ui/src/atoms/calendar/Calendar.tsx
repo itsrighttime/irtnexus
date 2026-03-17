@@ -18,7 +18,7 @@ import {
 import { Button } from "../button/Button";
 import { PRESETS } from "@/templates/index.js";
 import type { CalendarProps, CalendarView } from "./Calendar.types.ts";
-// import { Loading } from "../../../SpecialPages/js/Loading.jsx";
+// import { Loading } from "../../../SpecialPages/js/Loading.jsx"; // TODO
 
 const { arrowLeftIcon, arrowRightIcon } = Icons;
 
@@ -95,6 +95,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           {!startDate || canMovePrev(view, currentDate, startDate) ? (
             <Button
               variant={PRESETS.BUTTON.A.GHOST}
+              size={isSmall ? PRESETS.BUTTON.B.SMALL : PRESETS.BUTTON.B.MEDIUM}
               iconOnly
               iconLeft={arrowLeftIcon}
               onClick={() =>
@@ -114,6 +115,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           {!endDate || canMoveNext(view, currentDate, endDate) ? (
             <Button
               variant={PRESETS.BUTTON.A.GHOST}
+              size={isSmall ? PRESETS.BUTTON.B.SMALL : PRESETS.BUTTON.B.MEDIUM}
               iconOnly
               iconLeft={arrowRightIcon}
               onClick={() =>

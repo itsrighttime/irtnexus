@@ -160,7 +160,6 @@ export const handleYearSelection = (
   setCurrentDate: (date: Date) => void,
   setView: React.Dispatch<React.SetStateAction<ViewType>>,
 ) => {
-  console.log("DDDD : handleYearSelection");
   setCurrentDate(new Date(year, 0, 1));
   setView("months");
 };
@@ -173,8 +172,6 @@ export const handleMonthSelection = (
   setCurrentDate: (date: Date) => void,
   setView: React.Dispatch<React.SetStateAction<ViewType>>,
 ) => {
-  console.log("DDDD : handleMonthSelection");
-
   const [month, year] = monthYear.split("-").map(Number);
   setCurrentDate(new Date(year, month, 1));
   setView("calendar");

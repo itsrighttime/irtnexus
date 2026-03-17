@@ -1,6 +1,6 @@
 "use client";
 
-import type { JSX } from "react";
+import { useState, type JSX } from "react";
 import styles from "./CalendarBox.module.css";
 import type { RenderYearsProps } from "./Calendar.types";
 
@@ -13,6 +13,7 @@ export const RenderYears: React.FC<RenderYearsProps> = ({
   restrictionEndYear,
 }) => {
   const years: JSX.Element[] = [];
+  const [clicked, setClicked] = useState<number>(-1);
 
   for (let i = startYear; i <= endYear; i++) {
     // Check if the year is within the restriction range
@@ -20,11 +21,22 @@ export const RenderYears: React.FC<RenderYearsProps> = ({
       (!restrictionStartYear || i >= restrictionStartYear) &&
       (!restrictionEndYear || i <= restrictionEndYear);
 
+    const isClicked = i === clicked;
+
     years.push(
       <div
         key={i}
-        className={`${styles.contentBox} ${!isWithinRange ? styles.restrictedCells : ""}`}
-        onClick={isWithinRange ? () => handleYearClick(i) : undefined}
+        className={`${styles.contentBox} 
+         ${isClicked && isWithinRange ? styles.currentCell : ""}
+        ${!isWithinRange ? styles.restrictedCells : ""}`}
+        onClick={
+          isWithinRange
+            ? () => {
+                handleYearClick(i);
+                setClicked(i);
+              }
+            : undefined
+        }
       >
         {i}
       </div>,

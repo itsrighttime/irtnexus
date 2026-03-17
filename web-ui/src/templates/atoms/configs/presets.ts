@@ -8,6 +8,8 @@ const ALL = {
   TERNARY: "tertiary",
   GHOST: "ghost",
   DESTRUCTIVE: "destructive",
+  MEDIUM: "medium",
+  LARGE: "large",
 } as const;
 
 export const PRESETS = {
@@ -24,6 +26,8 @@ export const PRESETS = {
       DEFAULT: ALL.DEFAULT,
       ERROR: ALL.ERROR,
       SUCCESS: ALL.SUCCESS,
+      MEDIUM: ALL.MEDIUM,
+      LARGE: ALL.LARGE,
     },
   },
 };
