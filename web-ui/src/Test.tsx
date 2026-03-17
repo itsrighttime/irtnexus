@@ -1,9 +1,9 @@
-import { TestIconGallery, TestTextInput, TestTooltip } from "@/tests";
+import { TestCalendar, TestIconGallery } from "@/tests";
 
 export function Test() {
   return (
     <>
-      <TestTooltip />
+      <TestCalendar />
       <TestIconGallery />
     </>
   );
