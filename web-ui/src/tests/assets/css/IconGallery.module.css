@@ -1,0 +1,41 @@
+.iconGrid {
+  display: flex;
+  width: 100vw;
+  max-height: 100vh;
+  flex-wrap: wrap;
+  justify-content: start;
+  align-items: start;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.iconCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid #ddd; */
+  /* border-radius: 8px; */
+  /* padding: 5px; */
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.iconCard:hover {
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12); */
+  /* background-color: var(--colorCyan); */
+}
+
+.icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.iconName {
+  font-size: 0.9rem;
+  color: #666;
+  word-break: break-all;
+  text-align: center;
+}

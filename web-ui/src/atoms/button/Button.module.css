@@ -10,6 +10,7 @@
 
   transition: all var(--transition-fast);
   font-weight: var(--font-weight-medium);
+  --final-color: var(--button-color, var(--color-primary));
 }
 
 .button:focus-visible {
@@ -20,7 +21,7 @@
 /* Variants */
 
 .primary {
-  background: var(--button-color, var(--color-primary));
+  background: var(--final-color);
   color: white;
 }
 
@@ -94,6 +95,36 @@
 .icon {
   display: inline-flex;
   align-items: center;
+}
+
+.iconOnly.ghost {
+  padding: 0;
+  aspect-ratio: 1;
+}
+
+.icon svg path {
+  color: var(--final-color);
+}
+
+.icon svg circle {
+  color: var(--final-color);
+}
+
+.icon svg {
+  font-size: calc(1.4 * var(--icon-size));
+  height: calc(1.4 * var(--icon-size));
+  width: calc(1.4 * var(--icon-size));
+}
+
+.iconOnly.ghost .icon svg {
+  font-size: calc(1.6 * var(--icon-size));
+  height: calc(1.6 * var(--icon-size));
+  width: calc(1.6 * var(--icon-size));
+}
+
+.iconOnly.primary .icon svg path,
+.iconOnly.primary .icon svg circle {
+  color: var(--color-background);
 }
 
 .label {

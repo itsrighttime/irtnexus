@@ -40,14 +40,24 @@ const ButtonBase = <C extends React.ElementType = "button">(
     onClick?.(e);
   };
 
+  const iconSize =
+    size === "large"
+      ? "var(--font-size-lg)"
+      : size === "medium"
+        ? "var(--font-size-md)"
+        : "var(--font-size-sm)";
+
   return (
     <Component
       ref={ref}
       id={id}
-      style={{
-        ...style,
-        ...(color && ({ "--button-color": color } as React.CSSProperties)),
-      }}
+      style={
+        {
+          ...style,
+          "--icon-size": iconSize,
+          ...(color && { "--button-color": color }),
+        } as React.CSSProperties
+      }
       title={tooltip}
       aria-label={ariaLabel}
       aria-disabled={isDisabled}
