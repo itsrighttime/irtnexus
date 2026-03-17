@@ -17,6 +17,12 @@ const ButtonBase = <C extends React.ElementType = "button">(
     loading,
     disabled,
     className,
+    style,
+    id,
+    color,
+    tooltip,
+    ariaLabel,
+    responsive,
     onClick,
     ...rest
   }: ButtonProps<C>,
@@ -31,12 +37,22 @@ const ButtonBase = <C extends React.ElementType = "button">(
       e.preventDefault();
       return;
     }
-    onClick?.();
+    onClick?.(e);
   };
 
   return (
     <Component
       ref={ref}
+      id={id}
+      style={{
+        ...style,
+        ...(color && ({ "--button-color": color } as React.CSSProperties)),
+      }}
+      title={tooltip}
+      aria-label={ariaLabel}
+      aria-disabled={isDisabled}
+      aria-busy={loading}
+      data-responsive={responsive || undefined}
       className={clsx(
         styles.button,
         styles[variant],
@@ -48,8 +64,6 @@ const ButtonBase = <C extends React.ElementType = "button">(
         className,
       )}
       disabled={Component === "button" ? isDisabled : undefined}
-      aria-disabled={isDisabled}
-      aria-busy={loading}
       onClick={handleClick}
       {...rest}
     >

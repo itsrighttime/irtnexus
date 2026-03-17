@@ -1,0 +1,162 @@
+/* -------------------- Dark Theme -------------------- */
+[data-theme="dark"] {
+  --color-primary: #6ea8e0; /* slightly brighter for visibility */
+  --color-secondary: #1b3b6f; /* lighter than original dark blue */
+  --color-tertiary: #b04a72; /* softened pink tone */
+  --color-accent: #3bc9db; /* brighter cyan for contrast */
+
+  --color-success: #7ed957;
+  --color-error: #ff6b7a;
+  --color-warning: #e0b94f;
+  --color-info: #4cc9f0;
+
+  --color-text: #e9ecef; /* near-white, not pure white */
+  --color-text-light: #ced4da;
+  --color-text-muted: #868e96;
+
+  --color-background: #121212; /* standard dark base */
+  --color-surface: #1e1e1e; /* cards / containers */
+  --color-surface-light: #2a2a2a; /* elevated surfaces */
+
+  --color-border: #343a40;
+  --color-border-light: #495057;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark-plus"] {
+  --color-primary: #569cd6;
+  --color-secondary: #4b6eaf;
+  --color-tertiary: #c586c0;
+  --color-accent: #4ec9b0;
+
+  --color-success: #6a9955;
+  --color-error: #f44747;
+  --color-warning: #ffcc66;
+  --color-info: #3794ff;
+
+  --color-text: #d4d4d4;
+  --color-text-light: #bdbdbd;
+  --color-text-muted: #858585;
+
+  --color-background: #1e1e1e;
+  --color-surface: #252526;
+  --color-surface-light: #2d2d2d;
+
+  --color-border: #3c3c3c;
+  --color-border-light: #4c4c4c;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dracula"] {
+  --color-primary: #bd93f9;
+  --color-secondary: #6272a4;
+  --color-tertiary: #ff79c6;
+  --color-accent: #50fa7b;
+
+  --color-success: #50fa7b;
+  --color-error: #ff5555;
+  --color-warning: #f1fa8c;
+  --color-info: #8be9fd;
+
+  --color-text: #f8f8f2;
+  --color-text-light: #e6e6e6;
+  --color-text-muted: #bfbfbf;
+
+  --color-background: #282a36;
+  --color-surface: #343746;
+  --color-surface-light: #44475a;
+
+  --color-border: #44475a;
+  --color-border-light: #6272a4;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="nord"] {
+  --color-primary: #81a1c1;
+  --color-secondary: #5e81ac;
+  --color-tertiary: #b48ead;
+  --color-accent: #88c0d0;
+
+  --color-success: #a3be8c;
+  --color-error: #bf616a;
+  --color-warning: #ebcb8b;
+  --color-info: #81a1c1;
+
+  --color-text: #eceff4;
+  --color-text-light: #e5e9f0;
+  --color-text-muted: #aeb6c2;
+
+  --color-background: #2e3440;
+  --color-surface: #3b4252;
+  --color-surface-light: #434c5e;
+
+  --color-border: #4c566a;
+  --color-border-light: #5e677a;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="amoled"] {
+  --color-primary: #4dabf7;
+  --color-secondary: #1c3d5a;
+  --color-tertiary: #d6336c;
+  --color-accent: #22d3ee;
+
+  --color-success: #69db7c;
+  --color-error: #ff6b6b;
+  --color-warning: #fcc419;
+  --color-info: #4dabf7;
+
+  --color-text: #f1f3f5;
+  --color-text-light: #dee2e6;
+  --color-text-muted: #adb5bd;
+
+  --color-background: #000000;
+  --color-surface: #0d0d0d;
+  --color-surface-light: #1a1a1a;
+
+  --color-border: #1f1f1f;
+  --color-border-light: #2c2c2c;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.8);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.9);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 1);
+}
+
+[data-theme="solarized-light"] {
+  --color-primary: #268bd2;
+  --color-secondary: #2aa198;
+  --color-tertiary: #d33682;
+  --color-accent: #b58900;
+
+  --color-success: #859900;
+  --color-error: #dc322f;
+  --color-warning: #b58900;
+  --color-info: #268bd2;
+
+  --color-text: #073642;
+  --color-text-light: #586e75;
+  --color-text-muted: #93a1a1;
+
+  --color-background: #fffcf2;
+  --color-surface: #eee8d5;
+  --color-surface-light: #f5efdc;
+
+  --color-border: #e0dac7;
+  --color-border-light: #e8e2cc;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+}

@@ -20,7 +20,7 @@
 /* Variants */
 
 .primary {
-  background: var(--color-primary);
+  background: var(--button-color, var(--color-primary));
   color: white;
 }
 
@@ -37,6 +37,7 @@
 
 .ghost {
   background: transparent;
+  color: var(--color-text);
 }
 
 .destructive {

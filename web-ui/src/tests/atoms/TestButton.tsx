@@ -40,7 +40,9 @@ export const TestButton = () => {
         <div style={{ display: "flex", gap: "12px" }}>
           <Button>Default</Button>
           <Button disabled>Disabled</Button>
-          <Button radius="25px" color="red" loading>Loading...</Button>
+          <Button color="red" loading>
+            Loading...
+          </Button>
         </div>
       </section>
 
@@ -51,7 +53,7 @@ export const TestButton = () => {
           {/* Replace with your icons */}
           <Button iconLeft={<span>➕</span>}>Add</Button>
           <Button iconRight={<span>⚙️</span>}>Settings</Button>
-          <Button variant="secondary"  iconOnly iconLeft={<span>⭐</span>} />
+          <Button variant="secondary" iconOnly iconLeft={<span>⭐</span>} />
         </div>
       </section>
 

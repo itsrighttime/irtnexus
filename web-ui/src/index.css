@@ -1,34 +1,22 @@
+/* -------------------- Fonts -------------------- */
 @import url("https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700&display=swap");
 
-* {
+
+/* -------------------- Reset -------------------- */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Wix Madefor Display", sans-serif;
-  color: var(--colorSimple);
-  font-size: var(--size);
 }
 
-body {
-  background-color: var(--colorBackground);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-html,
-body {
-  background-color: var(--colorBackground);
-}
-
-a {
-  text-decoration: none;
-}
-
+/* -------------------- Root Tokens (Light Theme Default) -------------------- */
 :root {
-  /* -------------------- Colors -------------------- */
+  /* Colors */
   --color-primary: #5b9bd5;
   --color-secondary: #0f2854;
-  --color-ternary: #8a244b;
+  --color-tertiary: #8a244b;
   --color-accent: #17a2b8;
 
   --color-success: #92d050;
@@ -39,14 +27,17 @@ a {
   --color-text: #212529;
   --color-text-light: #6c757d;
   --color-text-muted: #adb5bd;
+
   --color-background: #ffffff;
   --color-surface: #f8f9fa;
   --color-surface-light: #ffffff;
+
   --color-border: #dee2e6;
   --color-border-light: #e9ecef;
-  --color-selection: var(--color-tertiary);
 
-  /* -------------------- Spacing -------------------- */
+  --color-selection: var(--color-primary);
+
+  /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 12px;
@@ -54,7 +45,7 @@ a {
   --spacing-xl: 24px;
   --spacing-xxl: 32px;
 
-  /* -------------------- Typography -------------------- */
+  /* Typography */
   --font-family: "Wix Madefor Display", sans-serif;
 
   --font-size-xs: 12px;
@@ -74,7 +65,7 @@ a {
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
 
-  /* -------------------- Border Radius -------------------- */
+  /* Radius */
   --radius-none: 0px;
   --radius-sm: 3px;
   --radius-md: 5px;
@@ -82,46 +73,79 @@ a {
   --radius-xl: 12px;
   --radius-full: 9999px;
 
-  /* -------------------- Shadows -------------------- */
+  /* Shadows */
   --shadow-none: none;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-special: 0 8px 20px rgba(255, 255, 255, 0.2); /* for glass effect */
 
-  /* -------------------- Transitions -------------------- */
-  --transition-fast: 150ms;
-  --transition-normal: 300ms;
-  --transition-slow: 500ms;
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
 }
 
+
+
+/* -------------------- Base Styles -------------------- */
+html {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+/* Smooth theme transitions */
+* {
+  transition:
+    background-color var(--transition-normal),
+    color var(--transition-normal),
+    border-color var(--transition-normal);
+}
+
+/* -------------------- Elements -------------------- */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* -------------------- Selection -------------------- */
 ::selection {
-  color: #ffffff; /* Selected text color */
-  background-color: var(--colorBlueHover); /* Highlight color */
+  color: #ffffff;
+  background-color: var(--color-selection);
 }
 
-/* For Firefox */
 ::-moz-selection {
   color: #ffffff;
-  background-color: var(--colorBlueHover);
+  background-color: var(--color-selection);
 }
 
-/* ***************************************************************** */
-
-/* Scrollbar styles */
+/* -------------------- Scrollbar -------------------- */
 ::-webkit-scrollbar {
-  width: 3px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--colorGray3);
+  background: var(--color-surface);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--colorRed);
+  background: var(--color-border);
+  border-radius: var(--radius-full);
 }
 
-::-webkit-scrollbar-corner {
-  background: var(--colorGray3);
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* -------------------- Utility (Optional) -------------------- */
+[data-hidden="true"] {
+  display: none !important;
 }
