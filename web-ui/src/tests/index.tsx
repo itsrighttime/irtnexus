@@ -1,3 +1,4 @@
+export { TestTooltip } from "./atoms/TestTooltip";
 export { TestIconGallery } from "./assets/TestIconGallery";
 export { TestTextInput } from "./atoms/TestTextInput";
 export { TestCreateAtoms } from "./templets/TestCreateAtoms";

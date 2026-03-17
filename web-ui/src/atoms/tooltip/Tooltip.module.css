@@ -1,0 +1,10 @@
+.tooltip {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  transition: opacity 0.5s ease, visibility 0.15s ease;
+  max-width: var(--width);
+  text-wrap: wrap;
+  height: auto;
+}
