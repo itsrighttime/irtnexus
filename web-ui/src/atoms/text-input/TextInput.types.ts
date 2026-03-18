@@ -13,7 +13,7 @@ export interface TextInputProps
 
   variant?: "outline" | "filled" | "ghost" | "underline";
 
-  type?: "text" | "password";
+  type?: "text" | "password" | "number";
 
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;

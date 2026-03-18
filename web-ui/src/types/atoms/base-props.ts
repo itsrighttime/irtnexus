@@ -13,5 +13,5 @@ export interface BaseProps {
   tooltip?: string; // Optional tooltip text
   ariaLabel?: string; // Accessibility label
   required?: boolean;
-  width?: string;
+  width_?: string;
 }

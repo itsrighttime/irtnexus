@@ -45,7 +45,9 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
       ? showPassword
         ? "text"
         : "password"
-      : "text";
+      : type === "number"
+        ? "number"
+        : "text";
 
     return (
       <div
