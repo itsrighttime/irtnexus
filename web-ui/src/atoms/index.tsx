@@ -1,3 +1,4 @@
+export { Switch } from "./switch/Switch";
 export { CheckboxGroup } from "./slection/CheckboxGroup";
 export { RadioGroup } from "./slection/RadioGroup";
 

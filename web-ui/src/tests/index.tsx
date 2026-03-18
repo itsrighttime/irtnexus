@@ -1,3 +1,4 @@
+export { TestSwitch } from "./atoms/TestSwitch";
 export { TestSelectionControls } from "./atoms/TestSelectionControls";
 export { TestOtpField } from "./atoms/TestOtpField";
 export { TestStepper } from "./atoms/TestStepper";

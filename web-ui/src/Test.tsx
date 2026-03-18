@@ -1,9 +1,9 @@
-import { TestOtpField, TestSelectionControls } from "./tests";
+import { TestOtpField, TestSelectionControls, TestSwitch } from "./tests";
 
 export function Test() {
   return (
     <>
-      <TestSelectionControls />
+      <TestSwitch />
     </>
   );
 }
