@@ -1,3 +1,4 @@
+export { Stepper } from "./stepper/stepper";
 export { Slider } from "./slider/Slider";
 export {
   DatePicker,
