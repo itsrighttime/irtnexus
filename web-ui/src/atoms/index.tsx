@@ -1,3 +1,4 @@
+export { OtpField } from "./opt/OtpField";
 export { Stepper } from "./stepper/stepper";
 export { Slider } from "./slider/Slider";
 export {
