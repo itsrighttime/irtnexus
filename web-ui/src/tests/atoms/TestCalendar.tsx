@@ -26,6 +26,19 @@ export const TestCalendar: React.FC = () => {
       </div>
 
       <div style={{ marginBottom: 40 }}>
+        <h2>Day Mode (dd)</h2>
+        <Calendar
+          mode="day"
+          isSmall={isSmall}
+          setResult={(value) => setSelectedValue(value)}
+          restrictionStartDate="01-01-2024"
+          restrictionEndDate="31-12-2024"
+          color="#00bcd4"
+        />
+        <p>Selected: {selectedValue}</p>
+      </div>
+
+      <div style={{ marginBottom: 40 }}>
         <h2>Month-Year Mode (MM-YYYY)</h2>
         <Calendar
           isSmall={isSmall}

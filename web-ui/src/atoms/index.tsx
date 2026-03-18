@@ -1,3 +1,9 @@
+export {
+  DatePicker,
+  DayPicker,
+  MonthPicker,
+  MonthYearPicker,
+} from "./calendar/CalendarInput";
 export { TimePicker } from "./time/TimePicker";
 export { ErrorPage } from "./error/ErrorPage";
 export { IconError } from "./error/IconError";

@@ -1,9 +1,9 @@
-import { TestTimePicker } from "@/tests";
+import { TestCalendar, TestCalendarPickers, TestTimePicker } from "@/tests";
 
 export function Test() {
   return (
     <>
-      <TestTimePicker />
+      <TestCalendarPickers />
     </>
   );
 }

@@ -90,7 +90,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       className={`${styles.calendarBox} ${isSmall ? styles.isSmall : ""}`}
       style={cssVariable}
     >
-      {mode !== "month" && (
+      {!["month", "day"].includes(mode) && (
         <div className={styles.calendarHeader}>
           {!startDate || canMovePrev(view, currentDate, startDate) ? (
             <Button
@@ -139,7 +139,11 @@ export const Calendar: React.FC<CalendarProps> = ({
           <RenderCalendar
             isSmall={isSmall}
             date={currentDate}
-            handleDateClick={setResult}
+            handleDateClick={(date: string) => {
+              const [dayStr] = date.split("-");
+              if (mode == "day") setResult(dayStr);
+              else setResult(date);
+            }}
             restrictionStartDate={startDate}
             restrictionEndDate={endDate}
           />

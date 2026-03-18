@@ -12,4 +12,6 @@ export interface BaseProps {
   responsive?: boolean; // Container-query based responsiveness
   tooltip?: string; // Optional tooltip text
   ariaLabel?: string; // Accessibility label
+  required?: boolean;
+  width?: string;
 }
