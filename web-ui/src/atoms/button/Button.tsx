@@ -19,7 +19,7 @@ const ButtonBase = <C extends React.ElementType = "button">(
     className,
     style,
     id,
-    color,
+    color = "var(--color-primary)",
     tooltip,
     ariaLabel,
     responsive,
@@ -55,7 +55,7 @@ const ButtonBase = <C extends React.ElementType = "button">(
         {
           ...style,
           "--icon-size": iconSize,
-          ...(color && { "--button-color": color }),
+          "--button-color": color,
         } as React.CSSProperties
       }
       title={tooltip}

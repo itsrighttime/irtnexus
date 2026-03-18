@@ -17,8 +17,12 @@ export const TestButton = () => {
         <h3>Variants</h3>
         <div style={{ display: "flex", gap: "12px" }}>
           <Button variant="primary">Primary</Button>
-          <Button variant="secondary">Secondary</Button>
-          <Button variant="tertiary">Tertiary</Button>
+          <Button color="blue" variant="secondary">
+            Secondary
+          </Button>
+          <Button color="green" variant="tertiary">
+            Tertiary
+          </Button>
           <Button variant="ghost">Ghost</Button>
           <Button variant="destructive">Delete</Button>
         </div>
@@ -28,9 +32,13 @@ export const TestButton = () => {
       <section>
         <h3>Sizes</h3>
         <div style={{ display: "flex", gap: "12px" }}>
-          <Button size="small">Small</Button>
+          <Button color="blue" size="small">
+            Small
+          </Button>
           <Button size="medium">Medium</Button>
-          <Button size="large">Large</Button>
+          <Button color="pink" size="large">
+            Large
+          </Button>
         </div>
       </section>
 
@@ -53,7 +61,12 @@ export const TestButton = () => {
           {/* Replace with your icons */}
           <Button iconLeft={<span>➕</span>}>Add</Button>
           <Button iconRight={<span>⚙️</span>}>Settings</Button>
-          <Button variant="secondary" iconOnly iconLeft={<span>⭐</span>} />
+          <Button
+            color="blue"
+            variant="secondary"
+            iconOnly
+            iconLeft={<span>⭐</span>}
+          />
         </div>
       </section>
 
