@@ -1,3 +1,4 @@
+export { Slider } from "./slider/Slider";
 export {
   DatePicker,
   DayPicker,
