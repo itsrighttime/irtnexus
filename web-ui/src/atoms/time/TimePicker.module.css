@@ -1,0 +1,92 @@
+/* Container */
+.timeInputContainer {
+  display: flex;
+  flex-direction: column;
+  margin: var(--spacing-sm) 0;
+  width: 100%;
+  gap: var(--spacing-xs);
+}
+
+/* Label */
+.label {
+  padding-left: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+/* Required */
+.required {
+  padding-right: var(--spacing-xs);
+  color: var(--color-error);
+  font-weight: var(--font-weight-bold);
+  text-align: end;
+  font-size: var(--font-size-sm);
+}
+
+.timeHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Time Selectors */
+.timeSelectors {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.timeSelectors > span {
+  margin: 0 var(--spacing-xs);
+  color: var(--color-text-muted);
+}
+
+/* ---------------- Sizes ---------------- */
+
+.small {
+  font-size: var(--font-size-sm);
+}
+
+.medium {
+  font-size: var(--font-size-md);
+}
+
+.large {
+  font-size: var(--font-size-lg);
+}
+
+/* ---------------- Radius ---------------- */
+
+.radius-none {
+  border-radius: var(--radius-none);
+}
+
+.radius-sm {
+  border-radius: var(--radius-sm);
+}
+
+.radius-md {
+  border-radius: var(--radius-md);
+}
+
+.radius-lg {
+  border-radius: var(--radius-lg);
+}
+
+/* ---------------- States ---------------- */
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Optional hover polish */
+.outlined:hover {
+  border-color: var(--color-text-muted);
+}
+
+.colon svg {
+  height: 30px;
+  width: 30px;
+  color: var(--color-text);
+}

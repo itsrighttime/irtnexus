@@ -1,3 +1,4 @@
+export { TimePicker } from "./time/TimePicker";
 export { ErrorPage } from "./error/ErrorPage";
 export { IconError } from "./error/IconError";
 export { Loading } from "./loading/Loading";

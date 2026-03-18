@@ -3,8 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
 import styles from "./CustomDropdown.module.css";
-import type { CustomDropdownProps } from "./Calendar.types";
-
+import type { CustomDropdownProps } from "../calendar/Calendar.types";
 
 export const CustomDropdown: React.FC<CustomDropdownProps> = ({
   options,
@@ -59,7 +58,7 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
   };
 
   const cssVariable: CSSProperties = {
-    "--color": color || "var(--colorCyan)",
+    "--color": color || "var(--color-primary)",
   } as CSSProperties;
 
   return (

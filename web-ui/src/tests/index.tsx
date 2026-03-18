@@ -1,3 +1,4 @@
+export { TestTimePicker } from "./atoms/TestTimePicker";
 export { TestErrorPage } from "./atoms/TestErrorPage";
 export { TestLoading } from "./atoms/TestLoading";
 export { TestCalendar } from "./atoms/TestCalendar";

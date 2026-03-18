@@ -1,9 +1,9 @@
-import { TestErrorPage } from "@/tests";
+import { TestTimePicker } from "@/tests";
 
 export function Test() {
   return (
     <>
-      <TestErrorPage />
+      <TestTimePicker />
     </>
   );
 }
