@@ -1,3 +1,6 @@
+export { CheckboxGroup } from "./slection/CheckboxGroup";
+export { RadioGroup } from "./slection/RadioGroup";
+
 export { OtpField } from "./opt/OtpField";
 export { Stepper } from "./stepper/stepper";
 export { Slider } from "./slider/Slider";
