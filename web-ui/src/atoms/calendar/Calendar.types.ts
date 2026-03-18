@@ -1,5 +1,3 @@
-import type { CSSProperties } from "react";
-
 export type CalendarMode = "date" | "day" | "month" | "month-year" | "year";
 export type CalendarView = "calendar" | "months" | "years";
 
@@ -12,14 +10,6 @@ export interface CalendarProps {
   height?: string;
   width?: string;
   mode?: CalendarMode;
-}
-
-export interface CustomDropdownProps {
-  options: string[];
-  value: string;
-  onChange: (option: string) => void;
-  color?: string;
-  specialStyle?: CSSProperties;
 }
 
 export type Period = "month" | "year";

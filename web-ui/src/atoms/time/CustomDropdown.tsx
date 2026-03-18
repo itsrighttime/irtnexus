@@ -3,7 +3,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
 import styles from "./CustomDropdown.module.css";
-import type { CustomDropdownProps } from "../calendar/Calendar.types";
+
+export interface CustomDropdownProps {
+  options: string[];
+  value: string;
+  onChange: (option: string) => void;
+  color?: string;
+  specialStyle?: CSSProperties;
+  error?: boolean;
+}
 
 export const CustomDropdown: React.FC<CustomDropdownProps> = ({
   options,
@@ -11,6 +19,7 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
   onChange,
   color,
   specialStyle = {},
+  error = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAbove, setIsAbove] = useState(false);
@@ -67,12 +76,15 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
       ref={dropdownRef}
       style={{ ...specialStyle, ...cssVariable }}
     >
-      <div className={styles.dropdownSelected} onClick={toggleDropdown}>
+      <div
+        className={`${styles.dropdownSelected} ${error ? styles.error : ""}`}
+        onClick={toggleDropdown}
+      >
         {value}
       </div>
       {isOpen && (
         <div
-          className={`${styles.dropdownOptions} ${isAbove ? styles.above : ""}`}
+          className={`${styles.dropdownOptions}   ${isAbove ? styles.above : ""}`}
         >
           {options.map((option, index) => (
             <div

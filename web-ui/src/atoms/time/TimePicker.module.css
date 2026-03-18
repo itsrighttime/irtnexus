@@ -90,3 +90,8 @@
   width: 30px;
   color: var(--color-text);
 }
+
+.error {
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+}

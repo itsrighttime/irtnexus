@@ -84,6 +84,8 @@ export const TimePicker: React.FC<TimePickerProps> = ({
     return true;
   };
 
+  const isTimeInvalid = !isValidTime(hours, minutes, period);
+
   const notifyTimeChange = (h: string, m: string, p: string) => {
     if (!isValidTime(h, m, p)) return;
 
@@ -151,6 +153,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
           value={hours}
           onChange={handleHoursChange}
           color={color}
+          error={isTimeInvalid}
         />
 
         <span className={styles.colon}>
@@ -164,6 +167,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
           value={minutes}
           onChange={handleMinutesChange}
           color={color}
+          error={isTimeInvalid}
         />
 
         <CustomDropdown
@@ -171,8 +175,22 @@ export const TimePicker: React.FC<TimePickerProps> = ({
           value={period}
           onChange={handlePeriodChange}
           color={color}
+          error={isTimeInvalid}
         />
       </div>
+      {isTimeInvalid && (
+        <div className={styles.timeHeader}>
+          <p className={styles.error}>
+            {minTime && maxTime
+              ? `${minTime} - ${maxTime}`
+              : minTime
+                ? `${minTime} - no max`
+                : maxTime
+                  ? `no min - ${maxTime}`
+                  : "no time specified"}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

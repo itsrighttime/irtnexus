@@ -44,3 +44,14 @@
   color: var(--color-background);
   font-weight: var(--font-weight-bold);
 }
+
+/* Error state */
+.error.dropdownSelected {
+  border: 1px solid var(--color-error);
+  color: var(--color-error);
+}
+
+/* Optional: subtle red shadow */
+.error.dropdownSelected {
+  box-shadow: 0 0 4px rgba(255, 89, 105, 0.6);
+}
