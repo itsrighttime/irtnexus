@@ -160,7 +160,7 @@ export function GenericForm({
     return (
       <div className={styles.formWrapper}>
         <SuccessMessage
-          color="var(--colorRed)"
+          color="var(--color-error)"
           message="Something wrong with the structure, contact the admin!"
           onHomeClick={() => (window.location.href = "/")}
           title="ERROR !!!"
@@ -185,7 +185,7 @@ export function GenericForm({
       <div className={styles.formWrapper}>
         <ErrorList
           errors={formStatusError}
-          color={formStatus === FORM_STATUS.error ? color : "var(--colorRed)"}
+          color={formStatus === FORM_STATUS.error ? color : "var(--color-error)"}
           onClick={() => setFormStatus(FORM_STATUS.fill)}
           clearFormPersistence={clearFormPersistence}
         />
@@ -230,17 +230,9 @@ export function GenericForm({
                 ]
               }
             </h3>
-            {/* {(config as MultiStepFormConfig)[FPs.STEP]?.[currentStep]?.[
-              FPs.DESCRIPTION
-            ] && (
-              <p>
-                {
-                  (config as MultiStepFormConfig)[FPs.STEP]?.[currentStep]?.[
-                    FPs.DESCRIPTION
-                  ]
-                }
-              </p>
-            )} */}
+            {(config as MultiStepFormConfig)?.[FPs.DESCRIPTION] && (
+              <p>{(config as MultiStepFormConfig)?.[FPs.DESCRIPTION]}</p>
+            )}
           </div>
         )}
 

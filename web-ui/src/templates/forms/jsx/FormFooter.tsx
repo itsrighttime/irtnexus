@@ -44,6 +44,7 @@ export function FormFooter({
               tooltip="Back"
               onClick={back}
               color={color}
+              variant="ghost"
             />
           )}
 
@@ -52,7 +53,8 @@ export function FormFooter({
             iconLeft={crossIcon}
             tooltip="Clear Every Thing"
             onClick={clearFormPersistence}
-            color="var(--colorRed)"
+            variant="ghost"
+            color="var(--color-error)"
           />
 
           {currentStep < steps.length - 1 ? (
@@ -61,6 +63,7 @@ export function FormFooter({
               iconOnly
               tooltip="Next"
               onClick={next}
+              variant="ghost"
               color={color}
             />
           ) : (
