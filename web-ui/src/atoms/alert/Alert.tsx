@@ -68,8 +68,14 @@ export const Alert: React.FC<AlertProps> = ({ message, type, onDismiss }) => {
           iconOnly
           iconLeft={crossIcon}
           onClick={handleManualDismiss}
+          size="small"
           color="#fff"
-          style={{ borderRadius: "50%", backgroundColor: "#ff5969" }}
+          style={{
+            height: "22px",
+            width: "22px",
+            borderRadius: "50%",
+            backgroundColor: "#ff5969",
+          }}
         />
       </div>
     </div>
