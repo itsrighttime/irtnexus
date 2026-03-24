@@ -1,6 +1,6 @@
 "use client";
 
-import { apiCaller } from "@/utils";
+import { apiCaller } from "core-ui";
 import { useState, useEffect, useCallback } from "react";
 
 type HTTPMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
