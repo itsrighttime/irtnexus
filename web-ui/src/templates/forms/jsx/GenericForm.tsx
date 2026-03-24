@@ -185,7 +185,9 @@ export function GenericForm({
       <div className={styles.formWrapper}>
         <ErrorList
           errors={formStatusError}
-          color={formStatus === FORM_STATUS.error ? color : "var(--color-error)"}
+          color={
+            formStatus === FORM_STATUS.error ? color : "var(--color-error)"
+          }
           onClick={() => setFormStatus(FORM_STATUS.fill)}
           clearFormPersistence={clearFormPersistence}
         />
@@ -230,8 +232,16 @@ export function GenericForm({
                 ]
               }
             </h3>
-            {(config as MultiStepFormConfig)?.[FPs.DESCRIPTION] && (
-              <p>{(config as MultiStepFormConfig)?.[FPs.DESCRIPTION]}</p>
+            {(config as MultiStepFormConfig)[FPs.STEP]?.[currentStep]?.[
+              FPs.DESCRIPTION
+            ] && (
+              <p>
+                {
+                  (config as MultiStepFormConfig)[FPs.STEP]?.[currentStep]?.[
+                    FPs.DESCRIPTION
+                  ]
+                }
+              </p>
             )}
           </div>
         )}

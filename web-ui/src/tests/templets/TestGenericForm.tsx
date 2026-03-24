@@ -6,10 +6,11 @@ export function TestGenericForm() {
   const config: FormConfig = {
     mode: "multi",
     title: "User Registration",
-    description: "Fill all the details",
+    description: "Fill all the details for you registration",
     step: [
       {
         title: "Basic Info",
+        description: "Fill User Info",
         fields: [
           {
             name: "firstName",

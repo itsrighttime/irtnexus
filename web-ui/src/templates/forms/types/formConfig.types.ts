@@ -20,6 +20,7 @@ export interface FormSettings {
 // Step definition
 export interface FormStep {
   [FPs.TITLE]?: string;
+  [FPs.DESCRIPTION]?: string;
   [FPs.FIELDS]: FormField[];
 }
 
