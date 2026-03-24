@@ -61,13 +61,15 @@ export const arrowDownIcon = (
 export const arrowLeftIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="0.44em"
-    height="1em"
-    viewBox="0 0 7 16"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
   >
     <path
       fill="currentColor"
-      d="M5.5 13a.47.47 0 0 1-.35-.15l-4.5-4.5c-.2-.2-.2-.51 0-.71l4.5-4.49c.2-.2.51-.2.71 0s.2.51 0 .71L1.71 8l4.15 4.15c.2.2.2.51 0 .71c-.1.1-.23.15-.35.15Z"
+      d="m4.296 12l8.492-8.727a.75.75 0 1 0-1.075-1.046l-9 9.25a.75.75 0 0 0 0 1.046l9 9.25a.75.75 0 1 0 1.075-1.046z"
+      strokeWidth="0.5"
+      stroke="currentColor"
     />
   </svg>
 );
@@ -75,13 +77,15 @@ export const arrowLeftIcon = (
 export const arrowRightIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="0.44em"
-    height="1em"
-    viewBox="0 0 7 16"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
   >
     <path
       fill="currentColor"
-      d="M1.5 13a.47.47 0 0 1-.35-.15c-.2-.2-.2-.51 0-.71L5.3 7.99L1.15 3.85c-.2-.2-.2-.51 0-.71s.51-.2.71 0l4.49 4.51c.2.2.2.51 0 .71l-4.5 4.49c-.1.1-.23.15-.35.15"
+      d="m19.704 12l-8.491-8.727a.75.75 0 1 1 1.075-1.046l9 9.25a.75.75 0 0 1 0 1.046l-9 9.25a.75.75 0 1 1-1.075-1.046z"
+      strokeWidth="0.5"
+      stroke="currentColor"
     />
   </svg>
 );

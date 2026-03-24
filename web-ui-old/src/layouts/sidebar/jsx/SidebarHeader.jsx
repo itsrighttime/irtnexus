@@ -2,7 +2,7 @@ import { IconRender } from "./IconRender";
 import { Icons } from "core-ui";
 import styles from "../css/Sidebar.module.css";
 
-const { LeftArrowIcon, RightArrowIcon } = Icons;
+const { arrowLeftIcon, arrowRightIcon } = Icons;
 
 export const SidebarHeader = ({ collapsed, toggleCollapsed }) => {
   return (
@@ -13,9 +13,9 @@ export const SidebarHeader = ({ collapsed, toggleCollapsed }) => {
 
       <button className={styles.collapseBtn} onClick={toggleCollapsed}>
         {collapsed ? (
-          <IconRender icon={RightArrowIcon} />
+          <IconRender icon={arrowRightIcon} />
         ) : (
-          <IconRender icon={LeftArrowIcon} />
+          <IconRender icon={arrowLeftIcon} />
         )}
       </button>
     </div>

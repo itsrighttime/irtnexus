@@ -6,6 +6,10 @@ export const FORM_FIELDS_TYPE = {
   PASSWORD: "password",
   MOBILE: "mobile",
   DATE: "date",
+  DAY: "day",
+  MONTH: "month",
+  MONTH_YEAR: "monthYear",
+  YEAR: "year",
   TIME: "time",
   ADDRESS: "address",
   TEXT: "text",
@@ -139,6 +143,46 @@ export const CORE_FIELDS_PROPS: CoreFieldsPropsMap = {
   [FORM_FIELDS_TYPE.PASSWORD]: { compulsory: [], optional: [] },
   [FORM_FIELDS_TYPE.MOBILE]: { compulsory: [CODE], optional: [] },
   [FORM_FIELDS_TYPE.DATE]: {
+    compulsory: [],
+    optional: [
+      RESTRICTION_START_DATE,
+      RESTRICTION_END_DATE,
+      MODE,
+      VALUE,
+      REQUIRED,
+    ],
+  },
+  [FORM_FIELDS_TYPE.DAY]: {
+    compulsory: [],
+    optional: [
+      RESTRICTION_START_DATE,
+      RESTRICTION_END_DATE,
+      MODE,
+      VALUE,
+      REQUIRED,
+    ],
+  },
+  [FORM_FIELDS_TYPE.MONTH]: {
+    compulsory: [],
+    optional: [
+      RESTRICTION_START_DATE,
+      RESTRICTION_END_DATE,
+      MODE,
+      VALUE,
+      REQUIRED,
+    ],
+  },
+  [FORM_FIELDS_TYPE.MONTH_YEAR]: {
+    compulsory: [],
+    optional: [
+      RESTRICTION_START_DATE,
+      RESTRICTION_END_DATE,
+      MODE,
+      VALUE,
+      REQUIRED,
+    ],
+  },
+  [FORM_FIELDS_TYPE.YEAR]: {
     compulsory: [],
     optional: [
       RESTRICTION_START_DATE,

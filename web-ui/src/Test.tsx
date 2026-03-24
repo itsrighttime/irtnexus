@@ -1,8 +1,9 @@
-import { TestGenericForm, TestSearchBox } from "./tests";
+import { TestGenericForm, TestIconGallery, TestSearchBox } from "./tests";
 
 export function Test() {
   return (
     <>
+      <TestIconGallery />
       <TestGenericForm />
     </>
   );

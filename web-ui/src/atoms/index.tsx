@@ -1,3 +1,8 @@
+export { AddressInput } from "./text-input/AddressInput";
+export { EmailInput } from "./text-input/EmailInput";
+export { MobileInput } from "./text-input/MobileInput";
+export { NumberInput } from "./text-input/NumberInput";
+export { PasswordInput } from "./text-input/PasswordInput";
 export type {
   addAlertType,
   removeAlertType,
@@ -17,6 +22,7 @@ export {
   DayPicker,
   MonthPicker,
   MonthYearPicker,
+  YearPicker,
 } from "./calendar/CalendarInput";
 export { TimePicker } from "./time/TimePicker";
 export { ErrorPage } from "./error/ErrorPage";
