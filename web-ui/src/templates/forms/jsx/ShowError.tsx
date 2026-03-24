@@ -1,30 +1,35 @@
 "use client";
 
-import { Button } from "../../../InputFields/Actions/jsx/Button.jsx";
-import { IconButton } from "../../../InputFields/Actions/jsx/IconButton.jsx";
-import { crossIcon } from "../../../utils/icons.jsx";
+import { Button } from "@/atoms";
+import { Icons } from "@/assets";
 import styles from "../css/ShowError.module.css";
+
+const { crossIcon } = Icons;
+
+interface ErrorItem {
+  label?: string;
+  name?: string;
+  error?: string;
+}
+
+interface ErrorListProps {
+  /** Object of form field errors */
+  errors?: Record<string, ErrorItem>;
+  /** Optional primary color for buttons */
+  color?: string;
+  /** Callback when user chooses to retry updating the form */
+  onClick: () => void;
+  /** Callback to clear persisted form data */
+  clearFormPersistence: () => void;
+}
 
 /**
  * ErrorList Component
  *
- * Displays a structured list of form validation errors in a tabular format
- * along with actions to clear or update the form.
- *
- * Props:
- * @param {Object} errors - An object containing form field errors.
- *                          Each key represents a field and value contains
- *                          error details (label, name, error message).
- * @param {string} color - Optional primary color for buttons (default: "var(--colorRed)").
- * @param {Function} onClick - Callback fired when the user chooses to reattempt form update.
- * @param {Function} clearFormPersistence - Callback to clear the persisted form data.
- *
- * Behavior:
- * - Converts the errors object into an array for rendering.
- * - Displays each field label and its corresponding error message in a table.
- * - Provides buttons to either clear all form data or allow the user to retry updating the form.
+ * Displays a structured list of form validation errors along with actions
+ * to clear or update the form.
  */
-export const ErrorList = ({
+export const ErrorList: React.FC<ErrorListProps> = ({
   errors = {},
   color = "var(--colorRed)",
   onClick,
@@ -74,17 +79,19 @@ export const ErrorList = ({
       </div>
 
       <div className={styles.buttons}>
-        <IconButton
-          icon={crossIcon}
-          label="Clear Every Thing"
+        <Button
+          iconOnly
+          iconLeft={crossIcon}
+          tooltip="Clear Every Thing"
           onClick={() => {
             clearFormPersistence();
             onClick();
           }}
-          size="2"
-          color={"var(--colorRed)"}
+          color="var(--color-error)"
         />
-        <Button color={color} text="Let's Update" onClick={onClick} />
+        <Button color={color} onClick={onClick}>
+          Let's Update
+        </Button>
       </div>
     </div>
   );
