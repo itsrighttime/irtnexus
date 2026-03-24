@@ -1,14 +1,7 @@
 "use client";
 
+import type { AlertItem, AlertType } from "@/atoms/alert/alert.type";
 import { useState, useCallback } from "react";
-
-export type AlertType = "success" | "warning" | "error" | "info" | string;
-
-export interface AlertItem {
-  id: string;
-  message: string;
-  type: AlertType;
-}
 
 interface UseAlertsReturn {
   alertContainer: AlertItem[];

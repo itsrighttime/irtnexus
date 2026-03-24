@@ -5,3 +5,5 @@ export const FORM_STATUS = {
   submitting: "submitting",
   failed: "failed",
 } as const;
+
+export type FormStatus = (typeof FORM_STATUS)[keyof typeof FORM_STATUS];
