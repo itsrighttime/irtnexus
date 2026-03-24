@@ -2,6 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import styles from "./Button.module.css";
 import type { ButtonProps, ButtonComponent } from "./Button.types";
+import { Tooltip } from "../tooltip/Tooltip";
 
 const ButtonBase = <C extends React.ElementType = "button">(
   {
@@ -48,45 +49,49 @@ const ButtonBase = <C extends React.ElementType = "button">(
         : "var(--font-size-sm)";
 
   return (
-    <Component
-      ref={ref}
-      id={id}
-      style={
-        {
-          ...style,
-          "--icon-size": iconSize,
-          "--button-color": color,
-        } as React.CSSProperties
-      }
-      title={tooltip}
-      aria-label={ariaLabel}
-      aria-disabled={isDisabled}
-      aria-busy={loading}
-      data-responsive={responsive || undefined}
-      className={clsx(
-        styles.button,
-        styles[variant],
-        styles[size],
-        styles[`radius-${radius}`],
-        block && styles.block,
-        iconOnly && styles.iconOnly,
-        isDisabled && styles.disabled,
-        className,
-      )}
-      disabled={Component === "button" ? isDisabled : undefined}
-      onClick={handleClick}
-      {...rest}
-    >
-      {loading && <span className={styles.spinner} />}
+    <Tooltip content={tooltip} delay={0}>
+      <Component
+        ref={ref}
+        id={id}
+        style={
+          {
+            ...style,
+            "--icon-size": iconSize,
+            "--button-color": color,
+          } as React.CSSProperties
+        }
+        // title={tooltip}
+        aria-label={ariaLabel}
+        aria-disabled={isDisabled}
+        aria-busy={loading}
+        data-responsive={responsive || undefined}
+        className={clsx(
+          styles.button,
+          styles[variant],
+          styles[size],
+          styles[`radius-${radius}`],
+          block && styles.block,
+          iconOnly && styles.iconOnly,
+          isDisabled && styles.disabled,
+          className,
+        )}
+        disabled={Component === "button" ? isDisabled : undefined}
+        onClick={handleClick}
+        {...rest}
+      >
+        {loading && <span className={styles.spinner} />}
 
-      {!loading && iconLeft && <span className={styles.icon}>{iconLeft}</span>}
+        {!loading && iconLeft && (
+          <span className={styles.icon}>{iconLeft}</span>
+        )}
 
-      {!iconOnly && <span className={styles.label}>{children}</span>}
+        {!iconOnly && <span className={styles.label}>{children}</span>}
 
-      {!loading && iconRight && (
-        <span className={styles.icon}>{iconRight}</span>
-      )}
-    </Component>
+        {!loading && iconRight && (
+          <span className={styles.icon}>{iconRight}</span>
+        )}
+      </Component>
+    </Tooltip>
   );
 };
 
