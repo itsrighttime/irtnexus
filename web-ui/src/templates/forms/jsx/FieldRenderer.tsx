@@ -1,22 +1,22 @@
+// components/FieldRenderer.tsx
+
 "use client";
 
-import { TextInput } from "@/atoms";
-import {
-  FORM_FIELDS_TYPE,
-  FIELDS_PROPS as FPs,
-} from "../validation/helper/fields";
+import type { FormField } from "../types/register.types";
+import { COMPONENT_REGISTRY } from "../registry/componentRegistry";
+
 import { isConditional } from "../validation/isConditional";
 import { RepeatableGroup } from "./RepeatableGroup";
-import type { FormField } from "../types/register.types";
+import { createFieldUIConfig } from "../registry/createFieldUIConfig";
+import { resolveProps } from "../registry/resolveProps";
+
+const FIELD_UI_CONFIG = createFieldUIConfig();
 
 interface FieldRendererProps {
   field: FormField;
   value: Record<string, any>;
   onChange: (name: string, value: any, isError?: boolean) => void;
-  settings: {
-    color?: string;
-    [key: string]: any;
-  };
+  settings: Record<string, any>;
 }
 
 export function FieldRenderer({
@@ -27,61 +27,35 @@ export function FieldRenderer({
 }: FieldRendererProps) {
   // Conditional rendering
   if (field.conditional) {
-    const isMatch = isConditional(field.conditional, value);
-    if (!isMatch) return null;
+    const match = isConditional(field.conditional, value);
+    if (!match) return null;
   }
 
-  const color = settings.color;
-  const width = "100%";
-
-  // Repeatable group
-  if (field[FPs.REPEATABLE]) {
+  // Repeatable fields
+  if (field.repeatable) {
     return (
       <RepeatableGroup
         field={field}
-        values={value[field[FPs.NAME]] || [{}]}
-        onChange={(v, isError) => onChange(field[FPs.NAME], v, isError)}
+        values={value[field.name] || [{}]}
+        onChange={(v, isError) => onChange(field.name, v, isError)}
         settings={settings}
       />
     );
   }
 
-  const fieldMap = {
-    [FORM_FIELDS_TYPE.PASSWORD]: (
-      <TextInput
-        width={width}
-        type="password"
-        color={color}
-        key={field[FPs.NAME]}
-        label={field[FPs.LABEL]}
-        placeholder={field[FPs.PLACEHOLDER] || field[FPs.LABEL]}
-        required={field?.[FPs.REQUIRED] || false}
-        value={value[field[FPs.NAME]]}
-        onChange={(v) => {
-          onChange(field[FPs.NAME], v);
-          onChange(field[FPs.NAME], true, true); // to update Error State as valid
-        }} // Update state on change
-        // showLabelAlways={settings.showLabelAlways}
-      />
-    ),
+  // UI Config
+  const uiConfig = FIELD_UI_CONFIG[field.type];
+  if (!uiConfig) return null;
 
-    [FORM_FIELDS_TYPE.TEXT]: (
-      <TextInput
-        key={field[FPs.NAME]}
-        label={field[FPs.LABEL]}
-        placeholder={field[FPs.PLACEHOLDER] || field[FPs.LABEL]}
-        name={field[FPs.NAME]}
-        value={value[field[FPs.NAME]]}
-        onChange={(v) => onChange(field[FPs.NAME], v)} // Update state on change
-        width={width}
-        color={color}
-        // showLabelAlways={settings.showLabelAlways}
-        required={field?.[FPs.REQUIRED] || false}
-        // setIsFieldValid={(v) => onChange(field[FPs.NAME], v, true)}
-      />
-    ),
-  };
+  // Component resolution
+  const Component = COMPONENT_REGISTRY[uiConfig.component];
+  if (!Component) {
+    console.warn(`Missing component for type: ${field.type}`);
+    return null;
+  }
 
-  const key = field[FPs.TYPE] as keyof typeof fieldMap;
-  return fieldMap[key] || null;
+  // Props resolution
+  const props = resolveProps(field, value, uiConfig.props, onChange);
+
+  return <Component {...props} />;
 }
