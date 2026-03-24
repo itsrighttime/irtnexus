@@ -46,6 +46,7 @@
   /* Typography */
   --font-family: "Wix Madefor Display", sans-serif;
 
+  --font-size: 1rem;
   --font-size-xs: 12px;
   --font-size-sm: 14px;
   --font-size-md: 16px;
@@ -70,6 +71,13 @@
   --radius-lg: 8px;
   --radius-xl: 12px;
   --radius-full: 9999px;
+
+  --color-gray1: #f2f2f2;
+  --color-gray2: #f7f7f7;
+  --color-gray3: #d9d9d9;
+  --color-gray4: #bbb9b9;
+  --color-gray5: #7f7f7f;
+  --color-gray6: #404040;
 
   /* Shadows */
   --shadow-none: none;
