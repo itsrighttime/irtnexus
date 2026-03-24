@@ -12,3 +12,6 @@ export interface AlertContainerProps {
   /** Callback function invoked with the alert's `id` when it is dismissed */
   removeAlert: (id: string) => void;
 }
+
+export type addAlertType = (message: string, type: AlertType) => void;
+export type removeAlertType = (id: string) => void;

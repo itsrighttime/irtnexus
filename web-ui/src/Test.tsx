@@ -1,9 +1,9 @@
-import { TestSearchBox } from "./tests";
+import { TestGenericForm, TestSearchBox } from "./tests";
 
 export function Test() {
   return (
     <>
-      <TestSearchBox />
+      <TestGenericForm />
     </>
   );
 }

@@ -1,23 +1,24 @@
+"use client";
+
 import { useCallback, type RefObject } from "react";
-import { VALIDITY } from "../helper/validity";
-import { FIELDS_PROPS as FPs } from "../validation/helper/fields";
-import { isConditional } from "../validation/isConditional";
-import { validateResponse } from "../validation/validateResponse";
-import { FORM_STATUS } from "../helper/formStatus";
+import { VALIDITY } from "../helper/validity.js";
+import { FIELDS_PROPS as FPs } from "../validation/helper/fields.js";
+import { isConditional } from "../validation/isConditional.js";
+import { validateResponse } from "../validation/validateResponse.js";
+import { FORM_STATUS, type FormStatus } from "../helper/formStatus.js";
+import type { FormConfig, FormValues } from "../types/formConfig.types";
+import type { addAlertType } from "@/atoms/index.js";
 
-type FormData = Record<string, any>;
-type FormError = Record<string, string>;
-
-interface UseFormNavigationParams {
-  config: any;
-  formData: FormData;
-  formError: FormError;
+interface UseFormNavigationProps {
+  config: FormConfig;
+  formData: FormValues;
+  formError: Record<string, string>;
   currentStep: number;
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  addAlert?: (msg: string) => void;
-  setFormStatus: (status: string) => void;
-  setFormStatusError: (errors: any) => void;
-  scrollRef?: RefObject<HTMLElement>;
+  setCurrentStep: (step: number | ((prev: number) => number)) => void;
+  addAlert: addAlertType;
+  setFormStatus: (status: FormStatus) => void;
+  setFormStatusError: (errors: Record<string, any>) => void;
+  scrollRef?: RefObject<HTMLElement> | null;
 }
 
 export function useFormNavigation({
@@ -30,29 +31,33 @@ export function useFormNavigation({
   setFormStatus,
   setFormStatusError,
   scrollRef,
-}: UseFormNavigationParams) {
+}: UseFormNavigationProps) {
   const isStepValid = useCallback((): boolean => {
     const fields =
       config.mode === "multi"
-        ? config.steps[currentStep][FPs.FIELDS]
-        : config[FPs.FIELDS];
+        ? config[FPs.STEP]?.[currentStep]?.[FPs.FIELDS] || []
+        : config[FPs.FIELDS] || [];
 
-    return fields.every((f: any) => {
-      if (f[FPs.CONDITIONAL]) {
-        const isMatch = isConditional(f, formData);
-        if (!isMatch) return true;
+    return fields.every((f) => {
+      if (f.conditional) {
+        const isMatch = isConditional(f.conditional, formData);
+        if (!isMatch) return true; // skip validation if conditional fails
       }
       return formError[f[FPs.NAME]] === VALIDITY.valid;
     });
-  }, [config, currentStep, formError, formData]);
+  }, [config, currentStep, formData, formError]);
 
-  const next = (): void => {
-    const subConfig = config[FPs.STEP][currentStep][FPs.FIELDS];
-    const { valid, errors } = validateResponse(subConfig, formData);
+  const next = useCallback(() => {
+    const fields =
+      config.mode === "multi"
+        ? config[FPs.STEP]?.[currentStep]?.[FPs.FIELDS] || []
+        : config[FPs.FIELDS] || [];
+    const { valid, errors } = validateResponse(fields, formData);
 
     if (valid) {
-      setCurrentStep((s) => s + 1);
+      setCurrentStep((prev) => prev + 1);
 
+      // Scroll to top of container smoothly
       if (scrollRef?.current) {
         scrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
       }
@@ -60,15 +65,23 @@ export function useFormNavigation({
       setFormStatus(FORM_STATUS.error);
       setFormStatusError(errors);
     }
-  };
+  }, [
+    config,
+    currentStep,
+    formData,
+    setCurrentStep,
+    setFormStatus,
+    setFormStatusError,
+    scrollRef,
+  ]);
 
-  const back = (): void => {
-    setCurrentStep((s) => Math.max(0, s - 1));
+  const back = useCallback(() => {
+    setCurrentStep((prev) => Math.max(0, prev - 1));
 
     if (scrollRef?.current) {
       scrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
-  };
+  }, [setCurrentStep, scrollRef]);
 
   return { isStepValid, next, back };
 }

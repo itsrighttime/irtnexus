@@ -1,7 +1,6 @@
 /* -------------------- Fonts -------------------- */
 @import url("https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700&display=swap");
 
-
 /* -------------------- Reset -------------------- */
 *,
 *::before,
@@ -27,13 +26,12 @@
   --color-text: #212529;
   --color-text-light: #6c757d;
   --color-text-muted: #adb5bd;
-
-  --color-background: #ffffff;
-  --color-surface: #f8f9fa;
-  --color-surface-light: #ffffff;
-
   --color-border: #dee2e6;
   --color-border-light: #e9ecef;
+
+  --color-surface: #f8f9fa;
+  --color-surface-light: #ffffff;
+  --color-background: #ffffff;
 
   --color-selection: var(--color-primary);
 
@@ -84,8 +82,6 @@
   --transition-normal: 300ms ease;
   --transition-slow: 500ms ease;
 }
-
-
 
 /* -------------------- Base Styles -------------------- */
 html {

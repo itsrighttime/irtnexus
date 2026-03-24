@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert } from "./Alert";
-import style from "../css/Alert.module.css";
+import style from "./Alert.module.css";
 import type { AlertContainerProps } from "./alert.type";
 
 /**

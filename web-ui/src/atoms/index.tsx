@@ -1,3 +1,8 @@
+export type {
+  addAlertType,
+  removeAlertType,
+  AlertItem,
+} from "./alert/alert.type";
 export { AlertContainer } from "./alert/AlertContainer";
 export { ErrorMsg } from "./alert/ErrorMsg";
 export { SearchBox } from "./search/SearchBox";

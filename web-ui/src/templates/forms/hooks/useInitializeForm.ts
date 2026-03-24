@@ -1,83 +1,77 @@
 import { useMemo } from "react";
-import { VALIDITY } from "../helper/validity.js";
-import { FIELDS_PROPS as FPs } from "../validation/helper/fields.js";
+import { VALIDITY } from "../helper/validity";
+import { FIELDS_PROPS as FPs } from "../validation/helper/fields";
+import type { FormField } from "../types/register.types";
 
-export function useInitializeForm(allFields = []) {
+export interface FormState {
+  [key: string]: any; // Each key is a field name, value can be string, object, array
+}
+
+export interface FormError {
+  [key: string]: any; // Same shape as state, but stores VALIDITY or nested objects/arrays
+}
+
+export function useInitializeForm(allFields: FormField[] = []) {
   const { initialState, initialError } = useMemo(() => {
-    /**
-     * Recursively builds the state for a given field definition.
-     * Handles repeatable groups, nested fields, and default values.
-     */
-    const buildFieldState = (fieldDef) => {
+    const buildFieldState = (fieldDef: FormField): any => {
       const fieldName = fieldDef[FPs.NAME];
       const isRepeatable = !!fieldDef[FPs.REPEATABLE];
       const subFields = fieldDef[FPs.FIELDS];
       const isGroup = Array.isArray(subFields) && subFields.length > 0;
 
-      // Case 1: Repeatable group (array of object structures)
       if (isRepeatable) {
-        // Initialize with at least one empty entry
         const repeatedEntry = isGroup
-          ? subFields.reduce((acc, subField) => {
+          ? subFields.reduce((acc: Record<string, any>, subField) => {
               acc[subField[FPs.NAME]] = buildFieldState(subField);
               return acc;
             }, {})
-          : fieldDef[FPs.VALUE] ?? "";
+          : "value" in fieldDef
+            ? fieldDef.value
+            : "";
 
         return [repeatedEntry];
       }
 
-      // Case 2: Nested group (non-repeatable)
       if (isGroup) {
-        return subFields.reduce((acc, subField) => {
+        return subFields.reduce((acc: Record<string, any>, subField) => {
           acc[subField[FPs.NAME]] = buildFieldState(subField);
           return acc;
         }, {});
       }
 
-      // Case 3: Simple field
-      return fieldDef[FPs.VALUE] ?? "";
+      return "value" in fieldDef ? fieldDef.value : "";
     };
 
-    /**
-     * Recursively builds the error object aligned with the state structure.
-     */
-    const buildFieldError = (fieldDef) => {
+    const buildFieldError = (fieldDef: FormField): any => {
       const isRepeatable = !!fieldDef[FPs.REPEATABLE];
       const subFields = fieldDef[FPs.FIELDS];
       const isGroup = Array.isArray(subFields) && subFields.length > 0;
 
-      // Case 1: Repeatable group
       if (isRepeatable) {
         const repeatedErrorEntry = isGroup
-          ? subFields.reduce((acc, subField) => {
+          ? subFields.reduce((acc: Record<string, any>, subField) => {
               acc[subField[FPs.NAME]] = buildFieldError(subField);
               return acc;
             }, {})
           : fieldDef[FPs.REQUIRED]
-          ? VALIDITY.invalid
-          : VALIDITY.valid;
+            ? VALIDITY.invalid
+            : VALIDITY.valid;
 
         return [repeatedErrorEntry];
       }
 
-      // Case 2: Nested group
       if (isGroup) {
-        return subFields.reduce((acc, subField) => {
+        return subFields.reduce((acc: Record<string, any>, subField) => {
           acc[subField[FPs.NAME]] = buildFieldError(subField);
           return acc;
         }, {});
       }
 
-      // Case 3: Simple field
       return fieldDef[FPs.REQUIRED] ? VALIDITY.invalid : VALIDITY.valid;
     };
 
-    /**
-     * Build top-level state & error for the entire form schema.
-     */
-    const state = {};
-    const errors = {};
+    const state: FormState = {};
+    const errors: FormError = {};
 
     allFields.forEach((f) => {
       state[f[FPs.NAME]] = buildFieldState(f);

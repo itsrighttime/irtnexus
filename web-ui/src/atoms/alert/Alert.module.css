@@ -1,0 +1,69 @@
+.alertContainer {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  z-index: 1010;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-width: 300px;
+  /* 10px gap between alerts */
+}
+
+.alert {
+  position: relative;
+  padding: 5px 20px 10px 20px;
+  border-radius: 5px;
+  z-index: 1010;
+  opacity: 1;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  background-color: var(--color-background);
+  overflow: hidden;
+}
+
+.fadeOut {
+  opacity: 0;
+  transform: translateX(40px);
+  pointer-events: none;
+}
+.crossIcon {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  opacity: 0.8;
+}
+
+.alert.success {
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.alert.error {
+  border: 1px solid var(--color-error);
+  color: var(--color-error);
+}
+
+.alert.info {
+  border: 1px solid var(--colorYellow);
+  color: var(--colorYellow);
+}
+
+.statusBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  transition: width 1s linear;
+}
+
+.error .statusBar {
+  background-color: var(--color-error);
+}
+
+.success .statusBar {
+  background-color: var(--color-primary);
+}
+
+.info .statusBar {
+  background-color: var(--colorYellow);
+}

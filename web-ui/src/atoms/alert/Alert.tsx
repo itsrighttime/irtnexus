@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import style from "../css/Alert.module.css";
+import style from "./Alert.module.css";
 import { Icons } from "@/assets";
 import { Button } from "../button/Button";
 

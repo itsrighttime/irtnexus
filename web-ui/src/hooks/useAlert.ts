@@ -1,12 +1,17 @@
 "use client";
 
-import type { AlertItem, AlertType } from "@/atoms/alert/alert.type";
+import type {
+  addAlertType,
+  AlertItem,
+  AlertType,
+  removeAlertType,
+} from "@/atoms/alert/alert.type";
 import { useState, useCallback } from "react";
 
 interface UseAlertsReturn {
   alertContainer: AlertItem[];
-  addAlert: (message: string, type: AlertType) => void;
-  removeAlert: (id: string) => void;
+  addAlert: addAlertType;
+  removeAlert: removeAlertType;
 }
 
 /**

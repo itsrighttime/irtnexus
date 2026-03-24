@@ -14,8 +14,10 @@
   "dependencies": {
     "@storybook/react": "^10.2.19",
     "clsx": "^2.1.1",
+    "lodash.throttle": "^4.1.1",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.13.1"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.1",
