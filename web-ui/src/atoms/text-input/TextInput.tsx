@@ -37,7 +37,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (isDisabled) return;
-      onChange?.(e);
+      onChange?.(e.target.value);
     };
 
     const isPassword = type === "password";

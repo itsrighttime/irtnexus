@@ -124,3 +124,6 @@ export const MonthPicker = (props: PickerProp) => (
 export const MonthYearPicker = (props: PickerProp) => (
   <CalendarInput {...props} mode="month-year" />
 );
+export const YearPicker = (props: PickerProp) => (
+  <CalendarInput {...props} mode="year" />
+);

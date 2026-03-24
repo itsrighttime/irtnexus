@@ -13,12 +13,12 @@ export interface TextInputProps
 
   variant?: "outline" | "filled" | "ghost" | "underline";
 
-  type?: "text" | "password" | "number";
+  type?: "text" | "password" | "number" | "email" | "tel";
 
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
 
   block?: boolean;
 
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value: string) => void;
 }
