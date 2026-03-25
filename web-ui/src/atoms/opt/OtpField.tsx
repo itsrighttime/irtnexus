@@ -18,7 +18,7 @@ export const OtpField: React.FC<OtpFieldProps> = ({
   length = 6,
   setResult,
   color,
-  width = "400px",
+  width = "300px",
   verifcationEndpoint,
   userId,
   setError,

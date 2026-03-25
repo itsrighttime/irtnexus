@@ -29,6 +29,8 @@ const CalendarInput: React.FC<CalendarInputProps> = ({
   style,
   label,
   required = false,
+  width = "300px",
+  height = "40px",
   variant = "full",
 }) => {
   const [open, setOpen] = useState(false);
@@ -68,10 +70,15 @@ const CalendarInput: React.FC<CalendarInputProps> = ({
     borderStyle: variant === "underline" ? "solid" : undefined,
   };
 
+  const cssVariable = {
+    "--width": width,
+    "--height": height,
+  };
+
   return (
     <div
       className={`${styles.calendarInputWrapper} ${className || ""} ${styles[variant]}`}
-      style={style}
+      style={{ ...style, ...cssVariable }}
       ref={containerRef}
     >
       {/* Label */}

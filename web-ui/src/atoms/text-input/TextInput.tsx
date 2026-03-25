@@ -8,13 +8,14 @@ import { Button } from "../button/Button";
 export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
   (
     {
-      label,
       helperText,
       error,
       iconLeft,
       iconRight,
       variant = "outline",
       size = "medium",
+      width = "300px",
+      height = "40px",
       radius = "md",
       block,
       loading,
@@ -49,18 +50,17 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
         ? "number"
         : "text";
 
+    const cssVariable = {
+      "--width": width,
+      "--height": height,
+    };
+
     return (
       <div
         className={clsx(styles.wrapper, block && styles.block, className)}
-        style={style}
+        style={{ ...style, ...cssVariable }}
         data-responsive={responsive || undefined}
       >
-        {label && (
-          <label htmlFor={id} className={styles.label}>
-            {label}
-          </label>
-        )}
-
         <div
           className={clsx(
             styles.inputContainer,

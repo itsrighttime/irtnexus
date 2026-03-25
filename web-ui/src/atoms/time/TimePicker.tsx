@@ -36,7 +36,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   label,
   value = "--:-- --",
   setResult,
-  width = "200px",
+  width = "300px",
   required = false,
 
   minTime,

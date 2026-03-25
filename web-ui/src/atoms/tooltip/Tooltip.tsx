@@ -20,7 +20,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   content,
   color = "#272626",
   backgroundColor = "#eceaea",
-  width = "250px",
+  width = "300px",
   delay = 1500,
 }) => {
   const tooltipRef = useRef<HTMLDivElement | null>(null);

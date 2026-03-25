@@ -17,5 +17,13 @@ export interface BaseProps {
   width?: string;
   height?: string;
   value?: any;
-  border?: boolean;
 }
+
+export type OmitProp =
+  | "size"
+  | "onChange"
+  | "onClick"
+  | "type"
+  | "height"
+  | "value"
+  | "width";

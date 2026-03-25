@@ -1,12 +1,10 @@
 import type { BaseProps } from "@/types";
+import type { OmitProp } from "@/types/atoms/base-props";
 
 export interface TextInputProps
   extends
     BaseProps,
-    Omit<
-      React.InputHTMLAttributes<HTMLInputElement>,
-      "size" | "onChange" | "onClick" | "type"
-    > {
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, OmitProp> {
   label?: string;
   helperText?: string;
   error?: string;
