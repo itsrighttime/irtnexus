@@ -1,4 +1,5 @@
 import {
+  TestAudioUpload,
   TestCalendar,
   TestDropdown,
   TestGenericForm,
@@ -12,6 +13,7 @@ import {
 export function Test() {
   return (
     <>
+      <TestAudioUpload />
       <TestJsonField />
       <TestTextArea />
       <TestDropdown />

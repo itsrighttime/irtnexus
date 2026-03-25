@@ -1,3 +1,4 @@
+export { TestAudioUpload } from "./atoms/TestAudioUpload";
 export { TestJsonField } from "./atoms/TestJsonField";
 export { TestTextArea } from "./atoms/TestTextArea";
 export { TestDropdown } from "./atoms/TestDropdown";

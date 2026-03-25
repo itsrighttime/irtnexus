@@ -1,3 +1,4 @@
+export { AudioUpload } from "./uploads/AudioUpload";
 export { JsonField } from "./text-input/JsonField";
 export { TextArea } from "./text-input/TextArea";
 export { MultipleDropdown, SingleDropdown } from "./slection/Dropdowns";
