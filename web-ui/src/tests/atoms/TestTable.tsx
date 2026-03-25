@@ -125,7 +125,6 @@ export function TestTable() {
         pageSize={3}
         onSearch={handleSearch}
         controls={{
-          search: true,
           pagination: false,
         }}
       />
