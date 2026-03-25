@@ -1,3 +1,4 @@
+export { Dropdown } from "./slection/Dropdown";
 export { AddressInput } from "./text-input/AddressInput";
 export { EmailInput } from "./text-input/EmailInput";
 export { MobileInput } from "./text-input/MobileInput";

@@ -20,7 +20,9 @@ interface Position {
  * @param ref - Ref pointing to the target DOM element
  * @returns Computed vertical and horizontal positions
  */
-export const useSmartPosition = (ref: RefObject<HTMLElement>): Position => {
+export const useSmartPosition = (
+  ref: RefObject<HTMLElement> | null | any,
+): Position => {
   const [position, setPosition] = useState<Position>({
     vertical: "bottom",
     horizontal: "right",
@@ -28,6 +30,7 @@ export const useSmartPosition = (ref: RefObject<HTMLElement>): Position => {
 
   useEffect(() => {
     const checkPosition = () => {
+      if (!ref) return;
       const el = ref.current;
       if (!el) return;
 

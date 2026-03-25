@@ -1,5 +1,6 @@
 import {
   TestCalendar,
+  TestDropdown,
   TestGenericForm,
   TestIconGallery,
   TestSearchBox,
@@ -9,6 +10,7 @@ import {
 export function Test() {
   return (
     <>
+      <TestDropdown />
       <TestCalendar />
       <TestTextInput />
       {/* <TestGenericForm /> */}
