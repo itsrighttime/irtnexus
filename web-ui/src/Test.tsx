@@ -1,10 +1,10 @@
-import { TestGenericForm, TestIconGallery, TestSearchBox } from "./tests";
+import { TestCalendar, TestGenericForm, TestIconGallery, TestSearchBox } from "./tests";
 
 export function Test() {
   return (
     <>
-      <TestIconGallery />
-      <TestGenericForm />
+      <TestCalendar />
+      {/* <TestGenericForm /> */}
     </>
   );
 }

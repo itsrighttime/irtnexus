@@ -3,12 +3,11 @@
 import React, { useState, useRef, useEffect, type CSSProperties } from "react";
 import style from "./OtpField.module.css";
 import { logger, apiCaller } from "core-ui";
+import type { BaseProps } from "@/types";
 
-interface OtpFieldProps {
+interface OtpFieldProps extends BaseProps {
   length?: number;
   setResult: (otp: string | null) => void;
-  color?: string;
-  width?: string;
   verifcationEndpoint?: string;
   userId?: string | number;
   setError?: (err: string) => void;
@@ -62,8 +61,6 @@ export const OtpField: React.FC<OtpFieldProps> = ({
           otp: value,
         },
       });
-
-      console.log("DDDD : ", response);
 
       if (!response.status) setError?.(response.messge);
       else if (response?.success) setResult(value);

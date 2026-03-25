@@ -3,3 +3,8 @@
 - Tab Index movable
 - Label and astric
 - Keyboard Interactions
+
+- Centralising the creation of all Atoms
+- Removing Label and astic from the atom and move that to Molecule
+- controlling width of all the atoms
+- controlling border lines all the atoms 
