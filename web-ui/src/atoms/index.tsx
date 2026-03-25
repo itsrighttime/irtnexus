@@ -1,3 +1,4 @@
+export { MultipleDropdown, SingleDropdown } from "./slection/Dropdowns";
 export { Dropdown } from "./slection/Dropdown";
 export { AddressInput } from "./text-input/AddressInput";
 export { EmailInput } from "./text-input/EmailInput";
