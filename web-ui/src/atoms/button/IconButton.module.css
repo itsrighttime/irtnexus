@@ -35,15 +35,15 @@
   color: var(--iconColor);
 }
 
-.btn:hover {
+.hoverBg:hover {
   background-color: var(--iconColor);
 }
 
-.btn:hover svg path {
+.hoverBg:hover svg path {
   color: var(--color-background);
 }
 
-.btn:hover svg circle {
+.hoverBg:hover svg circle {
   color: var(--color-background);
 }
 

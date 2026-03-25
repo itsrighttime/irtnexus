@@ -12,21 +12,27 @@ type IconButtonProps = {
   size?: string | number;
   label?: string | null;
   isBorder?: boolean;
+  disabled?: boolean;
+  hoverBackground?: boolean;
 };
 
 export const IconButton: React.FC<IconButtonProps> = ({
   icon,
   onClick,
-  color = "var(color-primary)",
+  color = "var(--color-primary)",
   style = {},
   size = "1",
   label = null,
   isBorder = false,
+  disabled = false,
+  hoverBackground = false,
 }) => {
   const colorStyle: React.CSSProperties = {
     ["--iconColor" as any]: color,
     ["--iconSize" as any]: `calc(var(--font-size) * ${size})`,
     ["--border" as any]: isBorder ? `1px solid ${color}` : "none",
+    opacity: disabled ? 0.6 : 1,
+    pointerEvents: disabled ? "none" : "auto",
   };
 
   const isImage = typeof icon === "string";
@@ -39,8 +45,8 @@ export const IconButton: React.FC<IconButtonProps> = ({
         ) : (
           <button
             type="button"
-            className={styles.btn}
-            onClick={onClick}
+            className={`${styles.btn} ${hoverBackground ? styles.hoverBg : ""}`}
+            onClick={disabled ? undefined : onClick}
             style={{ ...style, ...colorStyle }}
           >
             {icon}
