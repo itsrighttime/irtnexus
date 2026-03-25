@@ -8,11 +8,13 @@ import {
   TestSearchBox,
   TestTextArea,
   TestTextInput,
+  TestVideoUpload,
 } from "./tests";
 
 export function Test() {
   return (
     <>
+      <TestVideoUpload />
       <TestAudioUpload />
       <TestJsonField />
       <TestTextArea />

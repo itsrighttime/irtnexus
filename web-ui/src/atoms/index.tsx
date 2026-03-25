@@ -1,3 +1,6 @@
+export { VideoPlayer } from "./uploads/VideoPlayer";
+export { VideoUpload } from "./uploads/VideoUpload";
+export { AudioPlayer } from "./uploads/AudioPlayer";
 export { AudioUpload } from "./uploads/AudioUpload";
 export { JsonField } from "./text-input/JsonField";
 export { TextArea } from "./text-input/TextArea";
