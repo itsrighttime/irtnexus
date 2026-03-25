@@ -1,3 +1,4 @@
+export { TextArea } from "./text-input/TextArea";
 export { MultipleDropdown, SingleDropdown } from "./slection/Dropdowns";
 export { Dropdown } from "./slection/Dropdown";
 export { AddressInput } from "./text-input/AddressInput";

@@ -1,0 +1,72 @@
+.textAreaContainer {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 20px;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 20px;
+  width: var(--width);
+}
+
+.textAreaLabel {
+  position: absolute;
+  top: -18px;
+  left: 5px;
+  font-size: calc(var(--font-size) * 0.8);
+  color: var(--color-gray5);
+}
+
+.textArea {
+  padding: 10px;
+  border: 1px solid var(--color-gray3);
+  border-radius: 4px;
+  font-size: 1rem;
+  resize: none;
+  outline: none;
+  width: 100%;
+  margin: 0;
+}
+
+.textArea:focus {
+  color: var(--color);
+}
+
+.autosize {
+  overflow: hidden;
+}
+
+.errorInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.information {
+  text-align: right;
+  padding-right: 10px;
+}
+
+.count,
+.count {
+  font-size: calc(var(--font-size) * 0.8);
+  color: var(--color-gray5);
+}
+
+.errorMessage {
+  color: var(--colorRed);
+  font-size: calc(var(--font-size) * 0.8);
+}
+
+.textArea:disabled {
+  background-color: var(--color-gray2);
+  cursor: not-allowed;
+}
+
+.required {
+  padding-top: 5px;
+  margin: 0 5px;
+  color: var(--color-error);
+  font-weight: var(--font-weight-bold);
+  text-align: end;
+}
