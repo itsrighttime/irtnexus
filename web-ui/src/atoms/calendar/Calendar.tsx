@@ -15,10 +15,9 @@ import {
   handleViewChange,
   handleYearSelection,
 } from "./helperCalnedar";
-import { Button } from "../button/Button";
-import { PRESETS } from "@/templates/index.js";
 import type { CalendarProps, CalendarView } from "./Calendar.types.ts";
 import { Loading } from "../loading/Loading.tsx";
+import { IconButton } from "../button/IconButton.tsx";
 
 const { arrowLeftIcon, arrowRightIcon } = Icons;
 
@@ -93,16 +92,14 @@ export const Calendar: React.FC<CalendarProps> = ({
       {!["month", "day"].includes(mode) && (
         <div className={styles.calendarHeader}>
           {!startDate || canMovePrev(view, currentDate, startDate) ? (
-            <Button
-              variant={PRESETS.BUTTON.A.GHOST}
-              size={isSmall ? PRESETS.BUTTON.B.SMALL : PRESETS.BUTTON.B.MEDIUM}
-              iconOnly
-              iconLeft={arrowLeftIcon}
+            <IconButton
+              size={"1"}
+              icon={arrowLeftIcon}
               onClick={() =>
                 handlePrev(currentDate, setCurrentDate, startDate, view)
               }
               color={color}
-              tooltip="Previous"
+              label="Previous"
             />
           ) : (
             <div></div>
@@ -113,16 +110,14 @@ export const Calendar: React.FC<CalendarProps> = ({
           </h2>
 
           {!endDate || canMoveNext(view, currentDate, endDate) ? (
-            <Button
-              variant={PRESETS.BUTTON.A.GHOST}
-              size={isSmall ? PRESETS.BUTTON.B.SMALL : PRESETS.BUTTON.B.MEDIUM}
-              iconOnly
-              iconLeft={arrowRightIcon}
+            <IconButton
+              size={"1"}
+              icon={arrowRightIcon}
               onClick={() =>
                 handleNext(currentDate, setCurrentDate, endDate, view)
               }
               color={color}
-              tooltip="Next"
+              label="Next"
             />
           ) : (
             <div></div>
