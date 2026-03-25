@@ -4,6 +4,7 @@ import {
   TestDropdown,
   TestGenericForm,
   TestIconGallery,
+  TestImageUpload,
   TestJsonField,
   TestSearchBox,
   TestTextArea,
@@ -14,6 +15,7 @@ import {
 export function Test() {
   return (
     <>
+      <TestImageUpload />
       <TestVideoUpload />
       <TestAudioUpload />
       <TestJsonField />

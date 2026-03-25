@@ -1,3 +1,4 @@
+export { TestImageUpload } from "./atoms/TestImageUpload";
 export { TestVideoUpload } from "./atoms/TestVideoUpload";
 export { TestAudioUpload } from "./atoms/TestAudioUpload";
 export { TestJsonField } from "./atoms/TestJsonField";

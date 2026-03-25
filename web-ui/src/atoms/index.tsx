@@ -1,3 +1,5 @@
+export { ImagePreview } from "./uploads/ImagePreview";
+export { ImageUpload } from "./uploads/ImageUpload";
 export { VideoPlayer } from "./uploads/VideoPlayer";
 export { VideoUpload } from "./uploads/VideoUpload";
 export { AudioPlayer } from "./uploads/AudioPlayer";
