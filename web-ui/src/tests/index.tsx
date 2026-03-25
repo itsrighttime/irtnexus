@@ -1,3 +1,4 @@
+export { TestJsonField } from "./atoms/TestJsonField";
 export { TestTextArea } from "./atoms/TestTextArea";
 export { TestDropdown } from "./atoms/TestDropdown";
 export { TestGenericForm } from "./templets/TestGenericForm";

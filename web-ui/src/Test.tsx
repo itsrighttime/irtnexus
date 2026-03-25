@@ -3,6 +3,7 @@ import {
   TestDropdown,
   TestGenericForm,
   TestIconGallery,
+  TestJsonField,
   TestSearchBox,
   TestTextArea,
   TestTextInput,
@@ -11,6 +12,7 @@ import {
 export function Test() {
   return (
     <>
+      <TestJsonField />
       <TestTextArea />
       <TestDropdown />
       <TestCalendar />

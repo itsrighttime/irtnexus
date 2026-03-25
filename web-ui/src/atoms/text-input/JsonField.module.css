@@ -1,0 +1,24 @@
+.jsonField {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.errBtn {
+  display: flex;
+  justify-content: space-between;
+  /* padding: 0 10px; */
+}
+.error {
+  color: var(--color-error);
+  text-overflow: ellipsis;
+}
+
+/* .btn {
+  width: 200px;
+} */
+
+.onDataSave {
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+}
