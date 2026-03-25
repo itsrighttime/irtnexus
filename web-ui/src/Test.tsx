@@ -2,6 +2,7 @@ import {
   TestAudioUpload,
   TestCalendar,
   TestDropdown,
+  TestFileUpload,
   TestGenericForm,
   TestIconGallery,
   TestImageUpload,
@@ -15,6 +16,7 @@ import {
 export function Test() {
   return (
     <>
+      <TestFileUpload />
       <TestImageUpload />
       <TestVideoUpload />
       <TestAudioUpload />

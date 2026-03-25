@@ -1,0 +1,123 @@
+.fileUploadContainer {
+  width: var(--width);
+  min-height: var(--height);
+}
+
+.fileUpload {
+  width: 100%;
+  height: calc(var(--height) - 20px);
+  border: 2px dashed var(--color);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  text-align: center;
+  color: var(--color);
+}
+
+.fileUpload .label {
+  color: var(--color-gray4);
+}
+
+.fileUpload.dragging {
+  border-color: var(--color);
+  background-color: var(--color);
+  color: var(--color-background);
+}
+
+.fileUpload.dragging .label {
+  color: var(--color-background);
+  font-weight: var(--boldL2);
+}
+
+.fileUpload:hover .label {
+  font-weight: var(--boldL2);
+}
+
+.fileUpload input[type="file"] {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.infor {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 3px;
+  padding-right: 0;
+  padding-top: 0;
+}
+
+.fileInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-gray1);
+  padding-bottom: 2px;
+  padding-right: 3px;
+}
+
+.inforDiv {
+  overflow: auto;
+}
+
+.fileName {
+  width: calc(100% - 170px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -background-space: nowrap;
+  text-align: left;
+}
+
+.fileName:hover {
+  text-decoration: underline;
+  color: var(--color-info);
+  cursor: pointer;
+}
+
+.uploadRemove {
+  display: flex;
+  gap: 15px;
+  width: 170px;
+  justify-content: end;
+}
+
+.actions {
+  padding: 0 10px;
+  border-top: 2px solid var(--color-gray3);
+  display: flex;
+  justify-content: end;
+  gap: 15px;
+}
+
+.error {
+  color: var(--color-error);
+  text-align: center;
+}
+
+.buttonLink {
+  color: var(--color);
+}
+
+.buttonLink:hover {
+  color: var(--color-info);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.required {
+  padding-top: 5px;
+  margin: 0 5px;
+  color: var(--color-error);
+  font-weight: var(--font-weight-bold);
+  text-align: end;
+}
