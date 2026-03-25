@@ -12,6 +12,7 @@ export function Table<T extends Record<string, any>>({
   onCellClick,
   pageSize = 10,
   onSearch,
+  controls,
 }: TableProps<T>) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [visibleColumns, setVisibleColumns] =
@@ -34,17 +35,31 @@ export function Table<T extends Record<string, any>>({
     currentPage * pageSize,
   );
 
+  const controls_ = {
+    search: controls?.search ?? true,
+    columnSelector: controls?.columnSelector ?? true,
+    pagination: controls?.pagination ?? true,
+  };
+
   return (
     <div className={styles.tableWrapper}>
-      <TableControls<T>
-        columns={columns}
-        visibleColumns={visibleColumns}
-        onColumnToggle={handleColumnToggle}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-        onSearch={onSearch}
-      />
+      {controls_ &&
+        (controls_.search ||
+          controls_.columnSelector ||
+          controls_.pagination) && (
+          <TableControls<T>
+            columns={columns}
+            visibleColumns={visibleColumns}
+            onColumnToggle={handleColumnToggle}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            onSearch={controls_.search ? onSearch : undefined}
+            showSearch={controls_.search}
+            showColumnSelector={controls_.columnSelector}
+            showPagination={controls_.pagination}
+          />
+        )}
 
       <table className={styles.table}>
         <TableHeader<T> columns={visibleColumns} />

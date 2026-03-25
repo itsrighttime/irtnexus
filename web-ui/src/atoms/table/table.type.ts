@@ -13,6 +13,12 @@ export type TableAction<T> = {
   onClick: (row: T) => void;
 };
 
+export type TableControlsConfig = {
+  search?: boolean;
+  columnSelector?: boolean;
+  pagination?: boolean;
+};
+
 export interface TableProps<T> {
   columns: TableColumn<T>[];
   data: T[];
@@ -20,4 +26,5 @@ export interface TableProps<T> {
   onCellClick?: (row: T, column: TableColumn<T>) => void;
   pageSize?: number;
   onSearch?: (query: string) => void;
+  controls?: TableControlsConfig;
 }

@@ -124,6 +124,10 @@ export function TestTable() {
         onCellClick={handleCellClick}
         pageSize={3}
         onSearch={handleSearch}
+        controls={{
+          search: true,
+          pagination: false,
+        }}
       />
     </div>
   );
