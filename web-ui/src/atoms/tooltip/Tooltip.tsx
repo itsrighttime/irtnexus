@@ -118,6 +118,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
               opacity: visible ? 1 : 0,
               visibility: visible && content ? "visible" : "hidden",
               transition: "opacity 0.15s ease, visibility 0.15s ease",
+              zIndex: 999999,
             }}
             className={`${styles.tooltip} ${styles[position]}`}
           >
