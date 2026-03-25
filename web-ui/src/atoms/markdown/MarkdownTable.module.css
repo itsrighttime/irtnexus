@@ -1,0 +1,22 @@
+.tableWrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--colorTableBg);
+}
+
+.tableWrapper th {
+  background: var(--color-gray2);
+  color: var(--color-primary);
+  padding: 0.2rem;
+  text-align: left;
+}
+
+.tableWrapper td {
+  padding: 0.2rem;
+  border-top: 1px solid var(--color-gray3);
+}

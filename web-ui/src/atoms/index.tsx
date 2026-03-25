@@ -1,3 +1,4 @@
+export { MarkdownRenderer } from "./markdown/MarkdownRenderer";
 export { FileUpload } from "./uploads/FileUpload";
 export { ImagePreview } from "./uploads/ImagePreview";
 export { ImageUpload } from "./uploads/ImageUpload";

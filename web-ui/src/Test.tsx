@@ -7,6 +7,7 @@ import {
   TestIconGallery,
   TestImageUpload,
   TestJsonField,
+  TestMarkdown,
   TestSearchBox,
   TestTextArea,
   TestTextInput,
@@ -16,6 +17,7 @@ import {
 export function Test() {
   return (
     <>
+      <TestMarkdown />
       <TestFileUpload />
       <TestImageUpload />
       <TestVideoUpload />

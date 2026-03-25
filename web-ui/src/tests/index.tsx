@@ -1,3 +1,4 @@
+export { TestMarkdown } from "./atoms/TestMarkdown";
 export { TestFileUpload } from "./atoms/TestFileUpload";
 export { TestImageUpload } from "./atoms/TestImageUpload";
 export { TestVideoUpload } from "./atoms/TestVideoUpload";
