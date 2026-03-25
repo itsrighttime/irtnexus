@@ -1,0 +1,60 @@
+.iconButton {
+  position: relative;
+}
+
+.iconButton:hover .label {
+  opacity: 1;
+}
+
+.btn {
+  border: var(--border);
+  outline: none;
+  padding: 2px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  align-items: center;
+  background-color: var(--color-background);
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.btn svg {
+  font-size: var(--iconSize);
+  height: var(--iconSize);
+  width: var(--iconSize);
+}
+
+.btn svg path {
+  color: var(--iconColor);
+}
+
+.btn svg circle {
+  color: var(--iconColor);
+}
+
+.btn:hover {
+  background-color: var(--iconColor);
+}
+
+.btn:hover svg path {
+  color: var(--color-background);
+}
+
+.btn:hover svg circle {
+  color: var(--color-background);
+}
+
+.image {
+  height: 25px;
+  cursor: pointer;
+  border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+}
+
+.image:hover {
+  border: 1px solid var(--iconColor);
+}
