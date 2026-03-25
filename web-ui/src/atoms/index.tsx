@@ -1,3 +1,5 @@
+export { Table } from "./table/Table";
+export type { TableColumn, TableAction } from "./table/table.type";
 export { MarkdownRenderer } from "./markdown/MarkdownRenderer";
 export { FileUpload } from "./uploads/FileUpload";
 export { ImagePreview } from "./uploads/ImagePreview";

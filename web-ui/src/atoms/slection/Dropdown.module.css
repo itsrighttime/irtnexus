@@ -32,9 +32,9 @@
 }
 
 .dropdownMenu {
-  position: absolute;
+  /* position: absolute; */
   width: 100%;
-  z-index: 1000;
+  /* z-index: 1000; */
   max-height: 300px;
   display: flex;
   flex-direction: column;
@@ -63,6 +63,7 @@
   padding: 8px;
   box-sizing: border-box;
   margin: 5px 0;
+  border-bottom: 2px solid var(--color);
   border-bottom: 2px solid var(--color);
 }
 
@@ -97,7 +98,7 @@
 }
 
 .optionItem {
-  padding: 8px;
+  padding: 2px 8px;
   cursor: pointer;
   border: 1px solid var(--color-background);
   text-align: left;

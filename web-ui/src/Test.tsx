@@ -9,6 +9,7 @@ import {
   TestJsonField,
   TestMarkdown,
   TestSearchBox,
+  TestTable,
   TestTextArea,
   TestTextInput,
   TestVideoUpload,
@@ -17,7 +18,8 @@ import {
 export function Test() {
   return (
     <>
-      <TestMarkdown />
+      <TestTable />
+      {/* <TestMarkdown />
       <TestFileUpload />
       <TestImageUpload />
       <TestVideoUpload />
@@ -26,8 +28,8 @@ export function Test() {
       <TestTextArea />
       <TestDropdown />
       <TestCalendar />
-      <TestTextInput />
-      {/* <TestGenericForm /> */}
+      <TestTextInput /> */}
+      <TestIconGallery />
     </>
   );
 }

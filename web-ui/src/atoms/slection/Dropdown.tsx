@@ -1,17 +1,11 @@
 "use client";
 
-import {
-  useState,
-  useRef,
-  useEffect,
-  type ChangeEvent,
-  type MouseEvent,
-} from "react";
+import { useState, useRef, useEffect, type ChangeEvent } from "react";
 import styles from "./Dropdown.module.css";
 import { Icons } from "@/assets";
-import { useSmartPosition } from "@/hooks";
 import { IconButton } from "../button/IconButton";
 import { Button } from "../button/Button";
+import { Popover } from "../over/Popover";
 
 const { arrowDownIcon, arrowUpIcon } = Icons;
 
@@ -29,11 +23,6 @@ type DropdownProps = {
   required?: boolean;
 };
 
-type SmartPosition = {
-  vertical: "top" | "bottom";
-  horizontal: "left" | "right";
-};
-
 export const Dropdown: React.FC<DropdownProps> = ({
   options = [],
   multiple = false,
@@ -45,42 +34,23 @@ export const Dropdown: React.FC<DropdownProps> = ({
   setAddedOptions,
   width = "300px",
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [allOptions, setAllOptions] = useState<string[]>(options);
-  const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
+  const [isOpen, setIsOpen] = useState(false);
+  const [allOptions, setAllOptions] = useState(options);
+  const [filteredOptions, setFilteredOptions] = useState(options);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [newOption, setNewOption] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [newOption, setNewOption] = useState("");
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const position = useSmartPosition(dropdownRef) as SmartPosition;
 
+  // Sync external value
   useEffect(() => {
     if (value.length > 0 && selectedOptions.length === 0) {
       setSelectedOptions(value);
     }
   }, [value, selectedOptions.length]);
 
-  useEffect(() => {
-    if (typeof window === "undefined" || typeof document === "undefined") {
-      return;
-    }
-
-    const handleClickOutside = (event: MouseEvent | globalThis.MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside as any);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside as any);
-    };
-  }, []);
-
+  // Handle select
   const handleSelectOption = (option: string) => {
     const updatedSelections = multiple
       ? selectedOptions.includes(option)
@@ -94,6 +64,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
     if (!multiple) setIsOpen(false);
   };
 
+  // Search filter
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const search = e.target.value;
     setSearchTerm(search);
@@ -105,6 +76,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
     );
   };
 
+  // Add new option
   const handleAddOption = () => {
     const trimmed = newOption.trim();
 
@@ -118,15 +90,18 @@ export const Dropdown: React.FC<DropdownProps> = ({
     }
   };
 
+  // Clear selection
   const handleClearSelection = () => {
     setSelectedOptions([]);
     setResult([]);
   };
 
-  const handleHeaderClick = () => setIsOpen((prev) => !prev);
+  const handleHeaderClick = () => {
+    setIsOpen((prev) => !prev);
+  };
 
   const cssVariable: React.CSSProperties = {
-    ["--color" as any]: color || "var(--colorCyan)",
+    ["--color" as any]: color || "var(--color-primary)",
     ["--width" as any]: width,
   };
 
@@ -137,6 +112,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
       tabIndex={0}
       style={cssVariable}
     >
+      {/* Header */}
       <div
         className={`${styles.dropdownHeader} ${isOpen ? styles.open : ""}`}
         onClick={handleHeaderClick}
@@ -144,7 +120,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
         {selectedOptions.length ? (
           <span>{selectedOptions.join(", ")}</span>
         ) : (
-          <span style={{ color: "var(--colorGray4)" }}>{placeholder}</span>
+          <span style={{ color: "var(--color-gray4)" }}>{placeholder}</span>
         )}
 
         <IconButton
@@ -154,16 +130,15 @@ export const Dropdown: React.FC<DropdownProps> = ({
         />
       </div>
 
-      {isOpen && (
-        <div
-          className={`${styles.dropdownMenu} ${
-            position.vertical === "top" ? styles.dropTop : styles.dropBottom
-          } ${
-            position.horizontal === "left"
-              ? styles.alignLeft
-              : styles.alignRight
-          }`}
-        >
+      {/* Popover Dropdown */}
+      <Popover
+        anchorRef={dropdownRef as any}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        offset={0}
+      >
+        <div className={styles.dropdownMenu} style={cssVariable}>
+          {/* Search */}
           <input
             type="text"
             value={searchTerm}
@@ -196,9 +171,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 <input
                   type="text"
                   value={newOption}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setNewOption(e.target.value)
-                  }
+                  onChange={(e) => setNewOption(e.target.value)}
                   placeholder="Add new option"
                 />
                 <Button
@@ -218,17 +191,23 @@ export const Dropdown: React.FC<DropdownProps> = ({
                   width="90%"
                   color={color}
                   variant="secondary"
+                  size="small"
                 >
                   Clear Selection
                 </Button>
-                <Button onClick={handleHeaderClick} width="90%" color={color}>
+                <Button
+                  onClick={() => setIsOpen(false)}
+                  width="90%"
+                  size="small"
+                  color={color}
+                >
                   Done
                 </Button>
               </div>
             )}
           </div>
         </div>
-      )}
+      </Popover>
     </div>
   );
 };

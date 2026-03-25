@@ -7,4 +7,5 @@
   max-width: var(--width);
   text-wrap: wrap;
   height: auto;
+  z-index: 100000;
 }

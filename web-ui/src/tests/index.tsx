@@ -1,3 +1,4 @@
+export { TestTable } from "./atoms/TestTable";
 export { TestMarkdown } from "./atoms/TestMarkdown";
 export { TestFileUpload } from "./atoms/TestFileUpload";
 export { TestImageUpload } from "./atoms/TestImageUpload";
