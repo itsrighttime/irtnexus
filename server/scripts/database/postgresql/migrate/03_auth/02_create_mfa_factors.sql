@@ -5,7 +5,9 @@ CREATE TABLE mfa_factors (
     factor_type VARCHAR(50) NOT NULL,    -- 'otp', 'totp', 'push', 'passkey', 'password'
     is_primary BOOLEAN DEFAULT FALSE,
     is_step_up BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 --
 --

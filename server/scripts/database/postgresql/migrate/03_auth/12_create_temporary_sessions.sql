@@ -4,7 +4,9 @@ CREATE TABLE temporary_sessions (
     tenant_id UUID NOT NULL REFERENCES tenants(tenant_id) ON DELETE CASCADE,
     session_pin VARCHAR(10),
     expires_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 --
 --

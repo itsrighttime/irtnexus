@@ -4,7 +4,9 @@ CREATE TABLE account_emails (
     email VARCHAR(255) NOT NULL,
     verified BOOLEAN DEFAULT FALSE,
     is_primary BOOLEAN DEFAULT FALSE,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE(email)
 );
 --

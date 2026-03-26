@@ -5,7 +5,9 @@ CREATE TABLE hardware_keys (
     key_type VARCHAR(50), -- 'FIDO U2F', 'FIDO2'
     connection_type VARCHAR(20), -- 'USB', 'NFC', 'Bluetooth'
     device_info JSONB,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 --
 --

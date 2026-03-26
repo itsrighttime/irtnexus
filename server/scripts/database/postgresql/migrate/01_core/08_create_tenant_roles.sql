@@ -3,6 +3,7 @@ CREATE TABLE tenant_roles (
     tenant_id UUID REFERENCES tenants(tenant_id) ON DELETE CASCADE,
     role_name VARCHAR(100) NOT NULL,
     permissions JSONB,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );

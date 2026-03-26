@@ -6,7 +6,9 @@ CREATE TABLE account_phones (
     verified BOOLEAN DEFAULT FALSE,
     is_primary BOOLEAN DEFAULT FALSE,
 
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
 
     UNIQUE(phone_number)
 );

@@ -7,6 +7,7 @@ CREATE TABLE tenant_access_grants (
     start_time TIMESTAMPTZ DEFAULT NOW(),
     end_time TIMESTAMPTZ,
     is_active BOOLEAN DEFAULT TRUE,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );

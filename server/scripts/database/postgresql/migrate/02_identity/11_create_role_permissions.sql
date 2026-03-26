@@ -1,7 +1,11 @@
 CREATE TABLE role_permissions (
     role_permission_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     role_id UUID NOT NULL REFERENCES roles(role_id) ON DELETE CASCADE,
-    permission_id UUID NOT NULL REFERENCES permissions(permission_id) ON DELETE CASCADE
+    permission_id UUID NOT NULL REFERENCES permissions(permission_id) ON DELETE CASCADE,
+    
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 --
 --

@@ -14,6 +14,7 @@ CREATE TABLE account_addresses (
     verified BOOLEAN NOT NULL DEFAULT FALSE,
     valid_from TIMESTAMPTZ NOT NULL DEFAULT now(),
     valid_to TIMESTAMPTZ,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

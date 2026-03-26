@@ -4,7 +4,9 @@ CREATE TABLE passwords (
     tenant_id UUID NOT NULL REFERENCES tenants(tenant_id) ON DELETE CASCADE,
     password_hash TEXT NOT NULL,
     salt TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     last_changed_at TIMESTAMPTZ
 );
 --

@@ -5,6 +5,9 @@ CREATE TABLE tenant_memberships (
     role_id UUID NOT NULL REFERENCES roles(role_id) ON DELETE CASCADE,
     status VARCHAR(50) DEFAULT 'active',
     joined_at TIMESTAMPTZ DEFAULT now(),
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE(tenant_id, account_id)
 );
 --

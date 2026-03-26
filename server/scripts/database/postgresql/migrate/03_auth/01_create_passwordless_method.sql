@@ -5,7 +5,9 @@ CREATE TABLE passwordless_methods (
     method_type VARCHAR(50) NOT NULL, -- 'magic_link', 'otp', 'totp', 'passkey', 'push'
     channel VARCHAR(50), -- 'email', 'sms', 'whatsapp'
     device_info JSONB,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     last_used_at TIMESTAMPTZ
 );
 --

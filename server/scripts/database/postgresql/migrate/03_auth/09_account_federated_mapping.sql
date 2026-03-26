@@ -4,7 +4,10 @@ CREATE TABLE account_federated_mapping (
     tenant_id UUID NOT NULL REFERENCES tenants(tenant_id) ON DELETE CASCADE,
     provider_id UUID NOT NULL REFERENCES federated_providers(provider_id),
     external_user_id VARCHAR(255),
-    last_login TIMESTAMPTZ
+    last_login TIMESTAMPTZ,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 --
 --

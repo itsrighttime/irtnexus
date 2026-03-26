@@ -6,6 +6,7 @@ CREATE TABLE tenant_owners (
         ownership_percentage > 0
         AND ownership_percentage <= 100
     ),
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );

@@ -6,6 +6,7 @@ CREATE TABLE portal_branding (
     login_button_style JSONB,
     custom_css TEXT,
     favicon_url TEXT,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );

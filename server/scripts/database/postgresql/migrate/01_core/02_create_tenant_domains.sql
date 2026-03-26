@@ -5,6 +5,7 @@ CREATE TABLE tenant_domains (
     is_primary BOOLEAN NOT NULL DEFAULT FALSE,
     verified BOOLEAN NOT NULL DEFAULT FALSE,
     ssl_status VARCHAR(20) DEFAULT 'pending',
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     UNIQUE(domain)

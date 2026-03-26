@@ -4,7 +4,10 @@ CREATE TABLE risk_signals (
     tenant_id UUID NOT NULL REFERENCES tenants(tenant_id) ON DELETE CASCADE,
     signal_type VARCHAR(50), -- 'device_fingerprint', 'geoip', 'behavioral'
     signal_data JSONB,
-    detected_at TIMESTAMPTZ DEFAULT NOW()
+    detected_at TIMESTAMPTZ DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 --
 --

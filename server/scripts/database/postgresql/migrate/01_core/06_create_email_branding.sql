@@ -10,6 +10,7 @@ CREATE TABLE email_branding (
     secondary_color VARCHAR(20),
     font_family VARCHAR(100),
     template_overrides JSONB,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );

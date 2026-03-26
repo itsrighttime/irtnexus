@@ -4,7 +4,10 @@ CREATE TABLE sso_providers (
     provider_name VARCHAR(100) NOT NULL,     -- 'Azure AD', 'Google Workspace', 'Okta', etc.
     protocol VARCHAR(50) NOT NULL,     -- 'SAML', 'OIDC'
     config JSONB,    -- metadata, endpoints, client IDs
-    is_active BOOLEAN DEFAULT TRUE
+    is_active BOOLEAN DEFAULT TRUE,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 --
 --

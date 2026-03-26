@@ -5,7 +5,11 @@ CREATE TABLE account_names (
     name_type VARCHAR(50) NOT NULL,
     verified BOOLEAN DEFAULT FALSE,
     valid_from TIMESTAMPTZ DEFAULT now(),
-    valid_to TIMESTAMPTZ
+    valid_to TIMESTAMPTZ,
+
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
 );
 --
 --

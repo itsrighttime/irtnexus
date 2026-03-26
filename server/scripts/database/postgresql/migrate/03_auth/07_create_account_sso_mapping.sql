@@ -4,7 +4,10 @@ CREATE TABLE account_sso_mapping (
     tenant_id UUID NOT NULL REFERENCES tenants(tenant_id) ON DELETE CASCADE,
     sso_id UUID NOT NULL REFERENCES sso_providers(sso_id),
     external_user_id VARCHAR(255),
-    last_login TIMESTAMPTZ
+    last_login TIMESTAMPTZ,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 --
 --

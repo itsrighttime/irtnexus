@@ -6,7 +6,10 @@ CREATE TABLE api_keys (
     description TEXT,
     permissions JSONB,
     is_active BOOLEAN DEFAULT TRUE,
-    expires_at TIMESTAMPTZ
+    expires_at TIMESTAMPTZ,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 --
 --

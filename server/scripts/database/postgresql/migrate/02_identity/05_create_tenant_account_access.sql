@@ -9,6 +9,7 @@ CREATE TABLE tenant_account_access (
     end_time TIMESTAMPTZ,     -- NULL = indefinite
     granted_by_account_id UUID REFERENCES accounts(account_id), -- who granted this access
     is_active BOOLEAN DEFAULT TRUE,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );

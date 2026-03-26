@@ -10,6 +10,7 @@ CREATE TABLE accounts (
     preferred_language VARCHAR(10),
     preferred_timezone VARCHAR(50),
 
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
 );

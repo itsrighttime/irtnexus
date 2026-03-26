@@ -19,6 +19,7 @@ CREATE TABLE tenants (
     spacing_base VARCHAR(20),
     theme_mode VARCHAR(10) DEFAULT 'light',
     custom_css TEXT,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );

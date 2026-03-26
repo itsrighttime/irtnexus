@@ -4,6 +4,7 @@ CREATE TABLE tenant_settings (
     setting_key VARCHAR(100) NOT NULL,
     setting_value JSONB NOT NULL,
     is_encrypted BOOLEAN DEFAULT FALSE,
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now(),
     UNIQUE(tenant_id, setting_key)

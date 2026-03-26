@@ -7,7 +7,9 @@ CREATE TABLE oauth_tokens (
     token_value TEXT NOT NULL,
     scopes JSONB,
     expires_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 --
 --
