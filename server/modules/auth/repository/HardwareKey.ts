@@ -15,3 +15,5 @@ export class HardwareKeyRepository extends BaseRepository<HardwareKey> {
     });
   }
 }
+
+export const repoHardwareKey = new HardwareKeyRepository();

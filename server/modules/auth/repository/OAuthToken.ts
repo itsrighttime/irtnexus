@@ -14,3 +14,5 @@ export class OAuthTokenRepository extends BaseRepository<OAuthToken> {
     });
   }
 }
+
+export const repoOAuthToken = new OAuthTokenRepository();

@@ -15,3 +15,5 @@ export class RiskSignalRepository extends BaseRepository<RiskSignal> {
     });
   }
 }
+
+export const repoRiskSignal = new RiskSignalRepository();

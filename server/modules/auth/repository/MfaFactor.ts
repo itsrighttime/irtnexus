@@ -14,3 +14,5 @@ export class MfaFactorRepository extends BaseRepository<MfaFactor> {
     });
   }
 }
+
+export const repoMfaFactor = new MfaFactorRepository();

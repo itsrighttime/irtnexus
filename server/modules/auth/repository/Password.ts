@@ -15,3 +15,5 @@ export class PasswordRepository extends BaseRepository<Password> {
     });
   }
 }
+
+export const repoPassword = new PasswordRepository();

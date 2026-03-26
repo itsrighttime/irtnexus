@@ -14,3 +14,5 @@ export class TemporarySessionRepository extends BaseRepository<TemporarySession>
     });
   }
 }
+
+export const repoTemporarySession = new TemporarySessionRepository();

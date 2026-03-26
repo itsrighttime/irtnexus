@@ -14,3 +14,5 @@ export class AccountFederatedMappingRepository extends BaseRepository<AccountFed
     });
   }
 }
+
+export const repoAccountFederatedMapping = new AccountFederatedMappingRepository();

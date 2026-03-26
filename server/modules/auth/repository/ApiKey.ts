@@ -15,3 +15,5 @@ export class ApiKeyRepository extends BaseRepository<ApiKey> {
     });
   }
 }
+
+export const repoApiKey = new ApiKeyRepository();

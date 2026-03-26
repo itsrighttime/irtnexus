@@ -15,3 +15,5 @@ export class PasswordlessMethodRepository extends BaseRepository<PasswordlessMet
     });
   }
 }
+
+export const repoPasswordlessMethod = new PasswordlessMethodRepository();

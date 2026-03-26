@@ -15,3 +15,5 @@ export class FederatedProviderRepository extends BaseRepository<FederatedProvide
     });
   }
 }
+
+export const repoFederatedProvider = new FederatedProviderRepository();

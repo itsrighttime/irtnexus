@@ -15,3 +15,5 @@ export class SsoProviderRepository extends BaseRepository<SsoProvider> {
     });
   }
 }
+
+export const repoSsoProvider = new SsoProviderRepository();
