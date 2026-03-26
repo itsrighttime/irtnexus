@@ -370,9 +370,11 @@ export class BaseRepository<T extends QueryResultRow> {
     readReplica = false,
   ): Promise<T | null> {
     const { client: db, release } = await this.getClient(client, readReplica);
+    const columns = this.columnsFor();
+
     try {
       const { rows } = await db.query<T>(
-        `SELECT *
+        `SELECT ${columns}
          FROM ${this.tableName}
          WHERE ${this.primaryKey} = $1
          AND is_deleted = FALSE`,

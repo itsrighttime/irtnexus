@@ -18,7 +18,7 @@ export class AccountRepository extends BaseRepository<Account> {
     username: string,
     ctx: DB_RequestContext,
     client?: PoolClient,
-  ): Promise<Account | null> {
+  ): Promise<Account[]> {
     const normalized = username.toLowerCase().trim();
 
     // Use columnsFor to generate SELECT columns dynamically
@@ -31,14 +31,14 @@ export class AccountRepository extends BaseRepository<Account> {
       client,
     );
 
-    return rows[0] || null;
+    return rows;
   }
 
   async findByUsernameExcludeMeta(
     username: string,
     ctx: DB_RequestContext,
     client?: PoolClient,
-  ): Promise<Account | null> {
+  ): Promise<Account[]> {
     // Exclude created_at / updated_at for lighter query
     const columns = this.columnsFor({ exclude: ["created_at", "updated_at"] });
 
@@ -49,6 +49,6 @@ export class AccountRepository extends BaseRepository<Account> {
       client,
     );
 
-    return rows[0] || null;
+    return rows;
   }
 }
