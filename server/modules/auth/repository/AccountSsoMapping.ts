@@ -1,14 +1,15 @@
+
 import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
-import { AccountAddress } from "../types";
+import { AccountSsoMapping } from "../types";
 
-export class AccountAddressRepository extends BaseRepository<AccountAddress> {
+export class AccountSsoMappingRepository extends BaseRepository<AccountSsoMapping> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "account_sso_mapping",
+      versionTableName: "account_sso_mapping_versions",
+      primaryKey: "mapping_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });

@@ -1,14 +1,15 @@
+
 import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
-import { AccountAddress } from "../types";
+import { FederatedProvider } from "../types";
 
-export class AccountAddressRepository extends BaseRepository<AccountAddress> {
+export class FederatedProviderRepository extends BaseRepository<FederatedProvider> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "federated_providers",
+      versionTableName: "federated_providers_versions",
+      primaryKey: "provider_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });

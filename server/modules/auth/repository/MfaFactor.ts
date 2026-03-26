@@ -1,14 +1,14 @@
 import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
-import { AccountAddress } from "../types";
+import { MfaFactor } from "../types";
 
-export class AccountAddressRepository extends BaseRepository<AccountAddress> {
+export class MfaFactorRepository extends BaseRepository<MfaFactor> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "mfa_factors",
+      versionTableName: "mfa_factors_versions",
+      primaryKey: "factor_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });

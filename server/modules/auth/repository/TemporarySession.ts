@@ -1,14 +1,14 @@
 import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
-import { AccountAddress } from "../types";
+import { TemporarySession } from "../types";
 
-export class AccountAddressRepository extends BaseRepository<AccountAddress> {
+export class TemporarySessionRepository extends BaseRepository<TemporarySession> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "temporary_sessions",
+      versionTableName: "temporary_sessions_versions",
+      primaryKey: "session_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });

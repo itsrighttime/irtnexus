@@ -1,0 +1,12 @@
+export { AccountFederatedMappingRepository } from "./AccountFederatedMapping";
+export { AccountSsoMappingRepository } from "./AccountSsoMapping";
+export { ApiKeyRepository } from "./ApiKey";
+export { FederatedProviderRepository } from "./FederatedProvider";
+export { HardwareKeyRepository } from "./HardwareKey";
+export { MfaFactorRepository } from "./MfaFactor";
+export { OAuthTokenRepository } from "./OAuthToken";
+export { PasswordRepository } from "./Password";
+export { PasswordlessMethodRepository } from "./PasswordlessMethod";
+export { RiskSignalRepository } from "./RiskSignal";
+export { SsoProviderRepository } from "./SsoProvider";
+export { TemporarySessionRepository } from "./TemporarySession";

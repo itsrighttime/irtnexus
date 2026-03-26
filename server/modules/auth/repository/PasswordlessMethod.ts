@@ -1,14 +1,15 @@
+
 import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
-import { AccountAddress } from "../types";
+import { PasswordlessMethod } from "../types";
 
-export class AccountAddressRepository extends BaseRepository<AccountAddress> {
+export class PasswordlessMethodRepository extends BaseRepository<PasswordlessMethod> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "passwordless_methods",
+      versionTableName: "passwordless_methods_versions",
+      primaryKey: "method_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });
