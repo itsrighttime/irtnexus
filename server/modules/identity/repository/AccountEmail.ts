@@ -14,3 +14,5 @@ export class AccountEmailRepository extends BaseRepository<AccountEmail> {
     });
   }
 }
+
+export const repoAccountEmail = new AccountEmailRepository();

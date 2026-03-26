@@ -14,3 +14,6 @@ export class AccountAddressRepository extends BaseRepository<AccountAddress> {
     });
   }
 }
+
+export const repoAccountAddress = new AccountAddressRepository();
+

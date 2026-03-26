@@ -14,3 +14,5 @@ export class AccountDelegationRepository extends BaseRepository<AccountDelegatio
     });
   }
 }
+
+export const repoAccountDelegation = new AccountDelegationRepository();

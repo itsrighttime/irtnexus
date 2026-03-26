@@ -14,3 +14,5 @@ export class TenantMembershipRepository extends BaseRepository<TenantMembership>
     });
   }
 }
+
+export const repoTenantMembership = new TenantMembershipRepository();

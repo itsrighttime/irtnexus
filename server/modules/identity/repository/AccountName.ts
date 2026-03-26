@@ -14,3 +14,5 @@ export class AccountNameRepository extends BaseRepository<AccountName> {
     });
   }
 }
+
+export const repoAccountName = new AccountNameRepository();

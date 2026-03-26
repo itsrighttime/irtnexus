@@ -14,3 +14,5 @@ export class AccountPhoneRepository extends BaseRepository<AccountPhone> {
     });
   }
 }
+
+export const repoAccountPhone = new AccountPhoneRepository();

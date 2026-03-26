@@ -52,3 +52,5 @@ export class AccountRepository extends BaseRepository<Account> {
     return rows;
   }
 }
+
+export const repoAccount = new AccountRepository();

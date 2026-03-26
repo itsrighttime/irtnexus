@@ -14,3 +14,5 @@ export class TenantAccountAccessRepository extends BaseRepository<TenantAccountA
     });
   }
 }
+
+export const repoTenantAccountAccess = new TenantAccountAccessRepository();

@@ -14,3 +14,5 @@ export class RoleRepository extends BaseRepository<Role> {
     });
   }
 }
+
+export const repoRole = new RoleRepository();

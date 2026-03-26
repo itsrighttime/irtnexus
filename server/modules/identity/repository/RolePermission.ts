@@ -14,3 +14,5 @@ export class RolePermissionRepository extends BaseRepository<RolePermission> {
     });
   }
 }
+
+export const repoRolePermission = new RolePermissionRepository();
