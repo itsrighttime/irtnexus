@@ -6,9 +6,9 @@ import { RolePermission } from "../types";
 export class RolePermissionRepository extends BaseRepository<RolePermission> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "role_permissions",
+      versionTableName: "role_permissions_versions",
+      primaryKey: "role_permission_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });

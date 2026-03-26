@@ -6,9 +6,9 @@ import { AccountName } from "../types";
 export class AccountNameRepository extends BaseRepository<AccountName> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "account_names",
+      versionTableName: "account_names_versions",
+      primaryKey: "name_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });

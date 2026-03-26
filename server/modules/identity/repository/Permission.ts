@@ -6,9 +6,9 @@ import { Permission } from "../types";
 export class PermissionRepository extends BaseRepository<Permission> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "permissions",
+      versionTableName: "permissions_versions",
+      primaryKey: "permission_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });

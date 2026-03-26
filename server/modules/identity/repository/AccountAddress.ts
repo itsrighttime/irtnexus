@@ -6,9 +6,9 @@ import { AccountAddress } from "../types";
 export class AccountAddressRepository extends BaseRepository<AccountAddress> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "account_addresses",
+      versionTableName: "account_addresses_versions",
+      primaryKey: "address_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });

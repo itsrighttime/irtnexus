@@ -6,9 +6,9 @@ import { AccountEmail } from "../types";
 export class AccountEmailRepository extends BaseRepository<AccountEmail> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "account_emails",
+      versionTableName: "account_emails_versions",
+      primaryKey: "email_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });

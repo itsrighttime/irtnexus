@@ -6,9 +6,9 @@ import { Role } from "../types";
 export class RoleRepository extends BaseRepository<Role> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "roles",
+      versionTableName: "roles_versions",
+      primaryKey: "role_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });

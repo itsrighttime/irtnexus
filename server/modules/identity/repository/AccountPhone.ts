@@ -6,9 +6,9 @@ import { AccountPhone } from "../types";
 export class AccountPhoneRepository extends BaseRepository<AccountPhone> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "account_phones",
+      versionTableName: "account_phones_versions",
+      primaryKey: "phone_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });

@@ -6,9 +6,9 @@ import { TenantAccountAccess } from "../types";
 export class TenantAccountAccessRepository extends BaseRepository<TenantAccountAccess> {
   constructor() {
     super({
-      tableName: "accounts",
-      versionTableName: "accounts_versions",
-      primaryKey: "account_id",
+      tableName: "tenant_account_access",
+      versionTableName: "tenant_account_access_versions",
+      primaryKey: "tenant_account_access_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
     });
