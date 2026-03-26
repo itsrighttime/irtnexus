@@ -14,3 +14,5 @@ export class TenantOwnerRepository extends BaseRepository<TenantOwner> {
     });
   }
 }
+
+export const repoTenantOwner = new TenantOwnerRepository();

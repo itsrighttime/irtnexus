@@ -31,3 +31,5 @@ export class TenantRepository extends BaseRepository<Tenant> {
     return rows;
   }
 }
+
+export const repoTenant = new TenantRepository();

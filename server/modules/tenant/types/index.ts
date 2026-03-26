@@ -6,3 +6,4 @@ export type { TenantDomain } from "./TenantDomain";
 export type { TenantOwner } from "./TenantOwner";
 export type { TenantRole } from "./TenantRole";
 export type { TenantSetting } from "./TenantSetting";
+export type { RegisterTenantInput } from "./RegisterTenantInput";

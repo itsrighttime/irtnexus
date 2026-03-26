@@ -14,3 +14,5 @@ export class EmailBrandingRepository extends BaseRepository<EmailBranding> {
     });
   }
 }
+
+export const repoEmailBranding = new EmailBrandingRepository();

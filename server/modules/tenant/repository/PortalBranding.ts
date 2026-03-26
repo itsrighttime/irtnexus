@@ -14,3 +14,5 @@ export class PortalBrandingRepository extends BaseRepository<PortalBranding> {
     });
   }
 }
+
+export const repoPortalBranding = new PortalBrandingRepository();

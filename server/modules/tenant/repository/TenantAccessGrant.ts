@@ -14,3 +14,5 @@ export class TenantAccessGrantRepository extends BaseRepository<TenantAccessGran
     });
   }
 }
+
+export const repoTenantAccessGrant = new TenantAccessGrantRepository();

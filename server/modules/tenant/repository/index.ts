@@ -1,8 +1,11 @@
-export { EmailBrandingRepository } from "./EmailBranding";
-export { PortalBrandingRepository } from "./PortalBranding";
-export { TenantRepository } from "./Tenant";
-export { TenantAccessGrantRepository } from "./TenantAccessGrant";
-export { TenantDomainRepository } from "./TenantDomain";
-export { TenantOwnerRepository } from "./TenantOwner";
-export { TenantRoleRepository } from "./TenantRole";
-export { TenantSettingRepository } from "./TenantSetting";
+export { EmailBrandingRepository, repoEmailBranding } from "./EmailBranding";
+export { PortalBrandingRepository, repoPortalBranding } from "./PortalBranding";
+export { TenantRepository, repoTenant } from "./Tenant";
+export {
+  TenantAccessGrantRepository,
+  repoTenantAccessGrant,
+} from "./TenantAccessGrant";
+export { TenantDomainRepository, repoTenantDomain } from "./TenantDomain";
+export { TenantOwnerRepository, repoTenantOwner } from "./TenantOwner";
+export { TenantRoleRepository, repoTenantRole } from "./TenantRole";
+export { TenantSettingRepository, repoTenantSetting } from "./TenantSetting";

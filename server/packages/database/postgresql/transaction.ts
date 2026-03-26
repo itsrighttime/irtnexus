@@ -3,21 +3,23 @@ import { PoolClient } from "pg";
 
 export async function withTransaction<T>(
   fn: (client: PoolClient) => Promise<T>,
+  existingClient?: PoolClient,
 ): Promise<T> {
-  const client = await pool.connect();
+  const client = existingClient ?? (await pool.connect());
+  const isOuter = !existingClient;
 
   try {
-    await client.query("BEGIN");
+    if (isOuter) await client.query("BEGIN");
 
     const result = await fn(client);
 
-    await client.query("COMMIT");
+    if (isOuter) await client.query("COMMIT");
 
     return result;
   } catch (err) {
-    await client.query("ROLLBACK");
+    if (isOuter) await client.query("ROLLBACK");
     throw err;
   } finally {
-    client.release();
+    if (isOuter) client.release();
   }
 }

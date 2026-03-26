@@ -14,3 +14,5 @@ export class TenantSettingRepository extends BaseRepository<TenantSetting> {
     });
   }
 }
+
+export const repoTenantSetting = new TenantSettingRepository();

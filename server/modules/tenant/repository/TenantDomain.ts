@@ -14,3 +14,5 @@ export class TenantDomainRepository extends BaseRepository<TenantDomain> {
     });
   }
 }
+
+export const repoTenantDomain = new TenantDomainRepository();

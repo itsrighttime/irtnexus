@@ -14,3 +14,5 @@ export class TenantRoleRepository extends BaseRepository<TenantRole> {
     });
   }
 }
+
+export const repoTenantRole = new TenantRoleRepository();
