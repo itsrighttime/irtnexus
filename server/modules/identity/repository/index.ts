@@ -1,0 +1,11 @@
+export { AccountRepository } from "./Account";
+export { AccountAddressRepository } from "./AccountAddress";
+export { AccountDelegationRepository } from "./AccountDelegation";
+export { AccountEmailRepository } from "./AccountEmail";
+export { AccountNameRepository } from "./AccountName";
+export { AccountPhoneRepository } from "./AccountPhone";
+export { PermissionRepository } from "./Permission";
+export { RoleRepository } from "./Role";
+export { RolePermissionRepository } from "./RolePermission";
+export { TenantAccountAccessRepository } from "./TenantAccountAccess";
+export { TenantMembershipRepository } from "./TenantMembership";
