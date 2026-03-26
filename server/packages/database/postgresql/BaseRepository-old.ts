@@ -1,7 +1,7 @@
 import { PoolClient, QueryResultRow } from "pg";
 import { pool } from "./connection";
 import { versionQueue } from "./queue";
-import { BaseRepositoryOptions, VersionEntry, RequestContext } from "./types";
+import { BaseRepositoryOptions, VersionEntry, DB_RequestContext } from "./types";
 import { QuerySecurityEngine } from "./QuerySecurityEngine";
 import { logger } from "#utils";
 
@@ -81,7 +81,7 @@ export class BaseRepository<T extends QueryResultRow> {
 
   async create(
     record: Partial<T>,
-    ctx: RequestContext,
+    ctx: DB_RequestContext,
     client?: PoolClient,
   ): Promise<T> {
     const { client: db, release } = await this.getClient(client);
@@ -151,7 +151,7 @@ export class BaseRepository<T extends QueryResultRow> {
   async update(
     id: number,
     updates: Partial<T>,
-    ctx: RequestContext,
+    ctx: DB_RequestContext,
     client?: PoolClient,
   ): Promise<T> {
     const { client: db, release } = await this.getClient(client);
@@ -226,7 +226,7 @@ export class BaseRepository<T extends QueryResultRow> {
 
   async delete(
     id: number,
-    ctx: RequestContext,
+    ctx: DB_RequestContext,
     client?: PoolClient,
   ): Promise<void> {
     const { client: db, release } = await this.getClient(client);
@@ -315,7 +315,7 @@ export class BaseRepository<T extends QueryResultRow> {
   async select<R extends QueryResultRow>(
     sql: string,
     params: any[] = [],
-    ctx: RequestContext,
+    ctx: DB_RequestContext,
     client?: PoolClient,
   ): Promise<R[]> {
     const { client: db, release } = await this.getClient(client);

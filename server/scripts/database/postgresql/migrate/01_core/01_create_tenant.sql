@@ -1,6 +1,7 @@
 CREATE TABLE tenants (
     tenant_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255) NOT NULL,
+    identifier VARCHAR(255) UNIQUE NOT NULL,
     plan VARCHAR(50) NOT NULL DEFAULT 'free',
     status VARCHAR(50) NOT NULL DEFAULT 'active',
     logo_url TEXT,
@@ -21,7 +22,6 @@ CREATE TABLE tenants (
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 --
 --
 CREATE TABLE tenants_versions (
@@ -33,3 +33,4 @@ CREATE TABLE tenants_versions (
     change_reason TEXT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+CREATE INDEX idx_tenants_identifier ON tenants(identifier);

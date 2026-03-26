@@ -1,3 +1,4 @@
+export { repoConfig } from "./repo.config";
 export { ACTION } from "./actionType.config";
 export { REDIS_PREFIX } from "./redis.const";
 export { registerSecurity } from "./security.config";

@@ -1,7 +1,12 @@
 import { PoolClient, QueryResultRow } from "pg";
 import { pool, replicaPool } from "./connection"; // replicaPool for read replicas
 import { versionQueue, writeQueue } from "./queue"; // separate async queues
-import { BaseRepositoryOptions, VersionEntry, RequestContext } from "./types";
+import {
+  BaseRepositoryOptions,
+  VersionEntry,
+  DB_RequestContext,
+  ColumnOptions,
+} from "./types";
 import { QuerySecurityEngine } from "./QuerySecurityEngine";
 import { logger } from "#utils";
 
@@ -9,11 +14,13 @@ export class BaseRepository<T extends QueryResultRow> {
   protected tableName: string;
   protected versionTableName: string;
   protected asyncVersioning: boolean;
-  protected asyncWrites: boolean; // NEW: enable async/eventual writes
+  protected asyncWrites: boolean;
+  protected primaryKey: string;
 
   constructor(options: BaseRepositoryOptions) {
     this.tableName = options.tableName;
     this.versionTableName = options.versionTableName;
+    this.primaryKey = options.primaryKey;
     this.asyncVersioning = options.asyncVersioning ?? false;
     this.asyncWrites = options.asyncWrites ?? false;
   }
@@ -82,11 +89,48 @@ export class BaseRepository<T extends QueryResultRow> {
     return { client: newClient, release: true };
   }
 
+  /**
+   * Return columns string for SQL queries
+   */
+  protected columnsFor(options?: ColumnOptions<T>): string {
+    // Get all keys of the type T
+    const allKeys = Object.keys({} as T) as (keyof T)[];
+
+    let keys = allKeys;
+
+    if (options?.include) {
+      keys = options.include;
+    }
+
+    if (options?.exclude) {
+      keys = keys.filter((k) => !options.exclude!.includes(k));
+    }
+
+    // Convert to string ready for SQL SELECT
+    return keys.map((k) => `"${String(k)}"`).join(", ");
+  }
+
+  protected extractRows<R>(result: R | R[] | null | undefined): R[] {
+    if (!result) return [];
+
+    // If it's already an array
+    if (Array.isArray(result)) {
+      // If first element is array (e.g., nested result from certain queries), flatten it
+      if (result.length > 0 && Array.isArray(result[0])) {
+        return result[0] as R[];
+      }
+      return result as R[];
+    }
+
+    // If single object, wrap it in an array
+    return [result] as R[];
+  }
+
   /** ----------------- CREATE ----------------- */
 
   async create(
     record: Partial<T>,
-    ctx: RequestContext,
+    ctx: DB_RequestContext,
     client?: PoolClient,
   ): Promise<T> {
     if (this.asyncWrites) {
@@ -137,7 +181,7 @@ export class BaseRepository<T extends QueryResultRow> {
       const created = rows[0];
 
       await this.handleVersioning(db, {
-        recordId: (created as any).id,
+        recordId: (created as any)[this.primaryKey],
         data: created,
         operation: "CREATE",
         performedBy: ctx.userId,
@@ -172,7 +216,7 @@ export class BaseRepository<T extends QueryResultRow> {
   async update(
     id: number,
     updates: Partial<T>,
-    ctx: RequestContext,
+    ctx: DB_RequestContext,
     client?: PoolClient,
   ): Promise<T> {
     if (this.asyncWrites) {
@@ -207,7 +251,7 @@ export class BaseRepository<T extends QueryResultRow> {
         UPDATE ${this.tableName}
         SET ${setClauses},
             updated_at = NOW()
-        WHERE id = $${values.length}
+        WHERE ${this.primaryKey} = $${values.length}
         AND is_deleted = FALSE
         RETURNING *
       `;
@@ -250,7 +294,7 @@ export class BaseRepository<T extends QueryResultRow> {
 
   async delete(
     id: number,
-    ctx: RequestContext,
+    ctx: DB_RequestContext,
     client?: PoolClient,
   ): Promise<void> {
     if (this.asyncWrites) {
@@ -274,7 +318,7 @@ export class BaseRepository<T extends QueryResultRow> {
 
       const { rows } = await db.query<T>(
         `SELECT * FROM ${this.tableName}
-         WHERE id=$1 AND is_deleted = FALSE`,
+         WHERE ${this.primaryKey} = $1 AND is_deleted = FALSE`,
         [id],
       );
 
@@ -287,7 +331,7 @@ export class BaseRepository<T extends QueryResultRow> {
          SET is_deleted = TRUE,
              deleted_at = NOW(),
              deleted_by = $2
-         WHERE id = $1`,
+         WHERE ${this.primaryKey} = $1`,
         [id, ctx.userId],
       );
 
@@ -330,7 +374,7 @@ export class BaseRepository<T extends QueryResultRow> {
       const { rows } = await db.query<T>(
         `SELECT *
          FROM ${this.tableName}
-         WHERE id = $1
+         WHERE ${this.primaryKey} = $1
          AND is_deleted = FALSE`,
         [id],
       );
@@ -345,7 +389,7 @@ export class BaseRepository<T extends QueryResultRow> {
   async select<R extends QueryResultRow>(
     sql: string,
     params: any[] = [],
-    ctx: RequestContext,
+    ctx: DB_RequestContext,
     client?: PoolClient,
     readReplica = false,
   ): Promise<R[]> {
@@ -376,7 +420,7 @@ export class BaseRepository<T extends QueryResultRow> {
         "DB_SELECT_SUCCESS",
       );
 
-      return rows;
+      return this.extractRows(rows);
     } finally {
       if (release) db.release();
     }

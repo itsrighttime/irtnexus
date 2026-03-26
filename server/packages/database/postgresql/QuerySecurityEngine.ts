@@ -1,5 +1,5 @@
 import { logger } from "#utils";
-import { RequestContext } from "./types";
+import { DB_RequestContext } from "./types";
 
 export class QuerySecurityEngine {
   private static mutationRegex =
@@ -69,7 +69,7 @@ export class QuerySecurityEngine {
   /**
    * Rewrite SQL query safely
    */
-  static rewrite(sql: string, ctx: RequestContext, params: any[]) {
+  static rewrite(sql: string, ctx: DB_RequestContext, params: any[]) {
     this.ensureReadOnly(sql);
 
     const aliases = this.detectAliases(sql);

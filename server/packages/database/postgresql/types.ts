@@ -13,11 +13,17 @@ export interface VersionEntry<T extends QueryResultRow> {
 export interface BaseRepositoryOptions {
   tableName: string;
   versionTableName: string;
+  primaryKey: string;
   asyncVersioning?: boolean;
   asyncWrites?: boolean;
 }
 
-export interface RequestContext {
+export interface DB_RequestContext {
   userId: string;
   tenantId?: string;
 }
+
+export type ColumnOptions<T> = {
+  include?: (keyof T)[];
+  exclude?: (keyof T)[];
+};
