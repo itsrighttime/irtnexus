@@ -102,7 +102,7 @@ async function executeMigrations(
   await ensureMigrationTable(client);
 
   for (const folder of folders) {
-    const folderPath = path.resolve(`src/database/migrate/${folder}`);
+    const folderPath = path.resolve(`scripts/database/postgresql/migrate/${folder}`);
 
     const sqlFiles = fs
       .readdirSync(folderPath)

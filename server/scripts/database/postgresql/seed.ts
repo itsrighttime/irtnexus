@@ -64,7 +64,7 @@ async function executeSeeds(
   await ensureSeedTable(client);
 
   for (const folder of folders) {
-    const folderPath = path.resolve(`src/database/seed/${folder}`);
+    const folderPath = path.resolve(`scripts/database/postgresql/seed/${folder}`);
     if (!fs.existsSync(folderPath)) continue;
 
     const seedFiles = fs
