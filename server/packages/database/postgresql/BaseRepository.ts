@@ -6,9 +6,12 @@ import {
   VersionEntry,
   DB_RequestContext,
   ColumnOptions,
+  QueryOptions,
+  WhereCondition,
 } from "./types";
 import { QuerySecurityEngine } from "./QuerySecurityEngine";
 import { logger } from "#utils";
+import { buildWhereClause } from "./buildWhereClause.heper";
 
 export class BaseRepository<T extends QueryResultRow> {
   protected tableName: string;
@@ -16,11 +19,13 @@ export class BaseRepository<T extends QueryResultRow> {
   protected asyncVersioning: boolean;
   protected asyncWrites: boolean;
   protected primaryKey: string;
+  protected allowedColumns: Set<string>;
 
   constructor(options: BaseRepositoryOptions) {
     this.tableName = options.tableName;
     this.versionTableName = options.versionTableName;
     this.primaryKey = options.primaryKey;
+    this.allowedColumns = new Set(options.allowedColumns);
     this.asyncVersioning = options.asyncVersioning ?? false;
     this.asyncWrites = options.asyncWrites ?? false;
   }
@@ -89,25 +94,46 @@ export class BaseRepository<T extends QueryResultRow> {
     return { client: newClient, release: true };
   }
 
+  private validateColumns(columns: (keyof T | string)[]) {
+    if (!columns || columns.length === 0) return;
+
+    const invalidColumns = columns.filter(
+      (col) => !this.allowedColumns.has(col as string),
+    );
+
+    if (invalidColumns.length > 0) {
+      throw new Error(
+        `Invalid column(s) [${invalidColumns.join(", ")}] for table "${this.tableName}".`,
+      );
+    }
+  }
+
   /**
    * Return columns string for SQL queries
    */
   protected columnsFor(options?: ColumnOptions<T>): string {
-    // Get all keys of the type T
-    const allKeys = Object.keys({} as T) as (keyof T)[];
+    let columns = [...this.allowedColumns];
 
-    let keys = allKeys;
-
-    if (options?.include) {
-      keys = options.include;
+    // INCLUDE (whitelist mode)
+    if (options?.include && options.include.length > 0) {
+      this.validateColumns(options.include);
+      columns = options.include as string[];
     }
 
-    if (options?.exclude) {
-      keys = keys.filter((k) => !options.exclude!.includes(k));
+    // EXCLUDE (blacklist mode)
+    if (options?.exclude && options.exclude.length > 0) {
+      this.validateColumns(options.exclude);
+      columns = columns.filter(
+        (col) => !options.exclude!.includes(col as keyof T),
+      );
     }
 
-    // Convert to string ready for SQL SELECT
-    return keys.map((k) => `"${String(k)}"`).join(", ");
+    if (columns.length === 0) {
+      throw new Error(`No columns selected for table "${this.tableName}".`);
+    }
+
+    // escape columns properly
+    return columns.map((col) => `"${col}"`).join(", ");
   }
 
   protected extractRows<R>(result: R | R[] | null | undefined): R[] {
@@ -391,13 +417,13 @@ export class BaseRepository<T extends QueryResultRow> {
   async select<R extends QueryResultRow>(
     sql: string,
     params: any[] = [],
-    ctx: DB_RequestContext,
+    // ctx: DB_RequestContext,
     client?: PoolClient,
     readReplica = false,
   ): Promise<R[]> {
     const { client: db, release } = await this.getClient(client, readReplica);
     try {
-      const finalSql = QuerySecurityEngine.rewrite(sql, ctx, params);
+      const finalSql = QuerySecurityEngine.rewrite(sql, params);
 
       logger.debug(
         `Executing SELECT`,
@@ -405,7 +431,7 @@ export class BaseRepository<T extends QueryResultRow> {
           originalQuery: sql,
           rewrittenQuery: finalSql,
           params,
-          tenantId: ctx.tenantId,
+          // tenantId: ctx.tenantId,
         },
         "DB_SELECT_EXEC",
       );
@@ -426,6 +452,85 @@ export class BaseRepository<T extends QueryResultRow> {
     } finally {
       if (release) db.release();
     }
+  }
+
+  async query(
+    options: QueryOptions<T>,
+    // ctx: DB_RequestContext,
+    client?: PoolClient,
+  ): Promise<T[]> {
+    const { client: db, release } = await this.getClient(client);
+
+    try {
+      const { where = {}, orderBy, limit, offset, includeDeleted } = options;
+
+      const keys = Object.keys(where);
+
+      // Validate columns
+      this.validateColumns(keys);
+
+      const values: any[] = [];
+      const whereSQLRaw = where
+        ? buildWhereClause(where, values, this.validateColumns)
+        : "";
+
+      const whereClauses = [];
+
+      if (whereSQLRaw) whereClauses.push(whereSQLRaw);
+
+      if (!includeDeleted) {
+        whereClauses.push(`deleted_at IS NULL`);
+      }
+
+      const whereSQL = whereClauses.length
+        ? `WHERE ${whereClauses.join(" AND ")}`
+        : "";
+
+      // ORDER BY
+      let orderSQL = "";
+      if (orderBy?.length) {
+        const orderClauses = orderBy.map((o) => {
+          const column = String(o.column);
+
+          if (!this.allowedColumns.has(column)) {
+            throw new Error(`Invalid order column: ${column}`);
+          }
+
+          return `${column} ${o.direction || "ASC"}`;
+        });
+
+        orderSQL = `ORDER BY ${orderClauses.join(", ")}`;
+      }
+
+      // LIMIT / OFFSET
+      const limitSQL = limit ? `LIMIT ${limit}` : "";
+      const offsetSQL = offset ? `OFFSET ${offset}` : "";
+
+      const columns = this.columnsFor();
+
+      const query = `
+        SELECT ${columns}
+        FROM ${this.tableName}
+        ${whereSQL}
+        ${orderSQL}
+        ${limitSQL}
+        ${offsetSQL}
+      `;
+
+      const { rows } = await db.query<T>(query, values);
+
+      return rows;
+    } finally {
+      if (release) db.release();
+    }
+  }
+
+  async findOne(
+    where: WhereCondition<T>,
+    client?: PoolClient,
+  ): Promise<T | null> {
+    const rows = await this.query({ where, limit: 1 }, client);
+    return rows[0] || null;
   }
 
   /** ----------------- VERSIONING ----------------- */

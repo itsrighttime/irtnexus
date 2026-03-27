@@ -69,7 +69,7 @@ export class QuerySecurityEngine {
   /**
    * Rewrite SQL query safely
    */
-  static rewrite(sql: string, ctx: DB_RequestContext, params: any[]) {
+  static rewrite(sql: string, params: any[]) {
     this.ensureReadOnly(sql);
 
     const aliases = this.detectAliases(sql);
@@ -78,14 +78,14 @@ export class QuerySecurityEngine {
 
     const finalSql = this.injectFilters(sql, filters);
 
-    params.push(ctx.tenantId);
+    // params.push(ctx.tenantId);
 
     logger.silly(
       `Query rewritten`,
       {
         originalSql: sql,
         rewrittenSql: finalSql,
-        tenantId: ctx.tenantId,
+        // tenantId: ctx.tenantId,
       },
       "DB_QUERY_REWRITE",
     );
