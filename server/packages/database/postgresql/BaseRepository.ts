@@ -413,8 +413,8 @@ export class BaseRepository<T extends QueryResultRow> {
     }
   }
 
-  /** SELECT */
-  async select<R extends QueryResultRow>(
+  /** QUERY */
+  async query<R extends QueryResultRow>(
     sql: string,
     params: any[] = [],
     // ctx: DB_RequestContext,
@@ -454,7 +454,8 @@ export class BaseRepository<T extends QueryResultRow> {
     }
   }
 
-  async query(
+  /** SELECT */
+  async select(
     options: QueryOptions<T>,
     // ctx: DB_RequestContext,
     client?: PoolClient,
@@ -529,7 +530,7 @@ export class BaseRepository<T extends QueryResultRow> {
     where: WhereCondition<T>,
     client?: PoolClient,
   ): Promise<T | null> {
-    const rows = await this.query({ where, limit: 1 }, client);
+    const rows = await this.select({ where, limit: 1 }, client);
     return rows[0] || null;
   }
 
