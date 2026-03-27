@@ -17,7 +17,6 @@ CREATE TABLE account_phones (
 CREATE TABLE account_phones_versions (
     version_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     phone_id UUID NOT NULL REFERENCES account_phones(phone_id),
-    tenant_id UUID NOT NULL REFERENCES tenants(tenant_id),
     version_number INT NOT NULL,
     data_snapshot JSONB NOT NULL,
     changed_by UUID NULL REFERENCES accounts(account_id),

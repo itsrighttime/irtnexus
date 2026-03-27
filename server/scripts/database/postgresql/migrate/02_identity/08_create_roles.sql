@@ -12,7 +12,6 @@ CREATE TABLE roles (
 CREATE TABLE roles_versions (
     version_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     role_id UUID NOT NULL REFERENCES roles(role_id),
-    tenant_id UUID NOT NULL REFERENCES tenants(tenant_id),
     version_number INT NOT NULL,
     data_snapshot JSONB NOT NULL,
     changed_by UUID NULL REFERENCES accounts(account_id),

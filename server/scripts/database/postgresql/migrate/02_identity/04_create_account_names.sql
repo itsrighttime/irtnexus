@@ -16,7 +16,6 @@ CREATE TABLE account_names (
 CREATE TABLE account_names_versions (
     version_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name_id UUID NOT NULL REFERENCES account_names(name_id),
-    tenant_id UUID NOT NULL REFERENCES tenants(tenant_id),
     version_number INT NOT NULL,
     data_snapshot JSONB NOT NULL,
     changed_by UUID NULL REFERENCES accounts(account_id),
