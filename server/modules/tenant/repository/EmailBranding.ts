@@ -2,6 +2,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { EmailBranding } from "../types";
+import { EmailBrandingCol } from "../const/dbColumns";
 
 export class EmailBrandingRepository extends BaseRepository<EmailBranding> {
   constructor() {
@@ -11,6 +12,7 @@ export class EmailBrandingRepository extends BaseRepository<EmailBranding> {
       primaryKey: "email_branding_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: EmailBrandingCol,
     });
   }
 }

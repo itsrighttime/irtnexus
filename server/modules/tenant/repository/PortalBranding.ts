@@ -2,6 +2,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { PortalBranding } from "../types";
+import { PortalBrandingCol } from "../const/dbColumns";
 
 export class PortalBrandingRepository extends BaseRepository<PortalBranding> {
   constructor() {
@@ -11,6 +12,7 @@ export class PortalBrandingRepository extends BaseRepository<PortalBranding> {
       primaryKey: "portal_branding_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: PortalBrandingCol,
     });
   }
 }

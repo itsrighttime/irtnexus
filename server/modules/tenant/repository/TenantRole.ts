@@ -2,6 +2,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { TenantRole } from "../types";
+import { TenantRoleCol } from "../const/dbColumns";
 
 export class TenantRoleRepository extends BaseRepository<TenantRole> {
   constructor() {
@@ -11,6 +12,7 @@ export class TenantRoleRepository extends BaseRepository<TenantRole> {
       primaryKey: "role_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: TenantRoleCol,
     });
   }
 }
