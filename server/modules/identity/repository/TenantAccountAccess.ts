@@ -2,6 +2,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { TenantAccountAccess } from "../types";
+import { TenantAccountAccessCol } from "../const/dbColumns";
 
 export class TenantAccountAccessRepository extends BaseRepository<TenantAccountAccess> {
   constructor() {
@@ -11,6 +12,7 @@ export class TenantAccountAccessRepository extends BaseRepository<TenantAccountA
       primaryKey: "tenant_account_access_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: TenantAccountAccessCol,
     });
   }
 }

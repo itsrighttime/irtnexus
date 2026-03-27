@@ -2,6 +2,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { AccountPhone } from "../types";
+import { AccountPhoneCol } from "../const/dbColumns";
 
 export class AccountPhoneRepository extends BaseRepository<AccountPhone> {
   constructor() {
@@ -11,6 +12,7 @@ export class AccountPhoneRepository extends BaseRepository<AccountPhone> {
       primaryKey: "phone_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: AccountPhoneCol,
     });
   }
 }

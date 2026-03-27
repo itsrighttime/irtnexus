@@ -2,6 +2,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { RolePermission } from "../types";
+import { RolePermissionCol } from "../const/dbColumns";
 
 export class RolePermissionRepository extends BaseRepository<RolePermission> {
   constructor() {
@@ -11,6 +12,7 @@ export class RolePermissionRepository extends BaseRepository<RolePermission> {
       primaryKey: "role_permission_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: RolePermissionCol,
     });
   }
 }
