@@ -1,12 +1,16 @@
 import fs from "fs";
 import path from "path";
 import { pathToFileURL } from "url";
-import { PoolClient } from "pg";
+import { Pool, PoolClient } from "pg";
 import { logger } from "#utils";
 import { DB_SETUP_HELPERS } from ".";
 
-const { DATABASES_TABLE_FOLDERS, pgPool } = DB_SETUP_HELPERS;
+const { DATABASES_TABLE_FOLDERS, DB_MAIN_CONFIG } = DB_SETUP_HELPERS;
 const SEED_TABLE = "_seeds";
+
+const dbPool = new Pool({
+  ...DB_MAIN_CONFIG,
+});
 
 /**
  * Ensure seed tracking table exists
@@ -64,7 +68,9 @@ async function executeSeeds(
   await ensureSeedTable(client);
 
   for (const folder of folders) {
-    const folderPath = path.resolve(`scripts/database/postgresql/seed/${folder}`);
+    const folderPath = path.resolve(
+      `scripts/database/postgresql/seed/${folder}`,
+    );
     if (!fs.existsSync(folderPath)) continue;
 
     const seedFiles = fs
@@ -115,7 +121,7 @@ async function runSeeds(mode: "--soft" | "--hard" = "--soft") {
     process.exit(1);
   }
 
-  const client = await pgPool.connect();
+  const client = await dbPool.connect();
   logger.info("Connected to PostgreSQL server for seeding");
   logger.info(`Seed mode: ${mode.toUpperCase()}`);
 
