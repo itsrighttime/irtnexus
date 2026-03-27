@@ -3,11 +3,13 @@ import { QueryResultRow } from "pg";
 export type CRUDOperation = "CREATE" | "UPDATE" | "DELETE";
 
 export interface VersionEntry<T extends QueryResultRow> {
-  recordId: number;
-  data: Partial<T>;
-  operation: CRUDOperation;
-  performedBy: string | null;
-  performedAt?: Date;
+  recordId: string; // UUID now, not number
+  tenantId: string; // REQUIRED
+  data: Partial<T>; // snapshot
+  operation: CRUDOperation; // optional but useful
+  performedBy: string | null; // maps to changed_by
+  performedAt?: Date; // maps to created_at
+  changeReason?: string | null; // NEW
 }
 
 export interface BaseRepositoryOptions {
@@ -20,8 +22,8 @@ export interface BaseRepositoryOptions {
 }
 
 export interface DB_RequestContext {
-  userId: string | null;
-  tenantId?: string;
+  userId: string;
+  tenantId: string;
 }
 
 export type ColumnOptions<T> = {

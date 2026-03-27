@@ -40,6 +40,7 @@ export const TABLES = {
     "email_branding",
     "portal_branding",
     "tenant_roles",
+    "tenant_addresses",
   ],
 
   SUBS: [],
