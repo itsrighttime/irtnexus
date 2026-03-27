@@ -69,7 +69,7 @@ async function executeSeeds(
 
     const seedFiles = fs
       .readdirSync(folderPath)
-      .filter((f) => f.endsWith(".js"))
+      .filter((f) => f.endsWith(".ts"))
       .sort();
 
     logger.info(`Found ${seedFiles.length} seed files in '${folder}'`);

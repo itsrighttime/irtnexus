@@ -11,32 +11,8 @@ export class RoleRepository extends BaseRepository<Role> {
       primaryKey: "role_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: [],
     });
-  }
-
-  async findByName(
-    name: string,
-    ctx: DB_RequestContext,
-    client?: PoolClient,
-  ): Promise<Role | null> {
-    const normalized = name.toLowerCase().trim();
-
-    const columns = this.columnsFor();
-
-    const result = await this.select<Role>(
-      `
-      SELECT ${columns}
-      FROM ${this.tableName}
-      WHERE LOWER(name) = $1
-        AND deleted_at IS NULL
-      LIMIT 1
-      `,
-      [normalized],
-      ctx,
-      client,
-    );
-
-    return result[0];
   }
 }
 
