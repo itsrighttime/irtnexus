@@ -10,6 +10,7 @@ import {
   authPlugin,
 } from "#apps/rest-server/middlewares";
 import { observability, prometheusRegistry } from "#packages/monitoring";
+import { testDB } from "#packages/database";
 
 export const createServer = async (): Promise<FastifyInstance> => {
   // const app = Fastify({logger: true});
@@ -38,7 +39,8 @@ export const createServer = async (): Promise<FastifyInstance> => {
   app.addHook("onRequest", async (req, _reply) => {
     // Store request start time in the request object
     (req as any).startTime = Date.now();
-    (req as any).context = { // TODO : Extract this from tocken
+    (req as any).context = {
+      // TODO : Extract this from tocken
       actor: {
         tenantId: req.headers["x-tenant-id"] as string | undefined,
         userId: req.headers["x-user-id"] as string | undefined,
@@ -88,6 +90,9 @@ export const createServer = async (): Promise<FastifyInstance> => {
 // Server bootstrap
 // ----------------------------
 const PORT = Number(process.env.PORT) || 5001;
+
+// Test Databse is Connected successfully or not
+testDB();
 
 createServer()
   .then((app) => app.listen({ port: PORT, host: "0.0.0.0" }))
