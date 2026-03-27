@@ -3,6 +3,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { SsoProvider } from "../types";
+import { SsoProviderCol } from "../const/dbColumns";
 
 export class SsoProviderRepository extends BaseRepository<SsoProvider> {
   constructor() {
@@ -12,6 +13,7 @@ export class SsoProviderRepository extends BaseRepository<SsoProvider> {
       primaryKey: "sso_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: SsoProviderCol
     });
   }
 }

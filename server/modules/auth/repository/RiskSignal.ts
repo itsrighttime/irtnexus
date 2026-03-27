@@ -3,6 +3,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { RiskSignal } from "../types";
+import { RiskSignalCol } from "../const/dbColumns";
 
 export class RiskSignalRepository extends BaseRepository<RiskSignal> {
   constructor() {
@@ -12,6 +13,7 @@ export class RiskSignalRepository extends BaseRepository<RiskSignal> {
       primaryKey: "signal_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: RiskSignalCol
     });
   }
 }

@@ -3,6 +3,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { PasswordlessMethod } from "../types";
+import { PasswordlessMethodCol } from "../const/dbColumns";
 
 export class PasswordlessMethodRepository extends BaseRepository<PasswordlessMethod> {
   constructor() {
@@ -12,6 +13,7 @@ export class PasswordlessMethodRepository extends BaseRepository<PasswordlessMet
       primaryKey: "method_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: PasswordlessMethodCol
     });
   }
 }

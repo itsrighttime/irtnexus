@@ -2,6 +2,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { MfaFactor } from "../types";
+import { MfaFactorCol } from "../const/dbColumns";
 
 export class MfaFactorRepository extends BaseRepository<MfaFactor> {
   constructor() {
@@ -11,6 +12,7 @@ export class MfaFactorRepository extends BaseRepository<MfaFactor> {
       primaryKey: "factor_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: MfaFactorCol
     });
   }
 }

@@ -3,6 +3,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { FederatedProvider } from "../types";
+import { FederatedProviderCol } from "../const/dbColumns";
 
 export class FederatedProviderRepository extends BaseRepository<FederatedProvider> {
   constructor() {
@@ -12,6 +13,7 @@ export class FederatedProviderRepository extends BaseRepository<FederatedProvide
       primaryKey: "provider_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: FederatedProviderCol
     });
   }
 }

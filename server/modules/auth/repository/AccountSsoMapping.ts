@@ -3,6 +3,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { AccountSsoMapping } from "../types";
+import { AccountSsoMappingCol } from "../const/dbColumns";
 
 export class AccountSsoMappingRepository extends BaseRepository<AccountSsoMapping> {
   constructor() {
@@ -12,6 +13,7 @@ export class AccountSsoMappingRepository extends BaseRepository<AccountSsoMappin
       primaryKey: "mapping_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: AccountSsoMappingCol
     });
   }
 }

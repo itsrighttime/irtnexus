@@ -2,6 +2,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { TemporarySession } from "../types";
+import { TemporarySessionCol } from "../const/dbColumns";
 
 export class TemporarySessionRepository extends BaseRepository<TemporarySession> {
   constructor() {
@@ -11,6 +12,7 @@ export class TemporarySessionRepository extends BaseRepository<TemporarySession>
       primaryKey: "session_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: TemporarySessionCol,
     });
   }
 }

@@ -2,6 +2,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { OAuthToken } from "../types";
+import { OAuthTokenCol } from "../const/dbColumns";
 
 export class OAuthTokenRepository extends BaseRepository<OAuthToken> {
   constructor() {
@@ -11,6 +12,7 @@ export class OAuthTokenRepository extends BaseRepository<OAuthToken> {
       primaryKey: "token_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: OAuthTokenCol
     });
   }
 }

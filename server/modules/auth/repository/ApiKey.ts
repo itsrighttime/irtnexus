@@ -3,6 +3,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { ApiKey } from "../types";
+import { ApiKeyCol } from "../const/dbColumns";
 
 export class ApiKeyRepository extends BaseRepository<ApiKey> {
   constructor() {
@@ -12,6 +13,7 @@ export class ApiKeyRepository extends BaseRepository<ApiKey> {
       primaryKey: "key_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: ApiKeyCol
     });
   }
 }

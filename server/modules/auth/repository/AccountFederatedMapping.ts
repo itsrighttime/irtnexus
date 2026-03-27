@@ -2,6 +2,7 @@ import { BaseRepository, DB_RequestContext } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoConfig } from "#configs";
 import { AccountFederatedMapping } from "../types";
+import { AccountFederatedMappingCol } from "../const/dbColumns";
 
 export class AccountFederatedMappingRepository extends BaseRepository<AccountFederatedMapping> {
   constructor() {
@@ -11,8 +12,10 @@ export class AccountFederatedMappingRepository extends BaseRepository<AccountFed
       primaryKey: "mapping_id",
       asyncVersioning: repoConfig.asyncVersioning,
       asyncWrites: repoConfig.asyncWrites,
+      allowedColumns: AccountFederatedMappingCol,
     });
   }
 }
 
-export const repoAccountFederatedMapping = new AccountFederatedMappingRepository();
+export const repoAccountFederatedMapping =
+  new AccountFederatedMappingRepository();
