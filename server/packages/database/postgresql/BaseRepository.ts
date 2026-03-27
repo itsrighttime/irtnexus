@@ -12,6 +12,7 @@ import {
 import { QuerySecurityEngine } from "./QuerySecurityEngine";
 import { logger } from "#utils";
 import { buildWhereClause } from "./buildWhereClause.heper";
+import { haveTenantId } from "scripts/database";
 
 export class BaseRepository<T extends QueryResultRow> {
   protected tableName: string;
@@ -207,6 +208,7 @@ export class BaseRepository<T extends QueryResultRow> {
       const created = rows[0];
 
       await this.handleVersioning(db, {
+        tenantId: ctx.tenantId,
         recordId: (created as any)[this.primaryKey],
         data: created,
         operation: "CREATE",
@@ -240,7 +242,7 @@ export class BaseRepository<T extends QueryResultRow> {
   /** ----------------- UPDATE ----------------- */
 
   async update(
-    id: number,
+    id: string,
     updates: Partial<T>,
     ctx: DB_RequestContext,
     client?: PoolClient,
@@ -287,6 +289,7 @@ export class BaseRepository<T extends QueryResultRow> {
       const updated = rows[0];
 
       await this.handleVersioning(db, {
+        tenantId: ctx.tenantId,
         recordId: id,
         data: updated,
         operation: "UPDATE",
@@ -319,7 +322,7 @@ export class BaseRepository<T extends QueryResultRow> {
   /** ----------------- DELETE ----------------- */
 
   async delete(
-    id: number,
+    id: string,
     ctx: DB_RequestContext,
     client?: PoolClient,
   ): Promise<void> {
@@ -362,6 +365,7 @@ export class BaseRepository<T extends QueryResultRow> {
       );
 
       await this.handleVersioning(db, {
+        tenantId: ctx.tenantId,
         recordId: id,
         data: existing,
         operation: "DELETE",
@@ -417,13 +421,13 @@ export class BaseRepository<T extends QueryResultRow> {
   async query<R extends QueryResultRow>(
     sql: string,
     params: any[] = [],
-    // ctx: DB_RequestContext,
+    ctx: DB_RequestContext,
     client?: PoolClient,
     readReplica = false,
   ): Promise<R[]> {
     const { client: db, release } = await this.getClient(client, readReplica);
     try {
-      const finalSql = QuerySecurityEngine.rewrite(sql, params);
+      const finalSql = QuerySecurityEngine.rewrite(sql, ctx, params);
 
       logger.debug(
         `Executing SELECT`,
@@ -431,7 +435,7 @@ export class BaseRepository<T extends QueryResultRow> {
           originalQuery: sql,
           rewrittenQuery: finalSql,
           params,
-          // tenantId: ctx.tenantId,
+          tenantId: ctx.tenantId,
         },
         "DB_SELECT_EXEC",
       );
@@ -457,7 +461,7 @@ export class BaseRepository<T extends QueryResultRow> {
   /** SELECT */
   async select(
     options: QueryOptions<T>,
-    // ctx: DB_RequestContext,
+    ctx: DB_RequestContext,
     client?: PoolClient,
   ): Promise<T[]> {
     const { client: db, release } = await this.getClient(client);
@@ -481,6 +485,11 @@ export class BaseRepository<T extends QueryResultRow> {
 
       if (!includeDeleted) {
         whereClauses.push(`deleted_at IS NULL`);
+      }
+
+      if (haveTenantId(this.tableName)) {
+        whereClauses.push(`tenant_id = $${values.length}`);
+        values.push(ctx.tenantId);
       }
 
       const whereSQL = whereClauses.length
@@ -528,20 +537,25 @@ export class BaseRepository<T extends QueryResultRow> {
 
   async findOne(
     where: WhereCondition<T>,
+    ctx: DB_RequestContext,
     client?: PoolClient,
   ): Promise<T | null> {
-    const rows = await this.select({ where, limit: 1 }, client);
+    const rows = await this.select({ where, limit: 1 }, ctx, client);
     return rows[0] || null;
   }
 
   /** ----------------- VERSIONING ----------------- */
 
-  private async handleVersioning(client: PoolClient, entry: VersionEntry<T>) {
+  private async handleVersioning<T extends QueryResultRow>(
+    client: PoolClient,
+    entry: VersionEntry<T>,
+  ): Promise<void> {
     if (this.asyncVersioning) {
       await versionQueue.add("versioning", {
         table: this.versionTableName,
         entry,
       });
+
       logger.debug(
         `Queued async versioning`,
         {
@@ -554,33 +568,99 @@ export class BaseRepository<T extends QueryResultRow> {
       return;
     }
 
-    const fields = Object.keys(entry.data).join(", ");
-    const values = Object.values(entry.data);
-    const placeholders = values.map((_, i) => `$${i + 1}`).join(", ");
+    try {
+      // 1. Lock latest version row
+      const latestVersionRes = await client.query(
+        `
+        SELECT version_number
+        FROM ${this.versionTableName}
+        WHERE ${this.primaryKey} = $1
+        ORDER BY version_number DESC
+        LIMIT 1
+        FOR UPDATE
+      `,
+        [entry.recordId],
+      );
 
-    const query = `
-      INSERT INTO ${this.versionTableName}
-      (record_id, ${fields}, operation_type, performed_by, performed_at)
-      VALUES ($${values.length + 1}, ${placeholders},
-              $${values.length + 2}, $${values.length + 3}, $${values.length + 4})
-    `;
+      const versionNumber =
+        latestVersionRes.rows.length > 0
+          ? latestVersionRes.rows[0].version_number + 1
+          : 1;
 
-    await client.query(query, [
-      entry.recordId,
-      ...values,
-      entry.operation,
-      entry.performedBy,
-      entry.performedAt,
-    ]);
+      // 2. Prepare snapshot
+      const snapshot = entry.data;
 
-    logger.debug(
-      `Writing version entry`,
-      {
-        table: this.versionTableName,
-        recordId: entry.recordId,
-        operation: entry.operation,
-      },
-      "DB_VERSION_SYNC",
-    );
+      // 3. Build dynamic query
+      const columns: string[] = [this.primaryKey];
+      const values: any[] = [entry.recordId];
+      const placeholders: string[] = [`$1`];
+
+      let paramIndex = 2;
+
+      // Conditionally add tenant_id
+      if (haveTenantId(this.tableName)) {
+        columns.push("tenant_id");
+        values.push(entry.tenantId);
+        placeholders.push(`$${paramIndex++}`);
+      }
+
+      // Common fields
+      columns.push(
+        "version_number",
+        "data_snapshot",
+        "changed_by",
+        "change_reason",
+        "created_at",
+      );
+
+      values.push(
+        versionNumber,
+        snapshot,
+        entry.performedBy,
+        entry.changeReason ?? null,
+        entry.performedAt ?? new Date(),
+      );
+
+      placeholders.push(
+        `$${paramIndex++}`,
+        `$${paramIndex++}`,
+        `$${paramIndex++}`,
+        `$${paramIndex++}`,
+        `$${paramIndex++}`,
+      );
+
+      const insertQuery = `
+        INSERT INTO ${this.versionTableName}
+        (${columns.join(", ")})
+        VALUES (${placeholders.join(", ")})
+      `;
+
+      await client.query(insertQuery, values);
+
+      logger.debug(
+        `Version entry written`,
+        {
+          table: this.versionTableName,
+          recordId: entry.recordId,
+          versionNumber,
+          operation: entry.operation,
+          hasTenantId: haveTenantId(this.tableName),
+        },
+        "DB_VERSION_SYNC",
+      );
+    } catch (error) {
+      logger.error(
+        `Versioning failed`,
+        {
+          table: this.versionTableName,
+          recordId: entry.recordId,
+          operation: entry.operation,
+          error,
+        },
+        "DB_VERSION_ERROR",
+      );
+
+      throw error;
+    }
   }
 }
