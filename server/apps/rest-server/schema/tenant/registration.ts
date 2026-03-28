@@ -1,3 +1,5 @@
+const passwordPattern = `^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$`;
+
 export const registerTenantSchema = {
   description: "Register a new tenant in the system",
   tags: ["Tenant Management"],
@@ -10,6 +12,8 @@ export const registerTenantSchema = {
       "adminUsername",
       "organizationName",
       "identifier",
+      "password",
+      "rePassword",
     ],
     properties: {
       adminName: { type: "string", minLength: 2 },
@@ -18,6 +22,18 @@ export const registerTenantSchema = {
       adminUsername: { type: "string", minLength: 5, pattern: "^[a-z0-9-]+$" },
       organizationName: { type: "string", minLength: 3 },
       identifier: { type: "string", pattern: "^[a-z0-9-]+$", minLength: 5 },
+      password: {
+        type: "string",
+        pattern: passwordPattern,
+        minLength: 8,
+        maxLength: 128,
+      },
+      rePassword: {
+        type: "string",
+        pattern: passwordPattern,
+        minLength: 8,
+        maxLength: 128,
+      },
     },
   },
 

@@ -8,6 +8,8 @@ export type RegisterTenantInput = {
   adminUsername: string;
   organizationName: string;
   identifier: string;
+  password: string;
+  rePassword: string;
 };
 
 export type RegisterTenantResponse = {

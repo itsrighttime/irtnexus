@@ -15,6 +15,7 @@ import {
   repoTenantMembership,
 } from "#modules/identity/index.js";
 import { ServiceResponse } from "#types";
+import { sendMailIdVerifcationEmail } from "#packages/mail";
 
 export async function registerTenant(
   data: RegisterTenantInput,
@@ -92,7 +93,6 @@ export async function registerTenant(
           account_id: account.account_id,
           email,
           is_primary: true,
-          verified: false,
         },
         ctx,
         client,
@@ -104,7 +104,6 @@ export async function registerTenant(
           account_id: account.account_id,
           phone_number: phone,
           is_primary: true,
-          verified: false,
         },
         ctx,
         client,
@@ -116,7 +115,6 @@ export async function registerTenant(
           account_id: account.account_id,
           full_name: name,
           name_type: "primary",
-          verified: false,
         },
         ctx,
         client,
@@ -158,6 +156,15 @@ export async function registerTenant(
         account,
       };
     });
+
+    // Sending Mail for Email verification
+    const verificationLink = "";
+    const isMailSend = await sendMailIdVerifcationEmail(
+      email,
+      name,
+      verificationLink,
+      5,
+    );
 
     return {
       success: true,
