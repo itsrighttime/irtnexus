@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your itsRIGHTtime Email Verification</title>
+    <link rel="stylesheet" href="../css/registration.css" />
+  </head>
+
+  <body>
+    <div class="email-wrapper">
+      <table
+        role="presentation"
+        width="100%"
+        cellspacing="0"
+        cellpadding="0"
+        border="0"
+        align="center"
+      >
+        <tr>
+          <td align="center">
+            <table
+              role="presentation"
+              class="email-content"
+              width="100%"
+              cellspacing="0"
+              cellpadding="0"
+              border="0"
+            >
+              <!-- Header -->
+              <tr>
+                <td class="header">
+                  <div class="brand">itsRIGHTtime Nexus (iRtNexus)</div>
+                </td>
+              </tr>
+
+              <!-- Body -->
+              <tr>
+                <td class="body">
+                  <p class="greeting">Hi {{user_name}},</p>
+
+                  <p class="lead">
+                    To continue with your request on
+                    <strong>iRtNexus</strong>, please verify your email address
+                    by clicking the button below.
+                  </p>
+
+                  <!-- Verification Link -->
+                  <div
+                    class="details"
+                    style="text-align: center; margin: 20px 0"
+                  >
+                    <a href="{{verification_link}}" class="btn">
+                      Verify Email
+                    </a>
+                    <p class="note">
+                      This link is valid for {{link_validity}} minutes.
+                    </p>
+                  </div>
+
+                  <p class="note">
+                    Please do not share this link with anyone for security
+                    reasons. If you did not request this verification, you can
+                    safely ignore this email.
+                  </p>
+
+                  <p class="closing">
+                    Best regards,<br />
+                    <strong>The itsRIGHTtime Team</strong>
+                  </p>
+                </td>
+              </tr>
+
+              <!-- Footer -->
+              <tr>
+                <td class="footer">
+                  <p><strong>itsRIGHTtime</strong></p>
+                  <p>
+                    If you’re having trouble or didn’t request this
+                    verification, contact us at
+                    <a href="mailto:support@itsrighttime.group"
+                      >support@itsrighttime.group</a
+                    >.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
