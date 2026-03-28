@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { logger } from "#utils";
+import { logger, response } from "#utils";
 import { AppError } from "./types/error";
 
 /**
@@ -20,16 +20,18 @@ export const globalErrorHandler = (
 
   // Translate the error message
   // const message = translate(messageKey, err.options || {});
-  const message = "Global Error"; // TODO
+  const message = err.message || "Global Error"; // TODO
 
   // Log the error for debugging
   logger.error("Global Error : ", err);
 
-  // Send JSON response
-  reply.status(statusCode).send({
-    success: false,
-    statusCode,
-    message,
-    details,
-  });
+  // // Send JSON response
+  // reply.status(statusCode).send({
+  //   success: false,
+  //   statusCode,
+  //   message,
+  //   details,
+  // });
+
+  response.error(request, reply, {}, message, "GLOBAL");
 };

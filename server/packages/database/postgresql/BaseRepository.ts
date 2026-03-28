@@ -95,7 +95,7 @@ export class BaseRepository<T extends QueryResultRow> {
     return { client: newClient, release: true };
   }
 
-  private validateColumns(columns: (keyof T | string)[]) {
+  private validateColumns = (columns: (keyof T | string)[]) => {
     if (!columns || columns.length === 0) return;
 
     const invalidColumns = columns.filter(
@@ -107,7 +107,7 @@ export class BaseRepository<T extends QueryResultRow> {
         `Invalid column(s) [${invalidColumns.join(", ")}] for table "${this.tableName}".`,
       );
     }
-  }
+  };
 
   /**
    * Return columns string for SQL queries
