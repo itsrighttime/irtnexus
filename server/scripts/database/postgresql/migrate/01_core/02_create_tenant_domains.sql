@@ -3,7 +3,7 @@ CREATE TABLE tenant_domains (
     tenant_id UUID NOT NULL REFERENCES tenants(tenant_id) ON DELETE CASCADE,
     domain VARCHAR(255) NOT NULL,
     is_primary BOOLEAN NOT NULL DEFAULT FALSE,
-    verified BOOLEAN NOT NULL DEFAULT FALSE,
+    verified_at TIMESTAMPTZ DEFAULT NULL,
     ssl_status VARCHAR(20) DEFAULT 'pending',
     deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),

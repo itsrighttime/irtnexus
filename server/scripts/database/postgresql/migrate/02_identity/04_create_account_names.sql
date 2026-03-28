@@ -3,10 +3,7 @@ CREATE TABLE account_names (
     account_id UUID NOT NULL REFERENCES accounts(account_id) ON DELETE CASCADE,
     full_name VARCHAR(255) NOT NULL,
     name_type VARCHAR(50) NOT NULL,
-    verified BOOLEAN DEFAULT FALSE,
-    valid_from TIMESTAMPTZ DEFAULT now(),
-    valid_to TIMESTAMPTZ,
-
+    verified_at TIMESTAMPTZ DEFAULT NULL,
     deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT NOW()

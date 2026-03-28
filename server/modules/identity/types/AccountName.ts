@@ -6,7 +6,7 @@ export interface AccountName {
   full_name: string;
   name_type: string;
 
-  verified?: boolean | null;
+  verified_at?: Date | null;
 
   valid_from?: Date | null;
   valid_to?: Date | null;

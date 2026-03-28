@@ -1,4 +1,4 @@
-export interface AccountAddress {
+export interface TenantAddress {
   address_id: string;
 
   tenant_id: string;

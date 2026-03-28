@@ -10,7 +10,7 @@ export interface TenantDomain {
 
   ssl_status?: string | null;
 
-  deleted_at?: Date | null;
+  verified_at?: Date | null;
 
   created_at: Date;
   updated_at: Date;

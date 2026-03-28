@@ -2,7 +2,7 @@ CREATE TABLE account_emails (
     email_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     account_id UUID NOT NULL REFERENCES accounts(account_id) ON DELETE CASCADE,
     email VARCHAR(255) NOT NULL,
-    verified BOOLEAN DEFAULT FALSE,
+    verified_at TIMESTAMPTZ DEFAULT NULL,
     is_primary BOOLEAN DEFAULT FALSE,
     deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT now(),

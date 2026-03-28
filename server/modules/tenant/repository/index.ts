@@ -1,3 +1,4 @@
+export { TenantAddressRepository, repoTenantAddress } from "./TenantAddress";
 export { EmailBrandingRepository, repoEmailBranding } from "./EmailBranding";
 export { PortalBrandingRepository, repoPortalBranding } from "./PortalBranding";
 export { TenantRepository, repoTenant } from "./Tenant";

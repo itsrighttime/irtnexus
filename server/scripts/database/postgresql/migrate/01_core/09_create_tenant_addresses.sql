@@ -10,9 +10,7 @@ CREATE TABLE tenant_addresses (
     state VARCHAR(20),
     country VARCHAR(20),
     pincode VARCHAR(20),
-    verified BOOLEAN NOT NULL DEFAULT FALSE,
-    valid_from TIMESTAMPTZ NOT NULL DEFAULT now(),
-    valid_to TIMESTAMPTZ,
+    verified_at TIMESTAMPTZ DEFAULT NULL,
     deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()

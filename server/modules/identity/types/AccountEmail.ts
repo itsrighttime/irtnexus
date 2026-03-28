@@ -5,7 +5,7 @@ export interface AccountEmail {
 
   email: string;
 
-  verified?: boolean | null;
+  verified_at?: Date | null;
   is_primary?: boolean | null;
 
   deleted_at?: Date | null;
