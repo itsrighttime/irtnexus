@@ -34,8 +34,6 @@ export async function tenantRoutes(fastify: FastifyInstance) {
 
       const result = await TenantService.register(body, ctx);
 
-      console.log("DDDD: ", result);
-
       if (!result.success) {
         return response.error(
           request,

@@ -1,3 +1,4 @@
+export { GENERAl_CONST } from "./general";
 export { repoConfig } from "./repo.config";
 export { ACTION } from "./actionType.config";
 export { REDIS_PREFIX } from "./redis.const";

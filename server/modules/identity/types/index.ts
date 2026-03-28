@@ -9,3 +9,4 @@ export type { Role } from "./Role";
 export type { RolePermission } from "./RolePermission";
 export type { TenantAccountAccess } from "./TenantAccountAccess";
 export type { TenantMembership } from "./TenantMembership";
+export type { Verification } from "./Verification";

@@ -1,3 +1,4 @@
+export { repoVerification, VerificationRepository } from "./Verification";
 export { AccountRepository, repoAccount } from "./Account";
 export { AccountAddressRepository, repoAccountAddress } from "./AccountAddress";
 export {

@@ -13,9 +13,13 @@ import {
   repoAccountPhone,
   repoRole,
   repoTenantMembership,
-} from "#modules/identity/index.js";
+  repoVerification,
+} from "#modules/identity";
 import { ServiceResponse } from "#types";
 import { sendMailIdVerifcationEmail } from "#packages/mail";
+import { repoPassword } from "#modules/auth";
+import { generateUUID, HASH_SALT, hashPassword } from "#packages/utils";
+import { GENERAl_CONST } from "#configs";
 
 export async function registerTenant(
   data: RegisterTenantInput,
@@ -27,6 +31,8 @@ export async function registerTenant(
   const phone = data.adminPhone;
   const identifier = data.identifier;
   const organizationName = data.organizationName;
+  const password = data.password;
+  const rePassword = data.rePassword;
 
   const [existingUsername, existingEmail, existingPhone, existingTenant] =
     await Promise.all([
@@ -38,21 +44,17 @@ export async function registerTenant(
 
   const errors: Record<string, string> = {};
 
-  if (existingUsername) {
-    errors.username = "Username already taken";
-  }
+  if (password !== rePassword)
+    errors.password = "Password and Re-Password must be same";
 
-  if (existingEmail) {
-    errors.email = "Email already in use";
-  }
+  if (existingUsername) errors.username = "Username already taken";
 
-  if (existingPhone) {
-    errors.phone = "Phone number already in use";
-  }
+  if (existingEmail) errors.email = "Email already in use";
 
-  if (existingTenant) {
+  if (existingPhone) errors.phone = "Phone number already in use";
+
+  if (existingTenant)
     errors.identifier = "Organization identifier already exists";
-  }
 
   if (Object.keys(errors).length > 0) {
     return {
@@ -151,20 +153,52 @@ export async function registerTenant(
         client,
       );
 
+      const hashPasswordKey = await hashPassword(password);
+
+      // 8 Create tenant owner entry
+      await repoPassword.create(
+        {
+          tenant_id: tenant.tenant_id,
+          account_id: account.account_id,
+          password_hash: hashPasswordKey,
+          salt: String(HASH_SALT),
+        },
+        ctx,
+        client,
+      );
+
+      // Sending Mail for Email verification
+      const verificationToken = generateUUID();
+      const verificationLink = `${GENERAl_CONST.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+      const expireMinutes = 0.5 * 60;
+
+      const expiresAt = new Date(Date.now() + expireMinutes * 60 * 1000);
+
+      await repoVerification.create(
+        {
+          tenant_id: tenant.tenant_id,
+          account_id: account.account_id,
+          target_id: email,
+          type: "EMAIL",
+          token: verificationToken,
+          expires_at: expiresAt,
+        },
+        ctx,
+        client,
+      );
+
+      const isMailSend = await sendMailIdVerifcationEmail(
+        email,
+        name,
+        verificationLink,
+        expireMinutes,
+      );
+
       return {
         tenant,
         account,
       };
     });
-
-    // Sending Mail for Email verification
-    const verificationLink = "";
-    const isMailSend = await sendMailIdVerifcationEmail(
-      email,
-      name,
-      verificationLink,
-      5,
-    );
 
     return {
       success: true,

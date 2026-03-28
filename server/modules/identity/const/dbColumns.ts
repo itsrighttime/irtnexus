@@ -134,3 +134,16 @@ export const TenantMembershipCol = [
   "created_at",
   "updated_at",
 ];
+export const VerificationCol = [
+  "verification_id",
+  "tenant_id",
+  "account_id",
+  "target_id",
+  "type",
+  "token",
+  "status",
+  "expires_at",
+  "verified_at",
+  "deleted_at",
+  "created_at",
+];
