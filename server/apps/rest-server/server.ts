@@ -11,6 +11,8 @@ import {
 } from "#apps/rest-server/middlewares";
 import { observability, prometheusRegistry } from "#packages/monitoring";
 import { testDB } from "#packages/database";
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUI from "@fastify/swagger-ui";
 
 export const createServer = async (): Promise<FastifyInstance> => {
   // const app = Fastify({logger: true});
@@ -23,6 +25,13 @@ export const createServer = async (): Promise<FastifyInstance> => {
   app.register(registerSecurity); // Must be a FastifyPluginAsync
   app.addHook("preHandler", languagePlugin);
   app.addHook("preHandler", requestContextPlugin);
+
+  // Swagger
+  app.register(fastifySwagger, {
+    routePrefix: "/documentation",
+    exposeRoute: true,
+  });
+  app.register(fastifySwaggerUI, { routePrefix: "/docs" });
 
   // Register Multer
   app.register(multipart, {

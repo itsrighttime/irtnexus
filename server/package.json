@@ -31,6 +31,7 @@
     "@fastify/rate-limit": "^10.3.0",
     "@fastify/secure-session": "^8.3.0",
     "@fastify/swagger": "^9.7.0",
+    "@fastify/swagger-ui": "^5.2.5",
     "@itsrighttime/broadcast": "^0.0.8",
     "@itsrighttime/socket-io": "^0.0.5",
     "@itsrighttime/utils": "^0.0.21",

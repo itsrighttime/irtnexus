@@ -11,7 +11,7 @@ interface ResponsePayload<T = any> {
   uniqueCode?: string;
   redirectUrl?: string;
   meta?: Record<string, any>;
-  errors?: Array<{ field?: string; message: string; code?: string }>;
+  errors?: Record<string, string>;
 }
 
 /** Generates unique codes like SECU-IN-USER_FOUND or SECU-ER-USER_NOT_FOUND */
@@ -21,11 +21,11 @@ const getUniqueCode = (code: string, type: StatusType = STATUS.SUCCESS) => {
 };
 
 class ResponseService {
-  static #send<T = any>(
+  private static send = <T = any>(
     request: FastifyRequest,
     reply: FastifyReply,
     payload: ResponsePayload<T> = {},
-  ) {
+  ) => {
     const ctx = (request as any).context || {};
     const {
       status = STATUS.SUCCESS,
@@ -57,17 +57,17 @@ class ResponseService {
         ...meta,
       },
     });
-  }
+  };
 
-  static success<T = any>(
+  static success = <T = any>(
     request: FastifyRequest,
     reply: FastifyReply,
     data: T | null = null,
     message = "Success",
     uniqueCode = "N/A",
     meta: Record<string, any> = {},
-  ) {
-    return this.#send(request, reply, {
+  ) => {
+    return this.send(request, reply, {
       status: STATUS.SUCCESS,
       code: HTTP_STATUS.x2_OK,
       message,
@@ -75,18 +75,18 @@ class ResponseService {
       uniqueCode,
       meta,
     });
-  }
+  };
 
-  static error(
+  static error = (
     request: FastifyRequest,
     reply: FastifyReply,
-    errors?: Array<{ field?: string; message: string; code?: string }>,
+    errors: Record<string, string>,
     message = "Internal Server Error",
     uniqueCode = "N/A",
     code = HTTP_STATUS.x5_INTERNAL_SERVER_ERROR,
     meta: Record<string, any> = {},
-  ) {
-    return this.#send(request, reply, {
+  ) => {
+    return this.send(request, reply, {
       status: STATUS.ERROR,
       code,
       message,
@@ -95,9 +95,9 @@ class ResponseService {
       errors,
       meta,
     });
-  }
+  };
 
-  static info(
+  static info = (
     request: FastifyRequest,
     reply: FastifyReply,
     message: string,
@@ -105,8 +105,8 @@ class ResponseService {
     uniqueCode = "N/A",
     code = HTTP_STATUS.x2_OK,
     meta: Record<string, any> = {},
-  ) {
-    return this.#send(request, reply, {
+  ) => {
+    return this.send(request, reply, {
       status: STATUS.INFO,
       code,
       message,
@@ -114,7 +114,7 @@ class ResponseService {
       uniqueCode,
       meta,
     });
-  }
+  };
 }
 
 const response = {

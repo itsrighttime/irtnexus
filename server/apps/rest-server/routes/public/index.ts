@@ -1,6 +1,7 @@
 // src/routes/public.routes.ts
 import { fastifyUploadAdapter } from "#packages/storage";
 import { FastifyPluginAsync } from "fastify";
+import { tenantRoutes } from "./tenant";
 
 export const publicRoutes: FastifyPluginAsync = async (fastify) => {
   // Root endpoint
@@ -21,6 +22,12 @@ export const publicRoutes: FastifyPluginAsync = async (fastify) => {
     }
   });
 
+  fastify.register(
+    async (fastifyInstance) => {
+      await tenantRoutes(fastifyInstance);
+    },
+    { prefix: "/tenants" },
+  );
   // Mount user routes under /users
   // fastify.register(userRoute, { prefix: "/users" });
 };
