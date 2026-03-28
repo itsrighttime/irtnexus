@@ -36,8 +36,8 @@ export const sendMailIdVerifcationEmail = async (
   try {
     const variables = {
       user_name: name,
-      otp: verificationLink,
-      otp_validity: validity,
+      verification_link: verificationLink,
+      link_validity: validity,
     };
 
     await emailService.sendEmail({
