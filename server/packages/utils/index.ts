@@ -1,3 +1,4 @@
+export { comparePassword, hashPassword, HASH_SALT } from "./hash.util";
 export { loadFile } from "./loadFile";
 export { response, STATUS, HTTP_STATUS } from "./response";
 
