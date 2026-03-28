@@ -1,16 +1,16 @@
 import { repoAccount } from "#modules/identity";
 import { SYSTEM_DEFAULT } from "#tools/const";
-import { logger } from "#utils";
+import { PoolClient } from "pg";
 
-export default async function seed() {
-  repoAccount.create(
+export default async function seed(client: PoolClient) {
+  await repoAccount.create(
     {
       username: SYSTEM_DEFAULT.ACCOUNT_USERNAME,
     },
     {
       userId: null,
+      tenantId: null,
     },
+    client,
   );
-
-  logger.info("User name seeded successfully!");
 }
