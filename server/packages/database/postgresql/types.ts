@@ -22,7 +22,7 @@ export interface BaseRepositoryOptions {
 }
 
 export interface DB_RequestContext {
-  userId: string;
+  accountId: string;
   tenantId: string;
 }
 

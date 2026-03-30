@@ -44,7 +44,7 @@ export const requestContextPlugin = async (
 
     actor: {
       anonymous: true,
-      userId: null,
+      accountId: null,
       username: null,
       role: null,
       tenantId: null,

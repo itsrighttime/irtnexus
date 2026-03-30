@@ -7,11 +7,11 @@ export const getReqContext = (req: FastifyRequest): DB_RequestContext => {
   if (reqCon) {
     return {
       tenantId: reqCon.actor.tenantId || "",
-      userId: reqCon.actor.userId || "",
+      accountId: reqCon.actor.accountId || "",
     };
   } else
     return {
       tenantId: "",
-      userId: "",
+      accountId: "",
     };
 };

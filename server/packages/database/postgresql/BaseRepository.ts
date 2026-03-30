@@ -198,7 +198,7 @@ export class BaseRepository<T extends QueryResultRow> {
           table: this.tableName,
           record,
           tenantId: ctx.tenantId,
-          userId: ctx.userId,
+          accountId: ctx.accountId,
         },
         "DB_CREATE_START",
       );
@@ -212,7 +212,7 @@ export class BaseRepository<T extends QueryResultRow> {
         recordId: (created as any)[this.primaryKey],
         data: created,
         operation: "CREATE",
-        performedBy: ctx.userId,
+        performedBy: ctx.accountId,
         performedAt: new Date(),
       });
 
@@ -293,7 +293,7 @@ export class BaseRepository<T extends QueryResultRow> {
         recordId: id,
         data: updated,
         operation: "UPDATE",
-        performedBy: ctx.userId,
+        performedBy: ctx.accountId,
         performedAt: new Date(),
       });
 
@@ -361,7 +361,7 @@ export class BaseRepository<T extends QueryResultRow> {
              deleted_at = NOW(),
              deleted_by = $2
          WHERE ${this.primaryKey} = $1`,
-        [id, ctx.userId],
+        [id, ctx.accountId],
       );
 
       await this.handleVersioning(db, {
@@ -369,7 +369,7 @@ export class BaseRepository<T extends QueryResultRow> {
         recordId: id,
         data: existing,
         operation: "DELETE",
-        performedBy: ctx.userId,
+        performedBy: ctx.accountId,
         performedAt: new Date(),
       });
 

@@ -16,7 +16,7 @@ export interface SessionData {
 // Type for actor / request context
 export interface ActorContext {
   anonymous: boolean;
-  userId: string | null;
+  accountId: string | null;
   username: string | null;
   role: string | null;
   tenantId: string | null;

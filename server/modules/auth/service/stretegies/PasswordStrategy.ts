@@ -54,7 +54,7 @@ export class PasswordStrategy implements AuthStrategy {
         client,
       );
 
-      if (!account || account.account_id !== ctx.userId) {
+      if (!account || account.account_id !== ctx.accountId) {
         return {
           success: false,
           message: "Unauthorized account access",
