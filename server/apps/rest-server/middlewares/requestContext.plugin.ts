@@ -11,7 +11,7 @@ const asyncLocalStorage = new AsyncLocalStorage<Map<string, any>>();
 /**
  * Retrieve current request context anywhere downstream
  */
-export const getRequestContext = (): RequestContext | null => {
+export const getRequestFullContext = (): RequestContext | null => {
   const store = asyncLocalStorage.getStore();
   return store?.get("context") || null;
 };
@@ -42,7 +42,14 @@ export const requestContextPlugin = async (
     traceId: traceHeader ?? generateUUID(),
     auditId: null, // Initialized as null; can be set later
 
-    actor: { anonymous: true } as ActorContext,
+    actor: {
+      anonymous: true,
+      userId: null,
+      username: null,
+      role: null,
+      tenantId: null,
+      tenantIdentifier: null,
+    } as ActorContext,
     startTime,
   };
 
