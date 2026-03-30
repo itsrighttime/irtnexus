@@ -10,3 +10,4 @@ export type { PasswordlessMethod } from "./PasswordlessMethod";
 export type { RiskSignal } from "./RiskSignal";
 export type { SsoProvider } from "./SsoProvider";
 export type { TemporarySession } from "./TemporarySession";
+export type * from "./stretegies";
