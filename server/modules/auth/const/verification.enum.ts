@@ -13,6 +13,7 @@ export const VERIFICATION_TYPE = {
   EMAIL: "EMAIL",
   PHONE: "PHONE",
   ADDRESS: "ADDRESS",
+  EMAIL_OTP: "EMAIL_OTP",
 } as const;
 
 export type VerificationType =

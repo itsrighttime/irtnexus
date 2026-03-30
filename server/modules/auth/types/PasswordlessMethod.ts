@@ -1,11 +1,13 @@
+import { PasswordlessMethodType, VerificationType } from "../const";
+
 export interface PasswordlessMethod {
   method_id: string;
 
   account_id: string;
   tenant_id: string;
 
-  method_type: string; // 'magic_link' | 'otp' | 'totp' | 'passkey' | 'push'
-  channel?: string | null; // 'email' | 'sms' | 'whatsapp'
+  method_type: PasswordlessMethodType; // 'magic_link' | 'otp' | 'totp' | 'passkey' | 'push'
+  channel?: VerificationType; // 'email' | 'sms' | 'whatsapp'
 
   device_info?: Record<string, any> | null;
 
