@@ -9,7 +9,7 @@ export type OtpCharset = (typeof OTP_CHARSET)[keyof typeof OTP_CHARSET];
 export const PASSWORDLESS_METHODS = {
   OTP: "otp",
   MAGIC_LINK: "magic_link",
-  PASS_KEY: "pass_key",
+  PASSKEY: "passkey",
   PUSH: "push",
 } as const;
 
