@@ -4,29 +4,24 @@ import { AuthStrategy } from "../../types";
 import { repoAccount, repoVerification } from "#modules/identity";
 import { repoPasswordlessMethod } from "../../repository";
 import { PoolClient } from "pg";
-import bcrypt from "bcrypt";
 import {
   PASSWORDLESS_METHODS,
   VERIFICATION_STATUS,
-  VERIFICATION_TYPE,
   VerificationType,
-  OTP_CHARSET,
   OtpCharset,
-  PasswordlessMethodType,
+  PasswordlessMethod,
 } from "../../const";
-import { generateOtp } from "../helper/generateOtp";
+import { tokenProviderRegistry } from "../token-provider";
 
-const DEFAULT_OTP_LENGTH = 6;
 const DEFAULT_OTP_EXPIRY_MINUTES = 5;
 const DEFAULT_COOLDOWN_SECONDS = 60;
-const SALT_ROUNDS = 12;
 
 // Helper to determine expiry per method
-const methodExpiryMap: Record<PasswordlessMethodType, number> = {
+const methodExpiryMap: Record<PasswordlessMethod, number> = {
   [PASSWORDLESS_METHODS.OTP]: DEFAULT_OTP_EXPIRY_MINUTES,
   [PASSWORDLESS_METHODS.MAGIC_LINK]: 15,
-  [PASSWORDLESS_METHODS.PUSH]: 2,
-  [PASSWORDLESS_METHODS.PASSKEY]: 10,
+  // [PASSWORDLESS_METHODS.PUSH]: 2,
+  // [PASSWORDLESS_METHODS.PASSKEY]: 10,
 };
 
 export class PasswordlessStrategy implements AuthStrategy {
@@ -37,7 +32,7 @@ export class PasswordlessStrategy implements AuthStrategy {
       accountId: string;
       targetId: string;
       channel: VerificationType;
-      methodType: PasswordlessMethodType;
+      methodType: PasswordlessMethod;
     },
     client?: PoolClient,
   ): Promise<ServiceResponse<{ methodId: string }>> {
@@ -169,19 +164,17 @@ export class PasswordlessStrategy implements AuthStrategy {
         }
       }
 
-      let token: string | undefined;
-      if (method.method_type === PASSWORDLESS_METHODS.OTP) {
-        token = generateOtp(
-          length ?? DEFAULT_OTP_LENGTH,
-          charset ?? OTP_CHARSET.NUMERIC,
-        );
-        token = await bcrypt.hash(token, SALT_ROUNDS);
-      } else if (method.method_type === PASSWORDLESS_METHODS.MAGIC_LINK) {
-        // Generate magic link token (example, just a random hash)
-        token = generateOtp(32, OTP_CHARSET.ALPHANUMERIC);
-      } else if (method.method_type === PASSWORDLESS_METHODS.PUSH) {
-        token = generateOtp(6, OTP_CHARSET.NUMERIC);
+      // 3. Token provider
+      const provider = tokenProviderRegistry[method.method_type];
+      if (!provider) {
+        return { success: false, message: "Unsupported method type" };
       }
+
+      const { raw, hashed } = await provider.generate({
+        length,
+        charset,
+        targetId,
+      });
 
       // Determine expiry
       const expiryMinutes =
@@ -195,7 +188,7 @@ export class PasswordlessStrategy implements AuthStrategy {
           account_id: accountId,
           target_id: targetId,
           type: method.channel,
-          token,
+          token: hashed ?? raw,
           status: VERIFICATION_STATUS.PENDING,
           expires_at: expiresAt,
         },
@@ -216,7 +209,7 @@ export class PasswordlessStrategy implements AuthStrategy {
 
       return {
         success: true,
-        data: { verificationId: record.verification_id, token },
+        data: { verificationId: record.verification_id },
         message: `Sent via ${method.channel}`,
       };
     } catch {
@@ -263,15 +256,8 @@ export class PasswordlessStrategy implements AuthStrategy {
         return { success: false, message: "Token expired" };
       }
 
-      let isValid = false;
-      if (
-        method.method_type === PASSWORDLESS_METHODS.OTP ||
-        method.method_type === PASSWORDLESS_METHODS.PUSH
-      ) {
-        isValid = await bcrypt.compare(token, record.token);
-      } else if (method.method_type === PASSWORDLESS_METHODS.MAGIC_LINK) {
-        isValid = token === record.token;
-      }
+      const provider = tokenProviderRegistry[method.method_type];
+      const isValid = provider.verify(token, record.token);
 
       if (!isValid) return { success: false, message: "Invalid token" };
 

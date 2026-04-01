@@ -9,9 +9,19 @@ export type OtpCharset = (typeof OTP_CHARSET)[keyof typeof OTP_CHARSET];
 export const PASSWORDLESS_METHODS = {
   OTP: "otp",
   MAGIC_LINK: "magic_link",
-  PASSKEY: "passkey",
-  PUSH: "push",
+  // PASSKEY: "passkey",
+  // PUSH: "push",
 } as const;
 
-export type PasswordlessMethodType =
+export type PasswordlessMethod =
   (typeof PASSWORDLESS_METHODS)[keyof typeof PASSWORDLESS_METHODS];
+
+export const PASSWORDLESS_CHANNEL = {
+  EMAIL: "email",
+  SMS: "sms",
+  WHATSAPP: "whatsapp",
+  CALL: "call",
+} as const;
+
+export type PasswordlessChannel =
+  (typeof PASSWORDLESS_CHANNEL)[keyof typeof PASSWORDLESS_CHANNEL];

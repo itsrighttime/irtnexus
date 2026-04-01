@@ -1,0 +1,1 @@
+export { authResolver } from "./AuthStrategyResolver";

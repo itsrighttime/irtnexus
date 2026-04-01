@@ -18,7 +18,7 @@ import {
 import { ServiceResponse } from "#types";
 import { sendMailIdVerifcationEmail } from "#packages/mail";
 import { repoPassword } from "#modules/auth";
-import { generateUUID, HASH_SALT, hashPassword } from "#packages/utils";
+import { generateUUID, HASH_SALT, hashText } from "#packages/utils";
 import { GENERAl_CONST } from "#configs";
 
 export async function registerTenant(
@@ -153,7 +153,7 @@ export async function registerTenant(
         client,
       );
 
-      const hashPasswordKey = await hashPassword(password);
+      const hashPasswordKey = await hashText(password);
 
       // 8 Create tenant owner entry
       await repoPassword.create(
