@@ -25,3 +25,11 @@ export const PASSWORDLESS_CHANNEL = {
 
 export type PasswordlessChannel =
   (typeof PASSWORDLESS_CHANNEL)[keyof typeof PASSWORDLESS_CHANNEL];
+
+export const AUTH_STRATEGY_METHODS = {
+  PASSWORD: "password",
+  PASSWORDLESS: "passwordless",
+  OAUTH: "oauth",
+} as const;
+
+export type AuthStrategyMethods = (typeof AUTH_STRATEGY_METHODS)[keyof typeof AUTH_STRATEGY_METHODS];

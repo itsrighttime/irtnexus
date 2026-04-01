@@ -2,11 +2,11 @@ import { DB_RequestContext } from "#packages/database";
 import { ServiceResponse } from "#types";
 import { PoolClient } from "pg";
 import { authStrategyRegistry } from "./AuthStrategyRegistry";
-import { AuthStrategyType } from "../const";
+import { AuthStrategyMethods } from "../const";
 
 export class AuthStrategyResolver {
   async setup(
-    strategyType: AuthStrategyType,
+    strategyType: AuthStrategyMethods,
     ctx: DB_RequestContext,
     payload: any,
     client?: PoolClient,
@@ -16,7 +16,7 @@ export class AuthStrategyResolver {
   }
 
   async authenticate(
-    strategyType: AuthStrategyType,
+    strategyType: AuthStrategyMethods,
     ctx: DB_RequestContext,
     payload: any,
     client?: PoolClient,
@@ -26,7 +26,7 @@ export class AuthStrategyResolver {
   }
 
   async verify(
-    strategyType: AuthStrategyType,
+    strategyType: AuthStrategyMethods,
     ctx: DB_RequestContext,
     payload: any,
     client?: PoolClient,
@@ -36,7 +36,7 @@ export class AuthStrategyResolver {
   }
 
   async revoke(
-    strategyType: AuthStrategyType,
+    strategyType: AuthStrategyMethods,
     ctx: DB_RequestContext,
     payload: any,
     client?: PoolClient,
@@ -46,7 +46,7 @@ export class AuthStrategyResolver {
   }
 
   async update(
-    strategyType: AuthStrategyType,
+    strategyType: AuthStrategyMethods,
     ctx: DB_RequestContext,
     payload: any,
     client?: PoolClient,
