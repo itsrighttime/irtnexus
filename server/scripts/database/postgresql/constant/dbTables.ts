@@ -49,4 +49,15 @@ export const TABLES = {
   AUDIT: ["audit_logs"],
 
   BILLING: [],
+
+  NOTIFICATION: [
+    "notifications",
+    "notification_recipients",
+    "notification_preferences",
+    "notification_preference_mutes",
+    "notification_templates",
+    "notification_rules",
+    "notification_logs",
+    "notification_jobs",
+  ],
 };

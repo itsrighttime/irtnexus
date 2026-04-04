@@ -13,6 +13,7 @@ export const DB_TABLES_USER_MAP = {
       ...TABLES.CONTACTS,
       ...TABLES.TENANTS,
       ...TABLES.SUBS,
+      ...TABLES.NOTIFICATION,
     ]),
   ],
 
@@ -22,6 +23,7 @@ export const DB_TABLES_USER_MAP = {
     ...TABLES.CONTACTS,
     ...TABLES.TENANTS,
     ...TABLES.SUBS,
+    ...TABLES.NOTIFICATION,
   ],
 
   REPORT: ["*"],
