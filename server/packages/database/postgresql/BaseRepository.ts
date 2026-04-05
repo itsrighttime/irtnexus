@@ -395,7 +395,7 @@ export class BaseRepository<T extends QueryResultRow> {
   /** ----------------- READ ----------------- */
 
   async findById(
-    id: number,
+    id: string,
     client?: PoolClient,
     readReplica = false,
   ): Promise<T | null> {
