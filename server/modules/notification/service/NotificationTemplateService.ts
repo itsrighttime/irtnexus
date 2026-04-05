@@ -72,7 +72,7 @@ export class NotificationTemplateService implements INotificationTemplateService
       {
         where: {
           type: type,
-          template_id: tenantId,
+          tenant_id: tenantId,
           channel,
           locale,
           is_active: true,

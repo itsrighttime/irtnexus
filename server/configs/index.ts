@@ -5,7 +5,7 @@ export { REDIS_PREFIX } from "./redis.const";
 export { registerSecurity } from "./security.config";
 export { HEADERS } from "./header.config";
 export { registerProcessHandlers } from "./processHandlers.config";
-export { redis, connectRedis, redisOptions } from "./redis.config";
+export { redis, connectRedis, redisOptions, redisUrl } from "./redis.config";
 export { DB_ENV, DB_GLOBAL } from "./db.config";
 export { registerCors } from "./cors.config";
 export { emailConfig } from "./email.config";

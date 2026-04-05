@@ -36,6 +36,13 @@ export const redisOptions: RedisOptions = {
 };
 
 /**
+ * Redis URL (exported)
+ */
+export const redisUrl = `redis://${
+  redisOptions.password ? `:${encodeURIComponent(redisOptions.password)}@` : ""
+}${redisOptions.host || "127.0.0.1"}:${redisOptions.port || 6379}`;
+
+/**
  * Redis client instance
  */
 export const redis = new Redis(redisOptions);

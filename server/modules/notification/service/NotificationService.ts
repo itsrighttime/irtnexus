@@ -110,6 +110,45 @@ export class NotificationService {
           client,
         );
       }
+
+      await Promise.all(
+        channels.map(async (channel) => {
+          await this.trackingService.createRecipientRecord(
+            {
+              notificationId,
+              accountId: recipient.accountId,
+              channel,
+            },
+            ctx,
+            client,
+          );
+
+          await this.dispatcher.dispatchToChannel(
+            {
+              notificationId,
+              tenantId,
+              recipient,
+              channel,
+              contentResolver,
+            },
+            ctx,
+            client,
+          );
+        }),
+      );
     }
+
+    const contentResolver = async (channel: NotificationChannel) => {
+      return this.templateService.render(
+        {
+          type,
+          channel,
+          tenantId,
+          data,
+        },
+        ctx,
+        client,
+      );
+    };
   }
 }

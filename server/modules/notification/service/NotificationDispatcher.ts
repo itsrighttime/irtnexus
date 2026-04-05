@@ -16,7 +16,7 @@ export class NotificationDispatcher implements INotificationDispatcher {
       tenantId: string;
       recipient: Recipient;
       channel: NotificationChannel;
-      contentResolver: (channel: NotificationChannel) => Promise<any>;
+      contentResolver: (channel: NotificationChannel) => Promise<{ subject?: string; body: string }>;
     },
     ctx: DB_RequestContext,
     client?: PoolClient,

@@ -52,11 +52,21 @@ export class NotificationPreferenceService implements INotificationPreferenceSer
       client,
     );
 
+    if (!existing) {
+      throw new Error("Preferences not found for user");
+    }
+
     const updated: Partial<NotificationPreferences> = {
-      account_id: accountId,
+      ...existing,
+      ...preferences,
     };
 
-    await this.preferenceRepo.update(accountId, updated, ctx, client);
+    await this.preferenceRepo.update(
+      existing.preference_id,
+      updated,
+      ctx,
+      client,
+    );
 
     return updated;
   }
@@ -79,7 +89,7 @@ export class NotificationPreferenceService implements INotificationPreferenceSer
 
     if (!prefs) {
       // No prefs found, apply your default logic (e.g. all channels enabled)
-      return ["IN_APP"];
+      return ["EMAIL", "SMS", "PUSH", "IN_APP"];
     }
 
     // 1. Hard stop → globally muted
