@@ -13,6 +13,8 @@ import { observability, prometheusRegistry } from "#packages/monitoring";
 import { testDB } from "#packages/database";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUI from "@fastify/swagger-ui";
+import { eventBusConsumerRegistry } from "#modules/bootstrap";
+import { eventBus } from "#modules/bootstrap/eventBus.instance.js";
 
 export const createServer = async (): Promise<FastifyInstance> => {
   // const app = Fastify({logger: true});
@@ -102,6 +104,7 @@ const PORT = Number(process.env.PORT) || 5001;
 
 // Test Databse is Connected successfully or not
 testDB();
+eventBusConsumerRegistry(eventBus);
 
 createServer()
   .then((app) => app.listen({ port: PORT, host: "0.0.0.0" }))

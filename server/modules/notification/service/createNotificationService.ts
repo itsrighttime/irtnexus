@@ -10,9 +10,8 @@ import { EventBus } from "#packages/event-bus";
 /**
  * Factory to create NotificationService instance
  */
-export const createNotificationService = (redisUrl: string) => {
+export const createNotificationService = (eventBus: EventBus) => {
   // Core services
-  const eventBus = new EventBus(redisUrl);
   const templateService = new NotificationTemplateService();
   const preferenceService = new NotificationPreferenceService();
   const trackingService = new NotificationTrackingService();
