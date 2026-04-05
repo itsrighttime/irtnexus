@@ -4,7 +4,7 @@ CREATE TABLE notification_recipients (
     notification_id UUID REFERENCES notifications(notification_id) ON DELETE CASCADE,
     tenant_id UUID REFERENCES tenants(tenant_id) ON DELETE CASCADE,
 
-    user_id UUID REFERENCES accounts(account_id),
+    account_id UUID REFERENCES accounts(account_id),
 
     -- delivery
     channel TEXT NOT NULL,          -- EMAIL, SMS, PUSH, IN_APP
@@ -16,6 +16,7 @@ CREATE TABLE notification_recipients (
     -- read tracking (your requirement ✅)
     is_read BOOLEAN DEFAULT FALSE,
     read_at TIMESTAMPTZ,
+    delivered_at TIMESTAMPTZ,
 
     -- optional delivery metadata
     provider_response JSONB,
@@ -26,7 +27,7 @@ CREATE TABLE notification_recipients (
 );
 
 -- fast user inbox
-CREATE INDEX idx_notification_user ON notification_recipients(user_id, is_read);
+CREATE INDEX idx_notification_user ON notification_recipients(account_id, is_read);
 
 -- fast lookup
 CREATE INDEX idx_notification_status ON notification_recipients(status);

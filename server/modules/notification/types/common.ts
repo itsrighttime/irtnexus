@@ -22,3 +22,23 @@ export type NotificationStatus = "PENDING" | "SENT" | "FAILED" | "RETRYING";
 export type JobStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED";
 
 export type DeliveryStatus = "SUCCESS" | "FAILED";
+
+export interface Recipient {
+  accountId: string;
+  email?: string;
+  phone?: string;
+  deviceToken?: string;
+}
+
+export interface SendNotificationInput {
+  type: string;
+  category: NotificationCategory;
+  tenantId: string;
+
+  recipients: Recipient[];
+
+  data?: Record<string, any>;
+
+  sendAt?: Date; // scheduling
+  priority?: "LOW" | "NORMAL" | "HIGH";
+}

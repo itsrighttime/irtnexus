@@ -4,9 +4,10 @@ export interface NotificationPreferences {
   preference_id: UUID;
 
   tenant_id: UUID | null;
-  user_id: UUID | null;
+  account_id: UUID | null;
 
   channels_enabled?: Record<NotificationChannel, boolean> | null;
+  mute_per_channel?: Record<NotificationChannel, boolean> | null;
 
   channel_configs?: {
     EMAIL?: { email: string };

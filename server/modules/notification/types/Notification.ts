@@ -9,7 +9,7 @@ import {
 export interface Notification<T = JSONB> {
   notification_id: UUID;
 
-  tenant_id: UUID | null;
+  tenant_id: UUID;
 
   type: NotificationType;
   category: NotificationCategory;
@@ -20,7 +20,7 @@ export interface Notification<T = JSONB> {
 
   priority: NotificationPriority;
 
-  scheduled_at?: string | null;
+  scheduled_at?: Date | null;
 
   created_at: Date;
   updated_at: Date;

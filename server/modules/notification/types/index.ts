@@ -6,3 +6,5 @@ export { NotificationPreferenceMute } from "./NotificationPreferenceMute";
 export { NotificationRule } from "./NotificationRule";
 export { NotificationLog } from "./NotificationLog";
 export { NotificationJob } from "./NotificationJob";
+export * from "./common";
+export * from "./interfaces";

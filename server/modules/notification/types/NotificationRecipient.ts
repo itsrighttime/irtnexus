@@ -6,7 +6,7 @@ export interface NotificationRecipient {
   notification_id: UUID | null;
   tenant_id: UUID | null;
 
-  user_id?: UUID | null;
+  account_id?: UUID | null;
 
   channel: NotificationChannel;
   status: NotificationStatus;
@@ -16,6 +16,7 @@ export interface NotificationRecipient {
 
   is_read: boolean;
   read_at?: Date | null;
+  delivered_at?: Date | null;
 
   provider_response?: JSONB | null;
 
