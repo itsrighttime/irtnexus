@@ -5,7 +5,7 @@ CREATE TABLE verifications (
     target_id VARCHAR(255) NOT NULL,        -- email_id, phone_id, address_id, etc.
     type VARCHAR(50) NOT NULL,      -- EMAIL, PHONE, ADDRESS
     token VARCHAR(255) NOT NULL UNIQUE,
-    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',  -- PENDING, VERIFIED, EXPIRED
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',  -- PENDING, VERIFIED, EXPIRED
     expires_at TIMESTAMPTZ NOT NULL,
     verified_at TIMESTAMPTZ DEFAULT NULL,
     deleted_at TIMESTAMPTZ DEFAULT NULL,

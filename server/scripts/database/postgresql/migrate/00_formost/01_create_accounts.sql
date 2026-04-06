@@ -5,7 +5,7 @@ CREATE TABLE accounts (
 
     status VARCHAR(50) NOT NULL DEFAULT 'active',
 
-    identity_level VARCHAR(10) DEFAULT 'L0',
+    identity_level VARCHAR(10) DEFAULT 'unverified',
 
     preferred_language VARCHAR(10),
     preferred_timezone VARCHAR(50),
