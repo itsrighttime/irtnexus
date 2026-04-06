@@ -1,4 +1,4 @@
-import { VerificationStatus, VerificationType } from "#modules/auth";
+import { VerificationStatus, VerificationType } from "../const";
 
 export interface Verification {
   verification_id: string; // UUID
