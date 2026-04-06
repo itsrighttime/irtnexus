@@ -280,7 +280,7 @@ export class BaseRepository<T extends QueryResultRow> {
         SET ${setClauses},
             updated_at = NOW()
         WHERE ${this.primaryKey} = $${values.length}
-        AND is_deleted = FALSE
+        AND deleted_at IS NULL
         RETURNING *
       `;
 
@@ -319,6 +319,120 @@ export class BaseRepository<T extends QueryResultRow> {
     }
   }
 
+  async updateWhere(
+    where: WhereCondition<T>,
+    updates: Partial<T>,
+    ctx: DB_RequestContext,
+    client?: PoolClient,
+  ): Promise<T[]> {
+    if (this.asyncWrites) {
+      await writeQueue.add("updateWhere", {
+        table: this.tableName,
+        where,
+        updates,
+        context: ctx,
+      });
+
+      logger.info(
+        `Async bulk update queued`,
+        { table: this.tableName, where, updates },
+        "DB_ASYNC_UPDATE_WHERE",
+      );
+
+      return [];
+    }
+
+    const { client: db, release } = await this.getClient(client);
+
+    try {
+      await this.txnBegin(release, db);
+
+      /** ----------------- VALIDATION ----------------- */
+      this.validateColumns(Object.keys(updates));
+      this.validateColumns(Object.keys(where));
+
+      /** ----------------- BUILD SET ----------------- */
+      const values: any[] = [];
+
+      const setClauses = Object.entries(updates).map(([key, value]) => {
+        values.push(value);
+        return `${key} = $${values.length}`;
+      });
+
+      /** ----------------- BUILD WHERE ----------------- */
+      const whereSQLRaw = buildWhereClause(where, values, this.validateColumns);
+
+      const whereClauses: string[] = [];
+
+      if (whereSQLRaw) whereClauses.push(whereSQLRaw);
+
+      // Soft delete safety
+      whereClauses.push(`deleted_at IS NULL`);
+
+      // Tenant isolation
+      if (haveTenantId(this.tableName)) {
+        whereClauses.push(`tenant_id = $${values.length + 1}`);
+        values.push(ctx.tenantId);
+      }
+
+      const whereSQL = `WHERE ${whereClauses.join(" AND ")}`;
+
+      /** ----------------- FINAL QUERY ----------------- */
+      const query = `
+      UPDATE ${this.tableName}
+      SET ${setClauses.join(", ")},
+          updated_at = NOW()
+      ${whereSQL}
+      RETURNING *
+    `;
+
+      logger.debug(
+        `Executing UPDATE WHERE`,
+        {
+          table: this.tableName,
+          where,
+          updates,
+          tenantId: ctx.tenantId,
+        },
+        "DB_UPDATE_WHERE_START",
+      );
+
+      const { rows } = await db.query<T>(query, values);
+
+      /** ----------------- VERSIONING ----------------- */
+      for (const row of rows) {
+        await this.handleVersioning(db, {
+          tenantId: ctx.tenantId,
+          recordId: (row as any)[this.primaryKey],
+          data: row,
+          operation: "UPDATE",
+          performedBy: ctx.accountId,
+          performedAt: new Date(),
+        });
+      }
+
+      await this.txnCommit(release, db);
+
+      logger.info(
+        `Bulk update successful`,
+        {
+          table: this.tableName,
+          affectedRows: rows.length,
+          tenantId: ctx.tenantId,
+        },
+        "DB_UPDATE_WHERE_SUCCESS",
+      );
+
+      return rows;
+    } catch (err: any) {
+      logger.error(`Bulk update failed`, err, "DB_UPDATE_WHERE_ERROR");
+      await this.txnRollback(release, db, err);
+      throw err;
+    } finally {
+      if (release) db.release();
+    }
+  }
+
   /** ----------------- DELETE ----------------- */
 
   async delete(
@@ -347,7 +461,7 @@ export class BaseRepository<T extends QueryResultRow> {
 
       const { rows } = await db.query<T>(
         `SELECT * FROM ${this.tableName}
-         WHERE ${this.primaryKey} = $1 AND is_deleted = FALSE`,
+         WHERE ${this.primaryKey} = $1 AND deleted_at IS NULL`,
         [id],
       );
 
@@ -357,8 +471,7 @@ export class BaseRepository<T extends QueryResultRow> {
 
       await db.query(
         `UPDATE ${this.tableName}
-         SET is_deleted = TRUE,
-             deleted_at = NOW(),
+         SET deleted_at = NOW(),
              deleted_by = $2
          WHERE ${this.primaryKey} = $1`,
         [id, ctx.accountId],
@@ -407,7 +520,7 @@ export class BaseRepository<T extends QueryResultRow> {
         `SELECT ${columns}
          FROM ${this.tableName}
          WHERE ${this.primaryKey} = $1
-         AND is_deleted = FALSE`,
+         AND deleted_at IS NULL`,
         [id],
       );
 

@@ -84,7 +84,7 @@ export const writeWorker = new Worker(
         );
       } else if (job.name === "deleteRecord") {
         await client.query(
-          `UPDATE ${table} SET is_deleted=TRUE, deleted_at=NOW(), deleted_by=$2 WHERE id=$1`,
+          `UPDATE ${table} SET deleted_at=NOW(), deleted_by=$2 WHERE id=$1`,
           [id, context.userId],
         );
       }
