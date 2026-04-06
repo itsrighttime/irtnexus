@@ -1,0 +1,9 @@
+export const ADDRESS_TYPE = {
+  HOME: "home",
+  WORK: "work",
+  OTHER: "other",
+  PRIMARY: "primary",
+  SECONDARY: "secondary",
+} as const;
+
+export type AddressType = (typeof ADDRESS_TYPE)[keyof typeof ADDRESS_TYPE];

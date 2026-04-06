@@ -1,10 +1,12 @@
+import { AccountNameType } from "../const";
+
 export interface AccountName {
   name_id: string;
 
   account_id: string;
 
   full_name: string;
-  name_type: string;
+  name_type: AccountNameType;
 
   verified_at?: Date | null;
 

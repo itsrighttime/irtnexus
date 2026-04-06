@@ -1,4 +1,24 @@
 TODO : 
 
 - Subscription with Free tier, limited features
-- 
+- Currently, there is no restriction on the number of emails, phone numbers, or addresses a user can have. 
+  - We need to update this so that limits can be applied. 
+  - These limits should be configurable and could dynamically adjust based on factors such as the user’s 
+  - subscription or other parameters.
+
+
+{
+  "account_id": "...",
+  "username": "...",
+  "identity_level": "L1",
+
+  "emails": [],
+  "phones": [],
+  "names": [],
+  "addresses": [],
+
+  "primary_email": "...",
+  "primary_phone": "...",
+
+  "kyc_status": "pending"
+}

@@ -228,4 +228,9 @@ export const EmailService = {
       client,
     );
   },
+
+  /** ---------------- GET EMAIL BY ID ---------------- */
+  async getEmail(emailId: string, client?: PoolClient) {
+    return repoAccountEmail.findById(emailId, client);
+  },
 };

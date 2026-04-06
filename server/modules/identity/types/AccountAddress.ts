@@ -1,10 +1,12 @@
+import { AddressType } from "../const";
+
 export interface AccountAddress {
   address_id: string;
 
   tenant_id: string;
   account_id: string;
 
-  address_type?: string | null;
+  address_type?: AddressType;
 
   house_no?: string | null;
   street_no?: string | null;
