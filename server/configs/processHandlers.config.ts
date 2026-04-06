@@ -1,8 +1,8 @@
 // src/core/processHandlers.ts
-import { UtilsError } from "#libs";
+// import { UtilsError } from "#libs";
 import { logger } from "#utils";
 
-const { errorHandler } = UtilsError;
+// const { errorHandler } = UtilsError;
 
 /**
  * Graceful Shutdown
@@ -41,13 +41,13 @@ const handleProcessError = async (
 ): Promise<void> => {
   logger.error(isFatal ? "Critical Error:" : "Process Error:", error);
 
-  // Delegate to centralized error handler
-  await errorHandler.handleError(error);
+  // // Delegate to centralized error handler
+  // await errorHandler.handleError(error);
 
-  // Shutdown the process for fatal or untrusted errors
-  if (!errorHandler.isTrustedError(error) || isFatal) {
-    await gracefulShutdown(1);
-  }
+  // // Shutdown the process for fatal or untrusted errors
+  // if (!errorHandler.isTrustedError(error) || isFatal) {
+  //   await gracefulShutdown(1);
+  // }
 };
 
 /**

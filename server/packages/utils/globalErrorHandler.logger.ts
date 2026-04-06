@@ -1,37 +1,60 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import { logger, response } from "#utils";
-import { AppError } from "./types/error";
+import { FastifyRequest, FastifyReply } from "fastify";
+import { HTTP_STATUS, response } from "./response";
+import { AppError, AppErrorParams } from "../errors";
 
 /**
  * Global Fastify error handler
- * @param err - The error object
- * @param request - FastifyRequest
- * @param reply - FastifyReply
+ * Should be registered as `setErrorHandler` in Fastify
  */
-export const globalErrorHandler = (
-  err: AppError,
+export function globalErrorHandler(
+  error: AppErrorParams | Error,
   request: FastifyRequest,
   reply: FastifyReply,
-): void => {
-  // Default error values
-  const statusCode = err.statusCode || 500;
-  const messageKey = "error.default";
-  const details = err.details || null;
+) {
+  // If the error is one of our AppErrors
+  if (error instanceof AppError) {
+    const payload = {
+      [error.details?.field || "error"]: error.message,
+    };
 
-  // Translate the error message
-  // const message = translate(messageKey, err.options || {});
-  const message = err.message || "Global Error"; // TODO
+    return response.error(
+      request,
+      reply,
+      payload,
+      error.message,
+      error.uniqueCode,
+      error.details.statusCode || error.statusCode || 500,
+    );
+  }
 
-  // Log the error for debugging
-  logger.error("Global Error : ", err);
+  // Handle Fastify validation errors (from schema validation)
+  if ((error as any).validation) {
+    const validationError = error as any;
+    const errors: Record<string, string> = {};
+    validationError.validation.forEach((err: any) => {
+      const field = err.instancePath.replace(/^\//, "") || err.schemaPath;
+      errors[field] = err.message;
+    });
 
-  // // Send JSON response
-  // reply.status(statusCode).send({
-  //   success: false,
-  //   statusCode,
-  //   message,
-  //   details,
-  // });
+    return response.error(
+      request,
+      reply,
+      errors,
+      "Validation failed",
+      "VALIDATION_FAILED",
+      HTTP_STATUS.x4_BAD_REQUEST,
+    );
+  }
 
-  response.error(request, reply, {}, message, "GLOBAL");
-};
+  // Fallback for unexpected/unhandled errors
+  console.error("Unexpected error:", error);
+
+  return response.error(
+    request,
+    reply,
+    { error: error.message },
+    "Internal Server Error",
+    "INTERNAL_SERVER_ERROR",
+    HTTP_STATUS.x5_INTERNAL_SERVER_ERROR,
+  );
+}

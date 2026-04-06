@@ -83,7 +83,7 @@ class ResponseService {
     errors: Record<string, string>,
     message = "Internal Server Error",
     uniqueCode = "N/A",
-    code = HTTP_STATUS.x5_INTERNAL_SERVER_ERROR,
+    code: number = HTTP_STATUS.x5_INTERNAL_SERVER_ERROR,
     meta: Record<string, any> = {},
   ) => {
     return this.send(request, reply, {
@@ -103,7 +103,7 @@ class ResponseService {
     message: string,
     data: any = null,
     uniqueCode = "N/A",
-    code = HTTP_STATUS.x2_OK,
+    code: number = HTTP_STATUS.x2_OK,
     meta: Record<string, any> = {},
   ) => {
     return this.send(request, reply, {

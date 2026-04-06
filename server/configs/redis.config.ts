@@ -1,9 +1,6 @@
 // src/database/redis.ts
 import Redis, { RedisOptions } from "ioredis";
-import { UtilsError } from "#libs";
 import { logger } from "#utils";
-
-const { handleError } = UtilsError;
 
 /**
  * Redis configuration options
@@ -55,10 +52,7 @@ export const connectRedis = async (): Promise<void> => {
     await redis.connect();
     logger.info("Connected to Redis", {}, "00010");
   } catch (error: any) {
-    handleError(error, {
-      code: "0000F",
-      isTrusted: false, // Redis is critical
-    });
+    logger.error("Failed to connect to Redis", error, "0000F");
   }
 };
 
