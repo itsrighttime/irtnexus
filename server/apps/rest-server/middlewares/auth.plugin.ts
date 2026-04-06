@@ -1,8 +1,9 @@
 // src/middlewares/auth.plugin.ts
 import { FastifyReply, FastifyRequest } from "fastify";
-import { redis, REDIS_PREFIX } from "#configs";
+import { HEADERS, JWT_CONFIG, redis, REDIS_PREFIX } from "#configs";
 import { logger } from "#utils";
-import { SessionData } from "#types";
+import { RequestContext, SessionData } from "#types";
+import jwt from "jsonwebtoken";
 
 /**
  * Auth plugin for Fastify
@@ -15,35 +16,27 @@ export const authPlugin = async (
   reply: FastifyReply,
 ) => {
   try {
-    // 1. Get session ID from request (cookies or headers)
-    const sessionId =
-      (request.cookies?.sessionId as string) ||
-      (request.headers?.["x-session-id"] as string);
+    const authHeader = request.headers[HEADERS.AUTHORIZATION];
 
-    if (!sessionId) {
-      reply.status(401).send({ message: "Unauthorized: No session found" });
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      reply.status(401).send({ message: "Unauthorized" });
       return;
     }
 
-    // 2. Verify session exists in Redis
-    const sessionDataStr = await redis.get(
-      `${REDIS_PREFIX.SESSION}${sessionId}`,
-    );
-    if (!sessionDataStr) {
-      reply.status(401).send({ message: "Unauthorized: Invalid session" });
-      return;
-    }
+    const token = authHeader.split(" ")[1];
 
-    // 3. Parse session data
-    const sessionObj: SessionData = JSON.parse(sessionDataStr);
+    const decoded = jwt.verify(token, JWT_CONFIG.SECRET) as any;
 
-    // 4. Attach user info to request
-    (request as any).user = sessionObj.user;
-
-    // 5. Optional: user active check
-    if (!sessionObj.user || !sessionObj.user.isActive) {
-      reply.status(403).send({ message: "Forbidden: User inactive" });
-      return;
+    // Attach to context instead of request.user
+    if (request.context) {
+      request.context.actor = {
+        anonymous: false,
+        accountId: decoded.id,
+        username: decoded.username,
+        role: decoded.role,
+        tenantId: decoded.tenantId ?? null,
+        tenantIdentifier: decoded.tenantIdentifier ?? null,
+      };
     }
 
     // Allow request to continue

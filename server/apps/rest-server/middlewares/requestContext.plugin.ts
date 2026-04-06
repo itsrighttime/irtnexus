@@ -1,20 +1,8 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { AsyncLocalStorage } from "async_hooks";
 import { ActorContext, RequestContext } from "#types";
 // import { observability } from "#core";
 import { HEADERS } from "#configs";
 import { generateUUID, logger } from "#utils";
-
-// AsyncLocalStorage store type
-const asyncLocalStorage = new AsyncLocalStorage<Map<string, any>>();
-
-/**
- * Retrieve current request context anywhere downstream
- */
-export const getRequestFullContext = (): RequestContext | null => {
-  const store = asyncLocalStorage.getStore();
-  return store?.get("context") || null;
-};
 
 const getEndpoint = (request: FastifyRequest): string => {
   // Fastify adds 'routerPath' internally for matched routes, but TS doesn't know it
@@ -53,39 +41,37 @@ export const requestContextPlugin = async (
     startTime,
   };
 
-  // Initialize async local store for this request
-  asyncLocalStorage.run(new Map(), () => {
-    asyncLocalStorage.getStore()?.set("context", context);
+  // Attach to request
+  request.context = context;
 
-    // Verbose logging for debugging
-    logger.verbose("[Request Context] Initialized:", context);
+  // Verbose logging for debugging
+  logger.verbose("[Request Context] Initialized:", context);
 
-    // // Notify observability layer
-    // observability.prometheus?.startRequest();
+  // // Notify observability layer
+  // observability.prometheus?.startRequest();
 
-    // // Attach finish hook
-    // reply.raw.on("finish", () => {
-    //   const durationMs = Date.now() - startTime;
+  // // Attach finish hook
+  // reply.raw.on("finish", () => {
+  //   const durationMs = Date.now() - startTime;
 
-    //   // Ignore metrics for certain endpoints
-    //   const ignoredPaths = ["/metrics", "/health", "/internal"];
-    //   const endpoint = getEndpoint(request);
+  //   // Ignore metrics for certain endpoints
+  //   const ignoredPaths = ["/metrics", "/health", "/internal"];
+  //   const endpoint = getEndpoint(request);
 
-    //   if (!ignoredPaths.includes(endpoint)) {
-    //     observability.prometheus?.endRequest({
-    //       method: request.method,
-    //       endpoint,
-    //       statusCode: reply.statusCode,
-    //       durationMs,
-    //     });
+  //   if (!ignoredPaths.includes(endpoint)) {
+  //     observability.prometheus?.endRequest({
+  //       method: request.method,
+  //       endpoint,
+  //       statusCode: reply.statusCode,
+  //       durationMs,
+  //     });
 
-    //     observability.logRequest({
-    //       req: request,
-    //       res: reply,
-    //       durationMs,
-    //       error: (reply as any).locals?.error,
-    //     });
-    //   }
-    // });
-  });
+  //     observability.logRequest({
+  //       req: request,
+  //       res: reply,
+  //       durationMs,
+  //       error: (reply as any).locals?.error,
+  //     });
+  //   }
+  // });
 };

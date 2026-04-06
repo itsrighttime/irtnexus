@@ -19,4 +19,5 @@ export const HEADERS = {
 
   /** Custom header to identify the tenant in multi-tenant applications */
   TENANT_ID: "x-tenant-id",
-};
+  AUTHORIZATION: "authorization",
+} as const;

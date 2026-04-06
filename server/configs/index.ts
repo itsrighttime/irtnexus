@@ -1,3 +1,4 @@
+export { JWT_CONFIG } from "./jwt.config";
 export { GENERAl_CONST } from "./general";
 export { repoConfig } from "./repo.config";
 export { ACTION } from "./actionType.config";
@@ -10,4 +11,3 @@ export { DB_ENV, DB_GLOBAL } from "./db.config";
 export { registerCors } from "./cors.config";
 export { emailConfig } from "./email.config";
 export { registerSession } from "./session.config";
-export { getJWT_Key } from "./jwt-security-key.config";

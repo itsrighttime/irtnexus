@@ -1,4 +1,3 @@
-export { getReqContext } from "./getReqContext";
 export { compareHashText, hashText, HASH_SALT } from "./hash.util";
 export { loadFile } from "./loadFile";
 export { response, STATUS, HTTP_STATUS } from "./response";
