@@ -20,6 +20,11 @@ import { sendMailIdVerifcationEmail } from "#packages/mail";
 import { repoPassword } from "#modules/auth";
 import { generateUUID, HASH_SALT, hashText } from "#packages/utils";
 import { GENERAl_CONST } from "#configs";
+import {
+  ACCOUNT_IDENTITY_LEVEL,
+  ACCOUNT_STATUS,
+} from "#modules/identity/const/account.js";
+import { VERIFICATION_TYPE } from "#modules/identity/const/verification.js";
 
 export async function registerTenant(
   data: RegisterTenantInput,
@@ -82,8 +87,8 @@ export async function registerTenant(
       const account = await repoAccount.create(
         {
           username,
-          status: "pending_verification",
-          identity_level: "L0",
+          status: ACCOUNT_STATUS.PENDING_VERIFICATION,
+          identity_level: ACCOUNT_IDENTITY_LEVEL.UNVERIFIED,
         },
         ctx,
         client,
@@ -179,7 +184,7 @@ export async function registerTenant(
           tenant_id: tenant.tenant_id,
           account_id: account.account_id,
           target_id: email,
-          type: "EMAIL",
+          type: VERIFICATION_TYPE.EMAIL,
           token: verificationToken,
           expires_at: expiresAt,
         },
