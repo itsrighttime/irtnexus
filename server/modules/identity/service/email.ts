@@ -17,11 +17,12 @@ import {
 export const EmailService = {
   /** ---------------- ADD EMAIL ---------------- */
   async addEmail(
-    accountId: string,
-    email: string,
+    params: { accountId: string; email: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { accountId, email } = params;
+
     // check existing
     const existing = await repoAccountEmail.findOne({ email }, ctx, client);
 
@@ -38,17 +39,18 @@ export const EmailService = {
       client,
     );
 
-    await this.initiateEmailVerification(accountId, email, ctx, client);
+    await this.initiateEmailVerification({ accountId, email }, ctx, client);
 
     return created;
   },
 
   async initiateEmailVerification(
-    accountId: string,
-    email: string,
+    params: { accountId: string; email: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { accountId, email } = params;
+
     const verificationToken = generateUUID();
     const expireMinutes = 30;
     const expiresAt = new Date(Date.now() + expireMinutes * 60 * 1000);
@@ -80,10 +82,11 @@ export const EmailService = {
 
   /** ---------------- VERIFY EMAIL ---------------- */
   async verifyEmail(
-    token: string,
+    params: { token: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { token } = params;
     // 1 Fetch verification record
     const verification = await repoVerification.findOne({ token }, ctx, client);
     if (!verification) {
@@ -139,11 +142,12 @@ export const EmailService = {
 
   /** ---------------- SET PRIMARY ---------------- */
   async setPrimaryEmail(
-    accountId: string,
-    emailId: string,
+    params: { accountId: string; emailId: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { accountId, emailId } = params;
+
     return withTransaction(async (tx) => {
       /** 1. Validate ownership */
       const email = await repoAccountEmail.findOne(
@@ -201,19 +205,21 @@ export const EmailService = {
 
   /** ---------------- DELETE EMAIL ---------------- */
   async deleteEmail(
-    emailId: string,
+    params: { emailId: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { emailId } = params;
     await repoAccountEmail.delete(emailId, ctx, client);
   },
 
   /** ---------------- LIST EMAILS ---------------- */
   async listEmails(
-    accountId: string,
+    params: { accountId: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { accountId } = params;
     return repoAccountEmail.select(
       {
         where: { account_id: accountId },
@@ -230,7 +236,21 @@ export const EmailService = {
   },
 
   /** ---------------- GET EMAIL BY ID ---------------- */
-  async getEmail(emailId: string, client?: PoolClient) {
+  async getEmailById(
+    params: { emailId: string },
+    ctx?: DB_RequestContext,
+    client?: PoolClient,
+  ) {
+    const { emailId } = params;
     return repoAccountEmail.findById(emailId, client);
+  },
+  /** ---------------- GET EMAIL BY ID ---------------- */
+  async getEmail(
+    params: { email: string },
+    ctx: DB_RequestContext,
+    client?: PoolClient,
+  ) {
+    const { email } = params;
+    return repoAccountEmail.findOne({ email }, ctx, client);
   },
 };
