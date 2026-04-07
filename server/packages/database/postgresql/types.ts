@@ -4,7 +4,7 @@ export type CRUDOperation = "CREATE" | "UPDATE" | "DELETE";
 
 export interface VersionEntry<T extends QueryResultRow> {
   recordId: string; // UUID now, not number
-  tenantId: string; // REQUIRED
+  tenantId: string | null; // REQUIRED
   data: Partial<T>; // snapshot
   operation: CRUDOperation; // optional but useful
   performedBy: string | null; // maps to changed_by
@@ -22,8 +22,8 @@ export interface BaseRepositoryOptions {
 }
 
 export interface DB_RequestContext {
-  accountId: string;
-  tenantId: string;
+  accountId: string | null;
+  tenantId: string | null;
 }
 
 export type ColumnOptions<T> = {

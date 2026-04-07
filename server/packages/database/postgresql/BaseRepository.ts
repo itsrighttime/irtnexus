@@ -711,7 +711,7 @@ export class BaseRepository<T extends QueryResultRow> {
       let paramIndex = 2;
 
       // Conditionally add tenant_id
-      if (haveTenantId(this.tableName)) {
+      if (haveTenantId(this.tableName) && entry.tenantId) {
         columns.push("tenant_id");
         values.push(entry.tenantId);
         placeholders.push(`$${paramIndex++}`);
