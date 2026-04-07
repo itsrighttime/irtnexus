@@ -7,18 +7,3 @@ TODO :
   - subscription or other parameters.
 
 
-{
-  "account_id": "...",
-  "username": "...",
-  "identity_level": "L1",
-
-  "emails": [],
-  "phones": [],
-  "names": [],
-  "addresses": [],
-
-  "primary_email": "...",
-  "primary_phone": "...",
-
-  "kyc_status": "pending"
-}

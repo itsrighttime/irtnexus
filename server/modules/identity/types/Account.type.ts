@@ -16,3 +16,13 @@ export interface Account {
   created_at: Date;
   updated_at: Date;
 }
+
+export type CreateAccountInput = Omit<
+  Account,
+  "account_id" | "created_at" | "updated_at" | "deleted_at"
+> & {
+  name: string;
+  email: string;
+  password: string;
+  rePassword: string;
+};
