@@ -6,26 +6,31 @@ import {
 import { PoolClient } from "pg";
 import { repoAccountAddress } from "../repository";
 import { ADDRESS_TYPE, AddressType } from "../const";
+import { AppError } from "#packages/errors/AppError.js";
 
 export const AddressService = {
   /** ---------------- ADD ADDRESS ---------------- */
   async addAddress(
-    accountId: string,
-    address: Partial<{
-      address_type: AddressType;
-      house_no: string;
-      street_no: string;
-      block_no: string;
-      city: string;
-      district: string;
-      state: string;
-      country: string;
-      pincode: string;
-    }>,
+    params: {
+      accountId: string;
+      address: Partial<{
+        address_type: AddressType;
+        house_no: string;
+        street_no: string;
+        block_no: string;
+        city: string;
+        district: string;
+        state: string;
+        country: string;
+        pincode: string;
+      }>;
+    },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
-    const created = await repoAccountAddress.create(
+    const { accountId, address } = params;
+
+    return repoAccountAddress.create(
       {
         account_id: accountId,
         address_type: address.address_type || ADDRESS_TYPE.HOME,
@@ -41,27 +46,29 @@ export const AddressService = {
       ctx,
       client,
     );
-
-    return created;
   },
 
   /** ---------------- UPDATE ADDRESS ---------------- */
   async updateAddress(
-    addressId: string,
-    updates: Partial<{
-      address_type: AddressType;
-      house_no: string;
-      street_no: string;
-      block_no: string;
-      city: string;
-      district: string;
-      state: string;
-      country: string;
-      pincode: string;
-    }>,
+    params: {
+      addressId: string;
+      updates: Partial<{
+        address_type: AddressType;
+        house_no: string;
+        street_no: string;
+        block_no: string;
+        city: string;
+        district: string;
+        state: string;
+        country: string;
+        pincode: string;
+      }>;
+    },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { addressId, updates } = params;
+
     const [updated] = await repoAccountAddress.updateWhere(
       { address_id: addressId },
       updates,
@@ -74,19 +81,22 @@ export const AddressService = {
 
   /** ---------------- DELETE ADDRESS ---------------- */
   async deleteAddress(
-    addressId: string,
+    params: { addressId: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { addressId } = params;
     await repoAccountAddress.delete(addressId, ctx, client);
   },
 
   /** ---------------- LIST ADDRESSES ---------------- */
   async listAddresses(
-    accountId: string,
+    params: { accountId: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { accountId } = params;
+
     return repoAccountAddress.select(
       {
         where: { account_id: accountId },
@@ -101,31 +111,46 @@ export const AddressService = {
       client,
     );
   },
+
   /** ---------------- GET ADDRESS BY ID ---------------- */
-  async getAddress(addressId: string, client?: PoolClient) {
+  async getAddress(
+    params: { addressId: string },
+    ctx: DB_RequestContext,
+    client?: PoolClient,
+  ) {
+    const { addressId } = params;
     return repoAccountAddress.findById(addressId, client);
   },
 
   /** ---------------- SET PRIMARY ADDRESS ---------------- */
   async setPrimaryAddress(
-    accountId: string,
-    addressId: string,
+    params: { accountId: string; addressId: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { accountId, addressId } = params;
+
     return withTransaction(async (tx) => {
-      // 1. Validate ownership
       const address = await repoAccountAddress.findOne(
         { address_id: addressId, account_id: accountId },
         ctx,
         tx,
       );
-      if (!address) throw new Error("Address not found for this account");
 
-      // Optional: check if already primary
-      if (address.address_type === ADDRESS_TYPE.PRIMARY) return address;
+      if (!address) {
+        throw new AppError(
+          "Address not found for this account",
+          "ADDRESS_NOT_FOUND",
+          {
+            statusCode: 404,
+          },
+        );
+      }
 
-      // 2. Demote existing primary
+      if (address.address_type === ADDRESS_TYPE.PRIMARY) {
+        return address;
+      }
+
       await repoAccountAddress.updateWhere(
         { account_id: accountId, address_type: ADDRESS_TYPE.PRIMARY },
         { address_type: ADDRESS_TYPE.HOME },
@@ -133,7 +158,6 @@ export const AddressService = {
         tx,
       );
 
-      // 3. Promote selected address
       const [updated] = await repoAccountAddress.updateWhere(
         { address_id: addressId, account_id: accountId },
         { address_type: ADDRESS_TYPE.PRIMARY },

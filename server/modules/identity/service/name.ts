@@ -6,27 +6,36 @@ import {
 import { PoolClient } from "pg";
 import { repoAccountName } from "../repository";
 import { ACCOUNT_NAME_TYPE, AccountNameType } from "../const";
+import { AppError } from "#packages/errors/AppError.js";
 
 export const NameService = {
   /** ---------------- ADD NAME ---------------- */
   async addName(
-    accountId: string,
-    fullName: string,
-    nameType: AccountNameType = ACCOUNT_NAME_TYPE.PRIMARY,
+    params: {
+      accountId: string;
+      fullName: string;
+      nameType?: AccountNameType;
+    },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
-    // Optional: prevent duplicate names for same type
+    const {
+      accountId,
+      fullName,
+      nameType = ACCOUNT_NAME_TYPE.PRIMARY,
+    } = params;
+
     const existing = await repoAccountName.findOne(
       { account_id: accountId, full_name: fullName },
       ctx,
       client,
     );
+
     if (existing) {
-      throw new Error(`The given name is already exists for this account`);
+      throw new Error(`The given name already exists for this account`);
     }
 
-    const created = await repoAccountName.create(
+    return repoAccountName.create(
       {
         account_id: accountId,
         full_name: fullName,
@@ -35,46 +44,60 @@ export const NameService = {
       ctx,
       client,
     );
-
-    return created;
   },
 
   /** ---------------- GET NAME BY ID ---------------- */
-  async getName(nameId: string, client?: PoolClient) {
+  async getName(
+    params: { nameId: string },
+    ctx: DB_RequestContext,
+    client?: PoolClient,
+  ) {
+    const { nameId } = params;
     return repoAccountName.findById(nameId, client);
   },
 
   /** ---------------- UPDATE NAME ---------------- */
   async updateName(
-    nameId: string,
-    updates: Partial<{ full_name: string; name_type: AccountNameType }>,
+    params: {
+      nameId: string;
+      updates: Partial<{
+        full_name: string;
+        name_type: AccountNameType;
+      }>;
+    },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { nameId, updates } = params;
+
     const [updated] = await repoAccountName.updateWhere(
       { name_id: nameId },
       updates,
       ctx,
       client,
     );
+
     return updated;
   },
 
   /** ---------------- DELETE NAME ---------------- */
   async deleteName(
-    nameId: string,
+    params: { nameId: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { nameId } = params;
     await repoAccountName.delete(nameId, ctx, client);
   },
 
   /** ---------------- LIST NAMES ---------------- */
   async listNames(
-    accountId: string,
+    params: { accountId: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { accountId } = params;
+
     return repoAccountName.select(
       {
         where: { account_id: accountId },
@@ -92,24 +115,33 @@ export const NameService = {
 
   /** ---------------- SET PRIMARY NAME ---------------- */
   async setPrimaryName(
-    accountId: string,
-    nameId: string,
+    params: { accountId: string; nameId: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { accountId, nameId } = params;
+
     return withTransaction(async (tx) => {
-      // 1. Validate ownership
       const name = await repoAccountName.findOne(
         { name_id: nameId, account_id: accountId },
         ctx,
         tx,
       );
-      if (!name) throw new Error("Name not found for this account");
 
-      // Optional: check if already primary type
-      if (name.name_type === ACCOUNT_NAME_TYPE.PRIMARY) return name;
+      if (!name) {
+        throw new AppError(
+          "Name not found for this account",
+          "NAME_NOT_FOUND",
+          {
+            statusCode: 404,
+          },
+        );
+      }
 
-      // 2. Demote existing primary
+      if (name.name_type === ACCOUNT_NAME_TYPE.PRIMARY) {
+        return name;
+      }
+
       await repoAccountName.updateWhere(
         { account_id: accountId, name_type: ACCOUNT_NAME_TYPE.PRIMARY },
         { name_type: ACCOUNT_NAME_TYPE.SECONDARY },
@@ -117,7 +149,6 @@ export const NameService = {
         tx,
       );
 
-      // 3. Promote selected name
       const [updated] = await repoAccountName.updateWhere(
         { name_id: nameId, account_id: accountId },
         { name_type: ACCOUNT_NAME_TYPE.PRIMARY },

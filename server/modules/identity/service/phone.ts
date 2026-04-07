@@ -5,21 +5,23 @@ import {
 } from "#packages/database";
 import { PoolClient } from "pg";
 import { repoAccountPhone } from "../repository";
+import { AppError } from "#packages/errors/AppError.js";
 
 export const PhoneService = {
   /** ---------------- ADD PHONE ---------------- */
   async addPhone(
-    accountId: string,
-    phone: string,
+    params: { accountId: string; phone: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
-    // check existing
+    const { accountId, phone } = params;
+
     const existing = await repoAccountPhone.findOne(
       { phone_number: phone },
       ctx,
       client,
     );
+
     if (existing) {
       throw new Error("Phone number already in use");
     }
@@ -33,30 +35,31 @@ export const PhoneService = {
       client,
     );
 
-    await this.initiatePhoneVerification(accountId, phone, ctx, client);
+    await this.initiatePhoneVerification({ accountId, phone }, ctx, client);
 
     return created;
   },
 
   /** ---------------- INITIATE VERIFICATION ---------------- */
   async initiatePhoneVerification(
-    accountId: string,
-    phone: string,
+    params: { accountId: string; phone: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { accountId, phone } = params;
+
     // TODO: implement SMS verification / OTP send logic
-    // For now, placeholder:
     console.log(`Send verification OTP to ${phone} for account ${accountId}`);
   },
 
   /** ---------------- VERIFY PHONE ---------------- */
   async verifyPhone(
-    phone: string,
+    params: { phone: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
-    // Mark phone as verified
+    const { phone } = params;
+
     const phoneRecords = await repoAccountPhone.updateWhere(
       { phone_number: phone },
       { verified_at: new Date() },
@@ -64,33 +67,48 @@ export const PhoneService = {
       client,
     );
 
-    return { success: true, phoneId: phoneRecords[0].phone_id };
+    return { success: true, phoneId: phoneRecords[0]?.phone_id };
   },
 
   /** ---------------- SET PRIMARY ---------------- */
   async setPrimaryPhone(
-    accountId: string,
-    phoneId: string,
+    params: { accountId: string; phoneId: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { accountId, phoneId } = params;
+
     return withTransaction(async (tx) => {
-      // 1. Validate ownership
       const phone = await repoAccountPhone.findOne(
         { phone_id: phoneId, account_id: accountId },
         ctx,
         tx,
       );
-      if (!phone) throw new Error("Phone not found for this account");
 
-      // 2. Prevent unverified
-      if (!phone.verified_at)
-        throw new Error("Cannot set unverified phone as primary");
+      if (!phone) {
+        throw new AppError(
+          "Phone not found for this account",
+          "PHONE_NOT_FOUND",
+          {
+            statusCode: 404,
+          },
+        );
+      }
 
-      // 3. Idempotent check
-      if (phone.is_primary) return phone;
+      if (!phone.verified_at) {
+        throw new AppError(
+          "Cannot set unverified phone as primary",
+          "PHONE_NOT_VERIFIED",
+          {
+            statusCode: 400,
+          },
+        );
+      }
 
-      // 4. Unset existing primary
+      if (phone.is_primary) {
+        return phone;
+      }
+
       await repoAccountPhone.updateWhere(
         { account_id: accountId, is_primary: true },
         { is_primary: false },
@@ -98,7 +116,6 @@ export const PhoneService = {
         tx,
       );
 
-      // 5. Set new primary
       const [updated] = await repoAccountPhone.updateWhere(
         { phone_id: phoneId, account_id: accountId },
         { is_primary: true },
@@ -112,24 +129,32 @@ export const PhoneService = {
 
   /** ---------------- DELETE PHONE ---------------- */
   async deletePhone(
-    phoneId: string,
+    params: { phoneId: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { phoneId } = params;
     await repoAccountPhone.delete(phoneId, ctx, client);
   },
 
   /** ---------------- GET PHONE BY ID ---------------- */
-  async getPhone(phoneId: string, client?: PoolClient) {
+  async getPhone(
+    params: { phoneId: string },
+    ctx: DB_RequestContext,
+    client?: PoolClient,
+  ) {
+    const { phoneId } = params;
     return repoAccountPhone.findById(phoneId, client);
   },
 
   /** ---------------- LIST PHONES ---------------- */
   async listPhones(
-    accountId: string,
+    params: { accountId: string },
     ctx: DB_RequestContext,
     client?: PoolClient,
   ) {
+    const { accountId } = params;
+
     return repoAccountPhone.select(
       {
         where: { account_id: accountId },
