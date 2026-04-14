@@ -7,7 +7,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px;
+  padding: 7px;
   border: 1px solid var(--color);
   border-radius: 5px;
   cursor: pointer;
@@ -29,6 +29,42 @@
   color: var(--color-gray5);
   text-align: left;
   padding-bottom: 3px;
+}
+
+.selectedContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.countBox {
+  background-color: var(--color-gray2);
+  color: var(--color-primary);
+  padding: 2px 8px;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+}
+
+.previewText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selectedHeader {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  margin: 6px 0;
+  color: var(--color-gray5);
+  text-align: left;
+}
+
+.emptyState {
+  color: var(--color-gray4);
+  font-size: var(--font-size-xs);
 }
 
 .dropdownMenu {
@@ -93,7 +129,7 @@
 .optionList {
   width: 95%;
   list-style: none;
-  margin: 10px 0;
+  /* margin: 10px 0; */
   padding: 0;
 }
 
@@ -102,6 +138,8 @@
   cursor: pointer;
   border: 1px solid var(--color-background);
   text-align: left;
+  background: var(--color-surface);
+
   border-radius: 4px;
 }
 

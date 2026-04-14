@@ -19,6 +19,7 @@ export function Test() {
   return (
     <>
       <TestTable />
+      <TestGenericForm />
       {/* <TestMarkdown />
       <TestFileUpload />
       <TestImageUpload />

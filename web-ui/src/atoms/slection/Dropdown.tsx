@@ -6,6 +6,7 @@ import { Icons } from "@/assets";
 import { IconButton } from "../button/IconButton";
 import { Button } from "../button/Button";
 import { Popover } from "../over/Popover";
+import { getFittedText } from "./helper/getFittedText";
 
 const { arrowDownIcon, arrowUpIcon } = Icons;
 
@@ -40,8 +41,10 @@ export const Dropdown: React.FC<DropdownProps> = ({
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [newOption, setNewOption] = useState("");
+  const [displayText, setDisplayText] = useState("");
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   // Sync external value
   useEffect(() => {
@@ -49,6 +52,22 @@ export const Dropdown: React.FC<DropdownProps> = ({
       setSelectedOptions(value);
     }
   }, [value, selectedOptions.length]);
+
+  useEffect(() => {
+    if (!containerRef || !containerRef.current) return;
+
+    const updateText = () => {
+      if (!containerRef || !containerRef.current) return;
+      const width = containerRef.current.offsetWidth - 80; // adjust for badge + icon
+      const text = getFittedText(selectedOptions, width, containerRef as any);
+      setDisplayText(text);
+    };
+
+    updateText();
+
+    window.addEventListener("resize", updateText);
+    return () => window.removeEventListener("resize", updateText);
+  }, [selectedOptions]);
 
   // Handle select
   const handleSelectOption = (option: string) => {
@@ -114,11 +133,16 @@ export const Dropdown: React.FC<DropdownProps> = ({
     >
       {/* Header */}
       <div
+        ref={containerRef}
         className={`${styles.dropdownHeader} ${isOpen ? styles.open : ""}`}
         onClick={handleHeaderClick}
       >
         {selectedOptions.length ? (
-          <span>{selectedOptions.join(", ")}</span>
+          <div className={styles.selectedContainer}>
+            <span className={styles.countBox}>{selectedOptions.length}</span>
+
+            <span className={styles.previewText}>{displayText}</span>
+          </div>
         ) : (
           <span style={{ color: "var(--color-gray4)" }}>{placeholder}</span>
         )}
@@ -148,6 +172,24 @@ export const Dropdown: React.FC<DropdownProps> = ({
           />
 
           <div className={styles.dropdownOptions}>
+            <div className={styles.selectedHeader}>Selected Options</div>
+            {selectedOptions.length > 0 ? (
+              <ul className={styles.optionList}>
+                {selectedOptions.map((option) => (
+                  <li
+                    key={option}
+                    className={`${styles.optionItem} ${styles.selected}`}
+                    onClick={() => handleSelectOption(option)} // optional: allow deselect
+                  >
+                    {option}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className={styles.emptyState}>Nothing selected</div>
+            )}
+
+            <div className={styles.selectedHeader}>All Options</div>
             <ul className={styles.optionList}>
               {filteredOptions.length > 0 ? (
                 filteredOptions.map((option) => (
