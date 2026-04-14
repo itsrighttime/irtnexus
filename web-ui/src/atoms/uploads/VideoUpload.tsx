@@ -32,7 +32,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({
   allowedTypes = ["video/mp4", "video/webm"],
   maxSizeMB = 50,
   preview = false,
-  width = "400px",
+  width = "300px",
   height = "200px",
   backendError,
   value = null,

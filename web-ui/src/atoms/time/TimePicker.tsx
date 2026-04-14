@@ -74,7 +74,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 
   /* -------------------- Validation -------------------- */
   const isValidTime = (h: string, m: string, p: string): boolean => {
-    if (h === "--" || m === "--" || p === "--") return false;
+    if (h === "--" || m === "--" || p === "--") return true;
 
     const current = convertToMinutes(`${h}:${m} ${p}`);
 
@@ -90,7 +90,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
     if (!isValidTime(h, m, p)) return;
 
     const formattedTime = `${h}:${m} ${p}`;
-    setResult(formattedTime);
+    setResult?.(formattedTime);
     onChange?.(formattedTime);
   };
 

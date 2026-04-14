@@ -3,7 +3,7 @@ import { validationEngine as engine } from "../ValidationEngine";
 import { FIELDS_PROPS as FPs } from "../helper/fields";
 import { FORM_FIELDS_TYPE, type FormFieldType } from "../helper/fields";
 
-engine.register(FORM_FIELDS_TYPE.IMAGE as FormFieldType, {
+engine.register(FORM_FIELDS_TYPE.FILE as FormFieldType, {
   validateConfig: (field: ImageFieldConfig) => {
     // Destructure for clarity
     const MAX_SIZE_MB = field[FPs.MAX_SIZE_MB];

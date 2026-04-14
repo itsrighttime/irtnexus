@@ -26,7 +26,7 @@ export const AudioUpload: React.FC<AudioUploadProps> = ({
   setIsFieldValid = () => {},
   allowedTypes = ["audio/mpeg", "audio/wav"],
   maxSizeMB = 10,
-  width = "500px",
+  width = "300px",
   height = "100px",
   backendError = "",
   value = null,

@@ -152,7 +152,7 @@ export function GenericForm({
   let validStructure = false;
   if (_isValidFormStructure) {
     const schema = configToSchema(config);
-    const { valid } = validateSchema(schema);
+    const { valid, errors } = validateSchema(schema);
     validStructure = valid;
   }
 
