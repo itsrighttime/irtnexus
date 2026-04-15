@@ -2,7 +2,7 @@
 
 import { useState, useEffect, type ChangeEvent, type DragEvent } from "react";
 import styles from "./FileUpload.module.css";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import { getFileTypeLabel } from "./getFileType.heper";
 import { formatFileSize } from "./formatFileSize.helper";
 import { IconButton } from "../button/IconButton";

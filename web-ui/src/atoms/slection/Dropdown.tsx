@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, type ChangeEvent } from "react";
 import styles from "./Dropdown.module.css";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import { IconButton } from "../button/IconButton";
 import { Button } from "../button/Button";
 import { Popover } from "../over/Popover";

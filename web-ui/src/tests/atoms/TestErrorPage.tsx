@@ -1,5 +1,5 @@
 import { ErrorPage, IconError } from "@/atoms";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 
 const { keyIcon, lockIcon, searchIcon, warningIcon } = Icons;
 

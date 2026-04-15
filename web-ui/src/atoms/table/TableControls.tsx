@@ -6,7 +6,7 @@ import { TextInput } from "../text-input/TextInput";
 import { useState, useRef } from "react";
 import { Popover } from "../over/Popover";
 import { IconButton } from "../button/IconButton";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 
 interface Props<T> {
   columns: TableColumn<T>[];

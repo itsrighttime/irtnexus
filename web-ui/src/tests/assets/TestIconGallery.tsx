@@ -1,6 +1,6 @@
 "use client";
 
-import { Icons } from "@/assets"; // no need for .jsx extension
+import { Icons } from "@/assets/icons"; // no need for .jsx extension
 import styles from "./css/IconGallery.module.css";
 import type { FC } from "react";
 import { Button } from "@/atoms";

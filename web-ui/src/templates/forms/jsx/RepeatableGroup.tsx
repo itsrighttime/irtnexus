@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { FieldRenderer } from "./FieldRenderer";
 import styles from "../css/GenericForm.module.css";
 import { FIELDS_PROPS } from "../validation/helper/fields";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import { useInitializeForm } from "../hooks/useInitializeForm";
 import { Button } from "@/atoms";
 import type { FormField } from "../types/register.types";

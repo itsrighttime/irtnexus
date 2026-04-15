@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import { IconError } from "../error/IconError";
 
 const { imageNotIcon } = Icons;

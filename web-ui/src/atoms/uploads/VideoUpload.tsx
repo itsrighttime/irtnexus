@@ -3,7 +3,7 @@
 import { useState, useEffect, type ChangeEvent, type DragEvent } from "react";
 import style from "./VideoUpload.module.css"; // Adjust the path as necessary
 import { VideoPlayer } from "./VideoPlayer";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons/index.js";
 import { formatFileSize } from "./formatFileSize.helper";
 import { IconButton } from "../button/IconButton.js";
 

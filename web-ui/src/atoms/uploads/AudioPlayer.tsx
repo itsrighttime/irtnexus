@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, useMemo } from "react";
 import style from "./AudioPlayer.module.css";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons/index.js";
 import { IconButton } from "../button/IconButton.js";
 import { Slider } from "../slider/Slider.js";
 

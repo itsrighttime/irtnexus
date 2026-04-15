@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/atoms";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import styles from "../css/ShowError.module.css";
 
 const { crossIcon } = Icons;

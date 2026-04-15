@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import style from "./Alert.module.css";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import { Button } from "../button/Button";
 
 const { crossIcon } = Icons;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons/index.js";
 import styles from "../css/GenericForm.module.css";
 import { FIELDS_PROPS as FPs } from "../validation/helper/fields.js";
 import { type MouseEventHandler } from "react";

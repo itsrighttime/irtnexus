@@ -1,0 +1,14 @@
+.flexContainer {
+  display: flex;
+  flex-direction: var(--flex-direction, row);
+  justify-content: var(--flex-justify, flex-start);
+  align-items: var(--flex-align, stretch);
+  flex-wrap: var(--flex-wrap, wrap);
+  gap: var(--flex-gap, 0px);
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols, 2), 1fr);
+  gap: var(--grid-gap, 8px);
+}

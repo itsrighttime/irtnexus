@@ -14,12 +14,14 @@ import {
   TestTextInput,
   TestVideoUpload,
 } from "./tests";
+import { UseLayoutExample } from "./tests/layout/TestLayout";
 
 export function Test() {
   return (
     <>
-      <TestTable />
-      <TestGenericForm />
+      <UseLayoutExample />
+      {/* <TestTable /> */}
+      {/* <TestGenericForm /> */}
       {/* <TestMarkdown />
       <TestFileUpload />
       <TestImageUpload />
@@ -30,7 +32,7 @@ export function Test() {
       <TestDropdown />
       <TestCalendar />
       <TestTextInput /> */}
-      <TestIconGallery />
+      {/* <TestIconGallery /> */}
     </>
   );
 }

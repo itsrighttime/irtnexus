@@ -1,4 +1,4 @@
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import { IconButton } from "../button/IconButton";
 import styles from "./Table.module.css";
 export interface PaginationProps {

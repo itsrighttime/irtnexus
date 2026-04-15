@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import styles from "./TextInput.module.css";
 import type { TextInputProps } from "./TextInput.types";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import { Button } from "../button/Button";
 
 export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(

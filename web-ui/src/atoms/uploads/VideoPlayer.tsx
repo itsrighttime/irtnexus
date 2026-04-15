@@ -1,7 +1,7 @@
 "use client";
 
 import style from "./VideoPlayer.module.css";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import React from "react";
 import { IconButton } from "../button/IconButton";
 import { IconError } from "../error/IconError";

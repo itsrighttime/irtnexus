@@ -1,4 +1,4 @@
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import type { ReactNode } from "react"; // Assuming these icons are React components
 
 const {

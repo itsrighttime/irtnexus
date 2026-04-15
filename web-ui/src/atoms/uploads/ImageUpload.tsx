@@ -2,7 +2,7 @@
 
 import { useState, useEffect, type ChangeEvent, type DragEvent } from "react";
 import style from "./ImageUpload.module.css"; // Adjust path as needed
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import { IconButton } from "../button/IconButton";
 
 const { crossIcon, resetFieldIcon } = Icons;

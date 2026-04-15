@@ -6,4 +6,4 @@ export const Icons = {
   ...IconsTemp,
   ...Icons01,
   ...Icons02,
-};
+} as const;

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, type CSSProperties } from "react";
 import styles from "./SelectionBox.module.css";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import { Button } from "../button/Button";
 
 const { tickSingleIcon } = Icons;

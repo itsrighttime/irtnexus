@@ -32,6 +32,8 @@
   --color-surface: #f8f9fa;
   --color-surface-light: #ffffff;
   --color-background: #ffffff;
+  --color-white: #ffffff;
+  --color-black: #000000;
 
   --color-selection: var(--color-primary);
 

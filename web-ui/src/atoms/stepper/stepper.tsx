@@ -2,7 +2,7 @@
 
 import { useState, useEffect, type CSSProperties } from "react";
 import styles from "./Stepper.module.css"; // Ensure this CSS exists
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import { Button } from "../button/Button";
 
 const { minusIcon, plusIcon } = Icons;

@@ -1,7 +1,7 @@
 import React from "react";
 import { TextInput } from "./TextInput";
 import type { TextInputProps } from "./TextInput.types";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 
 export const MobileInput = React.forwardRef<
   HTMLInputElement,

@@ -2,7 +2,7 @@
 
 import React, { useState, Suspense } from "react";
 import styles from "./CalendarBox.module.css";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons/index.tsx";
 import { convertStrDate2Date } from "./handleDateChange";
 import { isAfterDate } from "./handleDateCompare";
 import {

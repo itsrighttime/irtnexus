@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import styles from "./Slider.module.css";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import { Button } from "../button/Button";
 
 const { minusIcon, plusIcon } = Icons;

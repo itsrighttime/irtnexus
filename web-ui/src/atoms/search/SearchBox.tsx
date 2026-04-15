@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, type CSSProperties } from "react";
 import styles from "./SearchBox.module.css";
-import { Icons } from "@/assets";
+import { Icons } from "@/assets/icons";
 import {
   filterSuggestions,
   handleKeyDown,

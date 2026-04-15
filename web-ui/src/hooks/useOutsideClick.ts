@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import type { RefObject } from "react";
 
 export const useOutsideClick = (
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null>,
   handler: () => void,
 ): void => {
   useEffect(() => {
