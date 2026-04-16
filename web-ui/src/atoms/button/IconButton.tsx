@@ -32,7 +32,6 @@ export const IconButton: React.FC<IconButtonProps> = ({
     ["--iconSize" as any]: `calc(var(--font-size) * ${size})`,
     ["--border" as any]: isBorder ? `1px solid ${color}` : "none",
     opacity: disabled ? 0.6 : 1,
-    pointerEvents: disabled ? "none" : "auto",
   };
 
   const isImage = typeof icon === "string";
@@ -40,18 +39,19 @@ export const IconButton: React.FC<IconButtonProps> = ({
   return (
     <div className={styles.iconButton} style={colorStyle}>
       <Tooltip content={label}>
-        {isImage ? (
-          <img src={icon} className={styles.image} alt={label || "icon"} />
-        ) : (
-          <button
-            type="button"
-            className={`${styles.btn} ${hoverBackground ? styles.hoverBg : ""}`}
-            onClick={disabled ? undefined : onClick}
-            style={{ ...style, ...colorStyle }}
-          >
-            {icon}
-          </button>
-        )}
+        <button
+          type="button"
+          className={`${styles.btn} ${hoverBackground ? styles.hoverBg : ""}`}
+          onClick={disabled ? undefined : onClick}
+          style={{ ...style, ...colorStyle }}
+          disabled={disabled}
+        >
+          {isImage ? (
+            <img src={icon} className={styles.image} alt={label || "icon"} />
+          ) : (
+            icon
+          )}
+        </button>
       </Tooltip>
     </div>
   );
