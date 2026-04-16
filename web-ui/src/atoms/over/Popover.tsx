@@ -10,7 +10,7 @@ import {
 import { createPortal } from "react-dom";
 
 type PopoverProps = {
-  anchorRef: RefObject<HTMLElement>;
+  anchorRef: RefObject<HTMLElement | null>;
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;

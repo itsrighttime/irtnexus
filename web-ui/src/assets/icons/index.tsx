@@ -7,3 +7,5 @@ export const Icons = {
   ...Icons01,
   ...Icons02,
 } as const;
+
+export type IconTypes = keyof typeof Icons;

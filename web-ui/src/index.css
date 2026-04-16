@@ -1,5 +1,6 @@
 /* -------------------- Fonts -------------------- */
 @import url("https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
 
 /* -------------------- Reset -------------------- */
 *,
@@ -47,6 +48,7 @@
 
   /* Typography */
   --font-family: "Wix Madefor Display", sans-serif;
+  /* --font-family: "Ubuntu", sans-serif; */
 
   --font-size: 1rem;
   --font-size-xs: 12px;
@@ -113,6 +115,7 @@ body {
     background-color var(--transition-normal),
     color var(--transition-normal),
     border-color var(--transition-normal);
+  font-family: var(--font-family);
 }
 
 /* -------------------- Elements -------------------- */

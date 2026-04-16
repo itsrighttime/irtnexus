@@ -11,6 +11,7 @@
 
   transition: all var(--transition-fast);
   font-weight: var(--font-weight-medium);
+  font-size: var(--font-size);
   --final-color: var(--button-color);
 }
 

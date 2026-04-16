@@ -1,3 +1,4 @@
+export { Popover } from "./over/Popover";
 export { Table } from "./table/Table";
 export type { TableColumn, TableAction } from "./table/table.type";
 export { MarkdownRenderer } from "./markdown/MarkdownRenderer";
@@ -27,7 +28,7 @@ export { SearchBox } from "./search/SearchBox";
 export { Switch } from "./switch/Switch";
 export { CheckboxGroup } from "./slection/CheckboxGroup";
 export { RadioGroup } from "./slection/RadioGroup";
-export { DropdownSimple } from "./slection/DropdownSimple";
+export { DropdownSimple, type DropdownItem } from "./slection/DropdownSimple";
 export { MultipleDropdown, SingleDropdown } from "./slection/Dropdowns";
 export { Dropdown } from "./slection/Dropdown";
 export { OtpField } from "./opt/OtpField";
@@ -50,3 +51,4 @@ export { Calendar } from "./calendar/Calendar";
 export { Tooltip } from "./tooltip/Tooltip";
 export { TextInput } from "./text-input/TextInput";
 export { Button } from "./button/Button";
+export { IconButton } from "./button/IconButton";
