@@ -80,9 +80,13 @@ export const Workspace = () => {
           </div>
         )}
 
-        {has.rightSidebar && (
+        {has.leftSidebar && leftSidebar && (
           <div className={styles.leftSidebar}>
-            <Sidebar position="left" />
+            <Sidebar
+              config={leftSidebar}
+              position={WS.LEFT_SIDEBAR}
+              onAction={handleNavigate}
+            />
           </div>
         )}
 
@@ -116,9 +120,13 @@ export const Workspace = () => {
         </div>
 
         {/* RIGHT SIDEBARS */}
-        {has.leftSidebar && (
+        {has.rightSidebar && rightSidebar && (
           <div className={styles.rightSidebar}>
-            <Sidebar position="right" />
+            <Sidebar
+              position={WS.RIGHT_SIDEBAR}
+              config={rightSidebar}
+              onAction={handleNavigate}
+            />
           </div>
         )}
 

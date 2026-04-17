@@ -63,10 +63,25 @@ const renderIcons = (items?: TabIconItem[]) => {
         }
 
         // static icon
+        // return (
+        //   <span key={i} className={styles.icon} style={{ color: item.color }}>
+        //     {iconNode}
+        //   </span>
+        // );
+
         return (
-          <span key={i} className={styles.icon} style={{ color: item.color }}>
-            {iconNode}
-          </span>
+          <IconButton
+            key={i}
+            icon={iconNode}
+            onClick={(e) => {
+              // e?.stopPropagation?.();
+              // item.onClick?.();
+            }}
+            color={item.color || "var(--color-text-light)"}
+            label={item.label}
+            disabled={false}
+            size={1.3}
+          />
         );
       })}
     </div>

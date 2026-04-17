@@ -22,6 +22,32 @@ export const useWorkspaceConfig = () => {
         route: "home",
       },
     ],
+    [WS.LEFT_SIDEBAR]: [
+      {
+        id: "t1",
+        type: "label",
+        leftIcons: [{ icon: "homeIcon" }],
+        rightIcons: [{ icon: "crossIcon" }],
+        text: "Home Icon",
+        route: "home",
+      },
+      {
+        id: "t2",
+        type: "label",
+        leftIcons: [{ icon: "homeIcon" }],
+        rightIcons: [{ icon: "crossIcon" }],
+        text: "Home Icon",
+        route: "home",
+      },
+      {
+        id: "t3",
+        type: "label",
+        leftIcons: [{ icon: "homeIcon" }],
+        rightIcons: [{ icon: "crossIcon" }],
+        text: "Home Icon",
+        route: "home",
+      },
+    ],
     [WS.LEFT_SECONDARY]: [
       {
         id: "t1",
