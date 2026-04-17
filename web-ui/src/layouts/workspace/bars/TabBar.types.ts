@@ -2,6 +2,7 @@ import type { IconTypes } from "@/assets";
 import type { DropdownItem } from "@/atoms";
 import { TAB_TYPE } from "../const";
 import type { TabOrientation, TabType } from "../const";
+import type { WorkspaceSlot } from "../const/layout";
 
 type BaseTab = {
   id: string;
@@ -73,6 +74,7 @@ type LabelTab = BaseTab &
 export type TabConfig = TextTab | IconTab | DropdownTab | CustomTab | LabelTab;
 
 export type TabBarConfig = {
+  position?: WorkspaceSlot;
   orientation?: TabOrientation;
   start?: TabConfig[];
   center?: TabConfig[];

@@ -1,0 +1,13 @@
+.sidebar {
+  border: none;
+  height: 100%;
+  width: 100%;
+}
+
+.sidebar[data-border-side="left"] {
+  border-left: 1px solid var(--color-border);
+}
+
+.sidebar[data-border-side="right"] {
+  border-right: 1px solid var(--color-border);
+}

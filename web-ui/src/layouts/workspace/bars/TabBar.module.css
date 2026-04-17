@@ -3,10 +3,27 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 2px;
+  height: 100%;
   gap: var(--spacing-sm);
   background: var(--color-surface-light);
+  border-bottom: none;
+}
+
+.bar[data-border-side="top"] {
+  border-top: 1px solid var(--color-border);
+}
+
+.bar[data-border-side="bottom"] {
   border-bottom: 1px solid var(--color-border);
+}
+
+.bar[data-border-side="left"] {
+  border-left: 1px solid var(--color-border);
+}
+
+.bar[data-border-side="right"] {
+  /* border: 1px solid blue; */
+  border-right: 1px solid var(--color-border);
 }
 
 /* Orientation */
@@ -19,7 +36,6 @@
   height: 100%;
   width: max-content;
   border-bottom: none;
-  border-right: 1px solid var(--color-border);
 }
 
 /* Sections */

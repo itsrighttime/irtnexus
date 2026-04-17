@@ -15,10 +15,26 @@ type Props = {
 export const TabBar = ({ config }: Props) => {
   const {
     orientation = TAB_ORIENTATION.HORIZONTAL,
+    position,
     start,
     center,
     end,
   } = config;
+
+  const side = (() => {
+    if (!position) return "";
+
+    if (position.startsWith("top")) return "bottom";
+    if (position.startsWith("bottom")) return "top";
+    if (position.startsWith("left")) return "right";
+    if (position.startsWith("right")) return "left";
+
+    return "";
+  })();
+
+  const props = {
+    "data-border-side": side,
+  };
 
   const renderTab = (tab: TabConfig) => {
     switch (tab.type) {
@@ -90,6 +106,7 @@ export const TabBar = ({ config }: Props) => {
           ? styles.horizontal
           : styles.vertical
       }`}
+      {...props}
     >
       {renderSection(start, styles.start)}
       {renderSection(center, styles.center)}
