@@ -11,6 +11,8 @@
   padding: var(--spacing-sm);
   border-radius: var(--radius-md);
   min-width: 180px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .dropdownItem {

@@ -36,7 +36,7 @@ export const TabDropdown = ({
       </div>
 
       <Popover anchorRef={anchorRef} isOpen={isOpen} onClose={handleClose}>
-        <DropdownSimple items={items} onSelect={handleSelect} />
+        <DropdownSimple items={items} onSelect={handleSelect} isOpen={isOpen} />
       </Popover>
     </>
   );

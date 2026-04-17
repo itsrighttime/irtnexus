@@ -127,7 +127,11 @@ export const Tab: React.FC<TabProps> = ({
       )}
 
       {showDropdown && dropdown && dropdown.length > 0 && (
-        <DropdownSimple items={dropdown} onSelect={handleDropdownSelect} />
+        <DropdownSimple
+          items={dropdown}
+          onSelect={handleDropdownSelect}
+          isOpen={showDropdown}
+        />
       )}
     </div>
   );

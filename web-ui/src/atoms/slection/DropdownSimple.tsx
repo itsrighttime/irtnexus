@@ -4,8 +4,6 @@ import { useRef, type JSX } from "react";
 import styles from "./DropdownSimple.module.css";
 import { useSmartPosition } from "@/hooks";
 
-/** ------------------ TYPES ------------------ */
-
 export type DropdownItem = {
   key: string | number;
   value: string;
@@ -13,24 +11,27 @@ export type DropdownItem = {
   description?: string;
 };
 
-type DropdownSimpleProps = {
-  items: DropdownItem[];
-  onSelect?: (key: string | number) => void;
-};
-
 type Position = {
   vertical: "top" | "bottom";
   horizontal: "left" | "right";
 };
 
-/** ------------------ COMPONENT ------------------ */
+type DropdownSimpleProps = {
+  items: DropdownItem[];
+  onSelect?: (key: string | number) => void;
+  isOpen: boolean;
+};
 
 export const DropdownSimple: React.FC<DropdownSimpleProps> = ({
   items,
   onSelect,
-}: DropdownSimpleProps): JSX.Element => {
+  isOpen,
+}): JSX.Element | null => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const position = useSmartPosition(dropdownRef) as Position;
+
+  const position = useSmartPosition(dropdownRef, isOpen) as Position;
+
+  if (!isOpen) return null;
 
   return (
     <div

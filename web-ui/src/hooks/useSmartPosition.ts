@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import type { RefObject } from "react";
 
 type VerticalPosition = "top" | "bottom";
@@ -11,52 +11,57 @@ interface Position {
   horizontal: HorizontalPosition;
 }
 
-/**
- * useSmartPosition Hook
- *
- * Determines the optimal vertical and horizontal position of a DOM element
- * relative to the viewport. Useful for tooltips, popovers, dropdowns, etc.
- *
- * @param ref - Ref pointing to the target DOM element
- * @returns Computed vertical and horizontal positions
- */
 export const useSmartPosition = (
-  ref: RefObject<HTMLElement> | null | any,
+  ref: RefObject<HTMLElement | null>,
+  isOpen: boolean,
 ): Position => {
   const [position, setPosition] = useState<Position>({
     vertical: "bottom",
     horizontal: "right",
   });
 
-  useEffect(() => {
-    const checkPosition = () => {
-      if (!ref) return;
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+
+    const compute = () => {
       const el = ref.current;
       if (!el) return;
 
-      const { top, bottom, left, right } = el.getBoundingClientRect();
+      const rect = el.getBoundingClientRect();
       const { offsetWidth: width, offsetHeight: height } = el;
-      const { innerHeight: vh, innerWidth: vw } = window;
+
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
 
       const space = {
-        below: vh - bottom,
-        above: top,
-        right: vw - right,
-        left: left,
+        below: vh - rect.bottom,
+        above: rect.top,
+        right: vw - rect.right,
+        left: rect.left,
       };
 
       setPosition({
         vertical:
-          space.below < height && space.above >= height ? "top" : "bottom",
+          space.below < height && space.above > space.below ? "top" : "bottom",
         horizontal:
-          space.right < width && space.left >= width ? "left" : "right",
+          space.right < width && space.left > space.right ? "left" : "right",
       });
     };
 
-    checkPosition();
-    window.addEventListener("resize", checkPosition);
-    return () => window.removeEventListener("resize", checkPosition);
-  }, [ref]);
+    // CRITICAL FIX: wait for first paint of dropdown
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(compute);
+    });
+
+    window.addEventListener("resize", compute);
+    window.addEventListener("scroll", compute, true);
+
+    return () => {
+      cancelAnimationFrame(id);
+      window.removeEventListener("resize", compute);
+      window.removeEventListener("scroll", compute, true);
+    };
+  }, [ref, isOpen]);
 
   return position;
 };

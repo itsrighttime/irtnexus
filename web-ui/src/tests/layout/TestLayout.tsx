@@ -5,11 +5,21 @@ import type { TabBarConfig } from "@/layouts/workspace/bars/TabBar.types";
 import { TabBar } from "@/layouts/workspace/bars/TabBar";
 import { IconButton, SearchBox } from "@/atoms";
 import { Icons } from "@/assets";
+import { TestDropdown } from "../atoms/TestDropdown";
 
 const config: TabBarConfig = {
   orientation: "horizontal",
 
   start: [
+    {
+      id: "more2",
+      type: "dropdown",
+      trigger: { type: "icon", icon: "mediaIcon" },
+      items: [
+        { key: 1, value: "Edit" },
+        { key: 2, value: "Delete" },
+      ],
+    },
     {
       id: "home",
       type: "text",
@@ -37,7 +47,7 @@ const config: TabBarConfig = {
 
   end: [
     {
-      id: "more",
+      id: "more1",
       type: "dropdown",
       trigger: { type: "icon", icon: "mediaIcon" },
       items: [
@@ -46,7 +56,7 @@ const config: TabBarConfig = {
       ],
     },
     {
-      id: "more",
+      id: "more2",
       type: "dropdown",
       trigger: { type: "icon", icon: "mediaIcon" },
       items: [
@@ -55,7 +65,7 @@ const config: TabBarConfig = {
       ],
     },
     {
-      id: "more",
+      id: "more3",
       type: "dropdown",
       trigger: { type: "icon", icon: "mediaIcon" },
       items: [
@@ -63,6 +73,11 @@ const config: TabBarConfig = {
         { key: 2, value: "Delete" },
       ],
     },
+    // {
+    //   id: "search1",
+    //   type: "custom",
+    //   render: () => <TestDropdown />,
+    // },
   ],
 };
 
@@ -78,7 +93,7 @@ export const UseLayoutExample = () => {
         }}
       />
 
-      <div style={{border: "1px solid black"}}>
+      <div style={{ border: "1px solid black" }}>
         <IconButton icon={Icons.AccessIcon} size={2} />
       </div>
 
@@ -97,7 +112,7 @@ export const UseLayoutExample = () => {
       />
 
       <TabBar config={config} />
-      <TabBar config={{ ...config, orientation: "vertical", center: [] }} />
+      {/* <TabBar config={{ ...config, orientation: "vertical", center: [] }} /> */}
     </div>
   );
 };
