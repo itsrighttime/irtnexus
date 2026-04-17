@@ -6,7 +6,9 @@ import { Tooltip } from "../tooltip/Tooltip";
 
 type IconButtonProps = {
   icon: React.ReactNode | string;
-  onClick?: () => void;
+  onClick?:
+    | (() => void)
+    | ((event: React.MouseEvent<HTMLButtonElement>) => void);
   color?: string;
   style?: React.CSSProperties;
   size?: string | number;
