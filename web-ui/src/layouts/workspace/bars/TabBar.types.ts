@@ -73,6 +73,8 @@ type LabelTab = BaseTab &
 
 export type TabConfig = TextTab | IconTab | DropdownTab | CustomTab | LabelTab;
 
+export type SidebarTab = LabelTab;
+
 export type TabBarConfig = {
   position?: WorkspaceSlot;
   orientation?: TabOrientation;

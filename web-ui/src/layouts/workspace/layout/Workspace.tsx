@@ -46,50 +46,97 @@ export const Workspace = () => {
     [WS.LEFT_SECONDARY]: leftSecondary,
     [WS.RIGHT_PRIMARY]: rightPrimary,
     [WS.RIGHT_SECONDARY]: rightSecondary,
+    [WS.LEFT_SIDEBAR]: leftSidebar,
+    [WS.RIGHT_SIDEBAR]: rightSidebar,
   } = workspaceConfigDefaults;
+
+  const has = {
+    topPrimary: !!topPrimary?.length,
+    topSecondary: !!topSecondary?.length,
+    bottomPrimary: !!bottomPrimary?.length,
+    bottomSecondary: !!bottomSecondary?.length,
+    leftPrimary: !!leftPrimary?.length,
+    leftSecondary: !!leftSecondary?.length,
+    rightPrimary: !!rightPrimary?.length,
+    rightSecondary: !!rightSecondary?.length,
+    leftSidebar: !!leftSidebar?.length,
+    rightSidebar: !!rightSidebar?.length,
+  };
 
   return (
     <div className={styles.workspace}>
-      <div className={styles.primaryHorizontal}>
+      {/* TOP PRIMARY */}
+      {has.topPrimary && (
         <div className={styles.topPrimary}>
           {renderBar(topPrimary, TO.HORIZONTAL, WS.TOP_PRIMARY)}
         </div>
-        <div className={styles.primaryVertical}>
+      )}
+
+      <div className={styles.primaryVertical}>
+        {/* LEFT BARS */}
+        {has.leftPrimary && (
           <div className={styles.leftPrimary}>
             {renderBar(leftPrimary, TO.VERTICAL, WS.LEFT_PRIMARY)}
           </div>
+        )}
+
+        {has.leftSecondary && (
           <div className={styles.leftSecondary}>
             {renderBar(leftSecondary, TO.VERTICAL, WS.LEFT_SECONDARY)}
           </div>
+        )}
+
+        {has.rightSidebar && (
           <div className={styles.leftSidebar}>
             <Sidebar position="left" />
           </div>
-          <div className={styles.secondaryHorizontal}>
+        )}
+
+        {/* CENTER AREA */}
+        <div className={styles.secondaryHorizontal}>
+          {has.topSecondary && (
             <div className={styles.topSecondary}>
               {renderBar(topSecondary, TO.HORIZONTAL, WS.TOP_SECONDARY)}
             </div>
-            <div className={styles.content}>
-              <h1>Workspace Content</h1>
-            </div>
+          )}
+
+          <div className={styles.content}>
+            <h1>Workspace Content</h1>
+          </div>
+
+          {has.bottomSecondary && (
             <div className={styles.bottomSecondary}>
               {renderBar(bottomSecondary, TO.HORIZONTAL, WS.BOTTOM_SECONDARY)}
             </div>
-          </div>
+          )}
+        </div>
+
+        {/* RIGHT SIDEBARS */}
+        {has.leftSidebar && (
           <div className={styles.rightSidebar}>
             <Sidebar position="right" />
           </div>
+        )}
+
+        {has.rightPrimary && (
           <div className={styles.rightPrimary}>
             {renderBar(rightPrimary, TO.VERTICAL, WS.RIGHT_PRIMARY)}
           </div>
+        )}
+
+        {has.rightSecondary && (
           <div className={styles.rightSecondary}>
             {renderBar(rightSecondary, TO.VERTICAL, WS.RIGHT_SECONDARY)}
           </div>
-        </div>
+        )}
+      </div>
 
+      {/* BOTTOM PRIMARY */}
+      {has.bottomPrimary && (
         <div className={styles.bottomPrimary}>
           {renderBar(bottomPrimary, TO.HORIZONTAL, WS.BOTTOM_PRIMARY)}
         </div>
-      </div>
+      )}
     </div>
   );
 };
