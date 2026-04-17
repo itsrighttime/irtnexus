@@ -1,131 +1,112 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import type { CSSProperties, MouseEvent } from "react";
-import ReactDOM from "react-dom";
-import styles from "./Tooltip.module.css";
-import type { TooltipProps } from "./Tooltip.types";
+import { useSmartPosition } from "@/hooks";
+import {
+  useRef,
+  useState,
+  useEffect,
+  type ReactNode,
+  cloneElement,
+  isValidElement,
+} from "react";
+import { Popover } from "../over/Popover";
 
-const OFFSET = 15;
+type TooltipProps = {
+  children: ReactNode;
+  content: ReactNode;
+  color?: string;
+  backgroundColor?: string;
+  width?: string;
+  delay?: number;
+};
 
-/**
- * Tooltip Component
- *
- * A cursor-following, portal-based tooltip component that displays
- * contextual content on hover with configurable delay, positioning,
- * and styling.
- */
-export const Tooltip: React.FC<TooltipProps> = ({
+export const Tooltip = ({
   children,
   content,
-  color = "#272626",
-  backgroundColor = "#eceaea",
+  color = "var(--color-text-light)",
+  backgroundColor = "var(--color-gray2)",
   width = "300px",
-  delay = 1500,
-}) => {
+  // delay = 1500,
+  delay = 0,
+}: TooltipProps) => {
+  const anchorRef = useRef<HTMLElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
-  const [visible, setVisible] = useState(false);
-  const [style, setStyle] = useState<CSSProperties>({});
-  const [position, setPosition] = useState<"top" | "bottom">("bottom");
-  const [mounted, setMounted] = useState(false);
+
+  const [isOpen, setIsOpen] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Only mount on client-side
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const position = useSmartPosition(tooltipRef, isOpen);
 
-  const updateTooltipPosition = (x: number, y: number) => {
-    const tooltip = tooltipRef.current;
-    if (!tooltip) return;
-
-    const { innerWidth: winW, innerHeight: winH } = window;
-    const rect = tooltip.getBoundingClientRect();
-
-    let top = y + OFFSET;
-    let left = x;
-    let newPosition: "top" | "bottom" = "bottom";
-
-    if (y + OFFSET + rect.height > winH) {
-      if (y - OFFSET - rect.height > 0) {
-        top = y - OFFSET - rect.height;
-        newPosition = "top";
-      } else {
-        top = Math.max(winH - rect.height - 5, 5);
-      }
-    }
-
-    left = x - rect.width / 2;
-    if (left + rect.width > winW) {
-      left = winW - rect.width - 5;
-    } else if (left < 0) {
-      left = 5;
-    }
-
-    setStyle({
-      position: "fixed",
-      top,
-      left,
-      zIndex: 9999,
-      pointerEvents: "none",
-      color,
-      backgroundColor,
-      "--width": width,
-    } as CSSProperties);
-
-    setPosition(newPosition);
-  };
-
-  const handleMouseMove = (e: MouseEvent<HTMLSpanElement>) => {
-    const { clientX, clientY } = e;
-    requestAnimationFrame(() => updateTooltipPosition(clientX, clientY));
-  };
-
-  const handleMouseEnter = () => {
+  // ---- Handlers ----
+  const openWithDelay = () => {
     timerRef.current = setTimeout(() => {
-      setVisible(true);
+      setIsOpen(true);
     }, delay);
   };
 
-  const handleMouseLeave = () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    setVisible(false);
+  const close = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    setIsOpen(false);
   };
 
+  // cleanup
   useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, []);
 
+  // ---- Clone child to attach events ----
+  const trigger = isValidElement(children)
+    ? cloneElement(children as any, {
+        ref: anchorRef,
+        onMouseEnter: openWithDelay,
+        onMouseLeave: close,
+        onFocus: () => setIsOpen(true),
+        onBlur: close,
+      })
+    : children;
+
   return (
     <>
-      <span
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onMouseMove={handleMouseMove}
-        style={{ display: "inline-block" }}
-      >
-        {children}
-      </span>
+      {trigger}
 
-      {mounted &&
-        ReactDOM.createPortal(
+      {content && (
+        <Popover
+          anchorRef={anchorRef}
+          isOpen={isOpen}
+          onClose={close}
+          offset={0}
+        >
           <div
             ref={tooltipRef}
             style={{
-              ...style,
-              opacity: visible ? 1 : 0,
-              visibility: visible && content ? "visible" : "hidden",
-              transition: "opacity 0.15s ease, visibility 0.15s ease",
-              zIndex: 999999,
+              position: "absolute",
+              maxWidth: width,
+              color,
+              backgroundColor,
+              padding: "1px 10px",
+              borderRadius: "var(--radius-md)",
+              fontSize: "var(--font-size-xs)",
+              textWrap: "nowrap",
+              boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+              pointerEvents: "none",
+              transform: `
+              translateY(${position.vertical === "top" ? "-100%" : "0"})
+              translateX(${position.horizontal === "left" ? "-100%" : "0"})
+            `,
+              marginTop: position.vertical === "bottom" ? "6px" : "-6px",
+              marginLeft: position.horizontal === "right" ? "6px" : "-6px",
+              opacity: position.ready ? 1 : 0,
+              border: "1px solid var(--color-gray3)",
             }}
-            className={`${styles.tooltip} ${styles[position]}`}
           >
             {content}
-          </div>,
-          document.body,
-        )}
+          </div>
+        </Popover>
+      )}
     </>
   );
 };

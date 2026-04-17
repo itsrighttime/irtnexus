@@ -20,7 +20,7 @@ import { TestTabs } from "./tests/layout/TestTabs";
 export function Test() {
   return (
     <>
-      <TestTabs />
+      {/* <TestTabs /> */}
       <TestLayout />
       {/* <TestTable /> */}
       {/* <TestGenericForm /> */}

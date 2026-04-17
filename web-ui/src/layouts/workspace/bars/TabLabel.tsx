@@ -2,7 +2,7 @@
 
 import { IconButton } from "@/atoms";
 import styles from "./TabLabel.module.css";
-import { Icons, type IconTypes } from "@/assets";
+import { Icons } from "@/assets";
 import type { TabIconItem, TabLabelProps, TabToken } from "./TabBar.types";
 
 export const TabLabel = ({

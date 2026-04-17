@@ -1,0 +1,21 @@
+.tabText {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  outline: none;
+
+  border: none;
+  cursor: pointer;
+  user-select: none;
+
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size);
+  background-color: transparent;
+  padding: 0 var(--spacing-xs);
+}
+
+.tabText:focus-visible {
+  outline: 1px solid var(--color-gray4);
+  outline-offset: 2px;
+}
