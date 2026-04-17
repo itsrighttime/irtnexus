@@ -5,7 +5,7 @@
   width: 100vw;
   overflow: hidden;
 
-  --barSize: 30px;
+  --barSize: 35px;
   --sidebarSize: 200px;
 }
 
@@ -49,6 +49,8 @@
 .rightSecondary {
   width: var(--barSize);
   flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ===== SIDEBARS ===== */

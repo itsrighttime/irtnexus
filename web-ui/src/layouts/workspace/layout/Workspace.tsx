@@ -1,83 +1,16 @@
 "use client";
 
-import { TabBar, type onActionType } from "../bars";
-import { TAB_ORIENTATION as TO, type TabOrientation } from "../const";
-import { WORKSPACE_SLOTS as WS, type WorkspaceSlot } from "../const/layout";
+import { TAB_ORIENTATION as TO } from "../const";
+import { WORKSPACE_SLOTS as WS } from "../const/layout";
 import { Sidebar } from "../sidebars/Sidebar";
-import type { WorkspaceConfig } from "./layout.types";
+import { renderBar } from "./renderBar";
+import { useWorkspaceConfig } from "./workspace.hook";
 import styles from "./Workspace.module.css";
 import { Outlet, useNavigate } from "react-router-dom";
 
-const renderBar = (
-  tabs?: any,
-  orientation: TabOrientation = TO.HORIZONTAL,
-  position: WorkspaceSlot = WS.TOP_PRIMARY,
-  onAction?: onActionType,
-) => {
-  if (!tabs?.length) return null;
-
-  return (
-    <TabBar
-      config={{ orientation, position, start: tabs }}
-      onAction={onAction}
-    />
-  );
-};
-
-const workspaceConfigDefaults: WorkspaceConfig = {
-  [WS.TOP_PRIMARY]: [{ id: "t1", type: "text", text: "Home", route: "home" }],
-  [WS.TOP_SECONDARY]: [{ id: "t1", type: "text", text: "Home", route: "home" }],
-  [WS.BOTTOM_PRIMARY]: [
-    { id: "t1", type: "text", text: "Home", route: "home" },
-  ],
-  [WS.BOTTOM_SECONDARY]: [
-    { id: "t1", type: "text", text: "Home", route: "home" },
-  ],
-  [WS.LEFT_PRIMARY]: [
-    {
-      id: "t1",
-      type: "icon",
-      icon: "homeIcon",
-      label: "Home Icon",
-      route: "home",
-    },
-  ],
-  [WS.LEFT_SECONDARY]: [
-    {
-      id: "t1",
-      type: "icon",
-      icon: "homeIcon",
-      label: "Home Icon",
-      route: "home",
-    },
-  ],
-  [WS.RIGHT_PRIMARY]: [
-    {
-      id: "t1",
-      type: "icon",
-      icon: "homeIcon",
-      label: "Home Icon",
-      route: "home",
-    },
-  ],
-  [WS.RIGHT_SECONDARY]: [
-    {
-      id: "t1",
-      type: "dropdown",
-      trigger: { type: "icon", icon: "homeIcon" },
-      items: [
-        {
-          key: "man",
-          route: "man",
-          value: "Man",
-        },
-      ],
-    },
-  ],
-};
-
 export const Workspace = () => {
   const navigate = useNavigate();
+  const workspaceConfig = useWorkspaceConfig();
 
   const {
     [WS.TOP_PRIMARY]: topPrimary,
@@ -90,7 +23,7 @@ export const Workspace = () => {
     [WS.RIGHT_SECONDARY]: rightSecondary,
     [WS.LEFT_SIDEBAR]: leftSidebar,
     [WS.RIGHT_SIDEBAR]: rightSidebar,
-  } = workspaceConfigDefaults;
+  } = workspaceConfig;
 
   const has = {
     topPrimary: !!topPrimary?.length,

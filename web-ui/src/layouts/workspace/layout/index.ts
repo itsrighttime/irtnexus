@@ -1,2 +1,2 @@
-export { WorkspaceRouter } from "./WorkspaceRouter";
+export { Workspace } from "./Workspace";
 export * from "./layout.types";

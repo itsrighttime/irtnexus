@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Workspace } from "./Workspace";
+import { Workspace } from "@/layouts/workspace";
 import { PageWorkspace } from "@/pages";
 
 export const WorkspaceRouter = () => {

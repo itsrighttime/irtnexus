@@ -1,1 +1,1 @@
-export const t = "";
+export { WorkspaceRouter } from "./WorkspaceRouter";
