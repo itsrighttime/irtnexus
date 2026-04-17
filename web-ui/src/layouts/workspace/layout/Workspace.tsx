@@ -1,42 +1,84 @@
 "use client";
 
-import { TabBar } from "../bars";
+import { TabBar, type onActionType } from "../bars";
 import { TAB_ORIENTATION as TO, type TabOrientation } from "../const";
 import { WORKSPACE_SLOTS as WS, type WorkspaceSlot } from "../const/layout";
 import { Sidebar } from "../sidebars/Sidebar";
 import type { WorkspaceConfig } from "./layout.types";
 import styles from "./Workspace.module.css";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const renderBar = (
   tabs?: any,
   orientation: TabOrientation = TO.HORIZONTAL,
   position: WorkspaceSlot = WS.TOP_PRIMARY,
+  onAction?: onActionType,
 ) => {
   if (!tabs?.length) return null;
 
-  return <TabBar config={{ orientation, position, start: tabs }} />;
+  return (
+    <TabBar
+      config={{ orientation, position, start: tabs }}
+      onAction={onAction}
+    />
+  );
 };
 
 const workspaceConfigDefaults: WorkspaceConfig = {
-  [WS.TOP_PRIMARY]: [{ id: "t1", type: "text", text: "Home" }],
-  [WS.TOP_SECONDARY]: [{ id: "t1", type: "text", text: "Home" }],
-  [WS.BOTTOM_PRIMARY]: [{ id: "t1", type: "text", text: "Home" }],
-  [WS.BOTTOM_SECONDARY]: [{ id: "t1", type: "text", text: "Home" }],
+  [WS.TOP_PRIMARY]: [{ id: "t1", type: "text", text: "Home", route: "home" }],
+  [WS.TOP_SECONDARY]: [{ id: "t1", type: "text", text: "Home", route: "home" }],
+  [WS.BOTTOM_PRIMARY]: [
+    { id: "t1", type: "text", text: "Home", route: "home" },
+  ],
+  [WS.BOTTOM_SECONDARY]: [
+    { id: "t1", type: "text", text: "Home", route: "home" },
+  ],
   [WS.LEFT_PRIMARY]: [
-    { id: "t1", type: "icon", icon: "homeIcon", label: "Home Icon" },
+    {
+      id: "t1",
+      type: "icon",
+      icon: "homeIcon",
+      label: "Home Icon",
+      route: "home",
+    },
   ],
   [WS.LEFT_SECONDARY]: [
-    { id: "t1", type: "icon", icon: "homeIcon", label: "Home Icon" },
+    {
+      id: "t1",
+      type: "icon",
+      icon: "homeIcon",
+      label: "Home Icon",
+      route: "home",
+    },
   ],
   [WS.RIGHT_PRIMARY]: [
-    { id: "t1", type: "icon", icon: "homeIcon", label: "Home Icon" },
+    {
+      id: "t1",
+      type: "icon",
+      icon: "homeIcon",
+      label: "Home Icon",
+      route: "home",
+    },
   ],
   [WS.RIGHT_SECONDARY]: [
-    { id: "t1", type: "icon", icon: "homeIcon", label: "Home Icon" },
+    {
+      id: "t1",
+      type: "dropdown",
+      trigger: { type: "icon", icon: "homeIcon" },
+      items: [
+        {
+          key: "man",
+          route: "man",
+          value: "Man",
+        },
+      ],
+    },
   ],
 };
 
 export const Workspace = () => {
+  const navigate = useNavigate();
+
   const {
     [WS.TOP_PRIMARY]: topPrimary,
     [WS.TOP_SECONDARY]: topSecondary,
@@ -63,12 +105,21 @@ export const Workspace = () => {
     rightSidebar: !!rightSidebar?.length,
   };
 
+  const handleNavigate = (payload: {
+    route?: string;
+    key?: string | number;
+  }): void => {
+    const { route } = payload;
+    if (!route) return;
+    navigate(route);
+  };
+
   return (
     <div className={styles.workspace}>
       {/* TOP PRIMARY */}
       {has.topPrimary && (
         <div className={styles.topPrimary}>
-          {renderBar(topPrimary, TO.HORIZONTAL, WS.TOP_PRIMARY)}
+          {renderBar(topPrimary, TO.HORIZONTAL, WS.TOP_PRIMARY, handleNavigate)}
         </div>
       )}
 
@@ -76,13 +127,23 @@ export const Workspace = () => {
         {/* LEFT BARS */}
         {has.leftPrimary && (
           <div className={styles.leftPrimary}>
-            {renderBar(leftPrimary, TO.VERTICAL, WS.LEFT_PRIMARY)}
+            {renderBar(
+              leftPrimary,
+              TO.VERTICAL,
+              WS.LEFT_PRIMARY,
+              handleNavigate,
+            )}
           </div>
         )}
 
         {has.leftSecondary && (
           <div className={styles.leftSecondary}>
-            {renderBar(leftSecondary, TO.VERTICAL, WS.LEFT_SECONDARY)}
+            {renderBar(
+              leftSecondary,
+              TO.VERTICAL,
+              WS.LEFT_SECONDARY,
+              handleNavigate,
+            )}
           </div>
         )}
 
@@ -96,17 +157,27 @@ export const Workspace = () => {
         <div className={styles.secondaryHorizontal}>
           {has.topSecondary && (
             <div className={styles.topSecondary}>
-              {renderBar(topSecondary, TO.HORIZONTAL, WS.TOP_SECONDARY)}
+              {renderBar(
+                topSecondary,
+                TO.HORIZONTAL,
+                WS.TOP_SECONDARY,
+                handleNavigate,
+              )}
             </div>
           )}
 
           <div className={styles.content}>
-            <h1>Workspace Content</h1>
+            <Outlet />
           </div>
 
           {has.bottomSecondary && (
             <div className={styles.bottomSecondary}>
-              {renderBar(bottomSecondary, TO.HORIZONTAL, WS.BOTTOM_SECONDARY)}
+              {renderBar(
+                bottomSecondary,
+                TO.HORIZONTAL,
+                WS.BOTTOM_SECONDARY,
+                handleNavigate,
+              )}
             </div>
           )}
         </div>
@@ -120,13 +191,23 @@ export const Workspace = () => {
 
         {has.rightPrimary && (
           <div className={styles.rightPrimary}>
-            {renderBar(rightPrimary, TO.VERTICAL, WS.RIGHT_PRIMARY)}
+            {renderBar(
+              rightPrimary,
+              TO.VERTICAL,
+              WS.RIGHT_PRIMARY,
+              handleNavigate,
+            )}
           </div>
         )}
 
         {has.rightSecondary && (
           <div className={styles.rightSecondary}>
-            {renderBar(rightSecondary, TO.VERTICAL, WS.RIGHT_SECONDARY)}
+            {renderBar(
+              rightSecondary,
+              TO.VERTICAL,
+              WS.RIGHT_SECONDARY,
+              handleNavigate,
+            )}
           </div>
         )}
       </div>
@@ -134,7 +215,12 @@ export const Workspace = () => {
       {/* BOTTOM PRIMARY */}
       {has.bottomPrimary && (
         <div className={styles.bottomPrimary}>
-          {renderBar(bottomPrimary, TO.HORIZONTAL, WS.BOTTOM_PRIMARY)}
+          {renderBar(
+            bottomPrimary,
+            TO.HORIZONTAL,
+            WS.BOTTOM_PRIMARY,
+            handleNavigate,
+          )}
         </div>
       )}
     </div>

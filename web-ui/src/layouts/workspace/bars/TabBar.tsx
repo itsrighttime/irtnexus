@@ -4,15 +4,16 @@ import styles from "./TabBar.module.css";
 import { TabText } from "./TabText";
 import { TabIcon } from "./TabIcon";
 import { TabDropdown } from "./TabDropdown";
-import type { TabBarConfig, TabConfig } from "./TabBar.types";
+import type { onActionType, TabBarConfig, TabConfig } from "./TabBar.types";
 import { TabLabel } from "./TabLabel";
 import { TAB_TYPE, TAB_ORIENTATION } from "../const";
 
 type Props = {
   config: TabBarConfig;
+  onAction?: onActionType;
 };
 
-export const TabBar = ({ config }: Props) => {
+export const TabBar = ({ config, onAction }: Props) => {
   const {
     orientation = TAB_ORIENTATION.HORIZONTAL,
     position,
@@ -23,12 +24,10 @@ export const TabBar = ({ config }: Props) => {
 
   const side = (() => {
     if (!position) return "";
-
     if (position.startsWith("top")) return "bottom";
     if (position.startsWith("bottom")) return "top";
     if (position.startsWith("left")) return "right";
     if (position.startsWith("right")) return "left";
-
     return "";
   })();
 
@@ -36,10 +35,35 @@ export const TabBar = ({ config }: Props) => {
     "data-border-side": side,
   };
 
+  /**
+   * Unified action handler
+   */
+  const handleAction = (tab: any, extraKey?: string | number) => {
+    // priority: route > key > click fallback
+
+    if (tab.route) {
+      onAction?.({ route: tab.route });
+      return;
+    }
+
+    if (extraKey !== undefined) {
+      onAction?.({ key: extraKey });
+      return;
+    }
+
+    tab.onClick?.();
+  };
+
   const renderTab = (tab: TabConfig) => {
     switch (tab.type) {
       case TAB_TYPE.TEXT:
-        return <TabText key={tab.id} text={tab.text} onClick={tab.onClick} />;
+        return (
+          <TabText
+            key={tab.id}
+            text={tab.text}
+            onClick={() => handleAction(tab)}
+          />
+        );
 
       case TAB_TYPE.LABEL:
         return (
@@ -49,9 +73,9 @@ export const TabBar = ({ config }: Props) => {
             leftIcons={tab.leftIcons}
             rightIcons={tab.rightIcons}
             tokens={tab.tokens}
-            onClick={tab.onClick}
             background={tab.background}
             border={tab.border}
+            onClick={() => handleAction(tab)}
           />
         );
 
@@ -61,7 +85,7 @@ export const TabBar = ({ config }: Props) => {
             key={tab.id}
             icon={tab.icon}
             label={tab.label}
-            onClick={tab.onClick}
+            onClick={() => handleAction(tab)}
           />
         );
 
@@ -77,7 +101,16 @@ export const TabBar = ({ config }: Props) => {
               )
             }
             items={tab.items}
-            onSelect={tab.onSelect}
+            onSelect={(key) => {
+              const item = tab.items.find((i) => i.key === key);
+
+              if (item?.route) {
+                onAction?.({ route: item.route });
+                return;
+              }
+
+              handleAction(tab, key);
+            }}
           />
         );
 
@@ -90,7 +123,7 @@ export const TabBar = ({ config }: Props) => {
   };
 
   const renderSection = (tabs?: TabConfig[], className?: string) => {
-    if (!tabs?.length) return <div></div>;
+    if (!tabs?.length) return <div />;
 
     return (
       <div className={`${styles.section} ${className}`}>

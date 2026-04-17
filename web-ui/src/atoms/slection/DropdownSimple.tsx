@@ -6,6 +6,7 @@ import { useSmartPosition } from "@/hooks";
 
 export type DropdownItem = {
   key: string | number;
+  route: string;
   value: string;
   box?: string[];
   description?: string;

@@ -7,6 +7,7 @@ import type { WorkspaceSlot } from "../const/layout";
 type BaseTab = {
   id: string;
   type: TabType;
+  route?: string;
 };
 
 type TextTab = BaseTab & {
@@ -82,3 +83,8 @@ export type TabBarConfig = {
   center?: TabConfig[];
   end?: TabConfig[];
 };
+
+export type onActionType = (payload: {
+  route?: string;
+  key?: string | number;
+}) => void;
