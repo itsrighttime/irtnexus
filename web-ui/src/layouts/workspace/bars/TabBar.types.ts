@@ -76,12 +76,15 @@ export type TabConfig = TextTab | IconTab | DropdownTab | CustomTab | LabelTab;
 
 export type SidebarTab = LabelTab;
 
-export type TabBarConfig = {
-  position?: WorkspaceSlot;
-  orientation?: TabOrientation;
+export type BarTabs = {
   start?: TabConfig[];
   center?: TabConfig[];
   end?: TabConfig[];
+};
+
+export type TabBarConfig = BarTabs & {
+  position?: WorkspaceSlot;
+  orientation?: TabOrientation;
 };
 
 export type onActionType = (payload: {

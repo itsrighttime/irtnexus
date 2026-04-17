@@ -1,9 +1,11 @@
 "use client";
 
+import type { BarTabs } from "../bars";
 import { TAB_ORIENTATION as TO } from "../const";
 import { WORKSPACE_SLOTS as WS } from "../const/layout";
 import { Sidebar } from "../sidebars/Sidebar";
 import { renderBar } from "./renderBar";
+import { validateWorkspaceConfig } from "./validateWorkspaceConfig.helper";
 import { useWorkspaceConfig } from "./workspace.hook";
 import styles from "./Workspace.module.css";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -11,6 +13,21 @@ import { Outlet, useNavigate } from "react-router-dom";
 export const Workspace = () => {
   const navigate = useNavigate();
   const workspaceConfig = useWorkspaceConfig();
+
+  const errors = validateWorkspaceConfig(workspaceConfig);
+
+  if (errors.length) {
+    console.error("Invalid workspace config:", errors);
+    throw Error("Invalid Workspace Config");
+  }
+
+  const hasTabs = (bar: BarTabs | undefined) => {
+    if (!bar) return false;
+
+    return Object.values(bar).some(
+      (value) => Array.isArray(value) && value.length > 0,
+    );
+  };
 
   const {
     [WS.TOP_PRIMARY]: topPrimary,
@@ -26,14 +43,14 @@ export const Workspace = () => {
   } = workspaceConfig;
 
   const has = {
-    topPrimary: !!topPrimary?.length,
-    topSecondary: !!topSecondary?.length,
-    bottomPrimary: !!bottomPrimary?.length,
-    bottomSecondary: !!bottomSecondary?.length,
-    leftPrimary: !!leftPrimary?.length,
-    leftSecondary: !!leftSecondary?.length,
-    rightPrimary: !!rightPrimary?.length,
-    rightSecondary: !!rightSecondary?.length,
+    topPrimary: hasTabs(topPrimary),
+    topSecondary: hasTabs(topSecondary),
+    bottomPrimary: hasTabs(bottomPrimary),
+    bottomSecondary: hasTabs(bottomSecondary),
+    leftPrimary: hasTabs(leftPrimary),
+    leftSecondary: hasTabs(leftSecondary),
+    rightPrimary: hasTabs(rightPrimary),
+    rightSecondary: hasTabs(rightSecondary),
     leftSidebar: !!leftSidebar?.length,
     rightSidebar: !!rightSidebar?.length,
   };
