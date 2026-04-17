@@ -9,6 +9,7 @@ type HorizontalPosition = "left" | "right";
 interface Position {
   vertical: VerticalPosition;
   horizontal: HorizontalPosition;
+  ready: boolean; // 👈 NEW
 }
 
 export const useSmartPosition = (
@@ -18,6 +19,7 @@ export const useSmartPosition = (
   const [position, setPosition] = useState<Position>({
     vertical: "bottom",
     horizontal: "right",
+    ready: false,
   });
 
   useLayoutEffect(() => {
@@ -28,7 +30,8 @@ export const useSmartPosition = (
       if (!el) return;
 
       const rect = el.getBoundingClientRect();
-      const { offsetWidth: width, offsetHeight: height } = el;
+      const width = el.offsetWidth;
+      const height = el.offsetHeight;
 
       const vw = window.innerWidth;
       const vh = window.innerHeight;
@@ -45,11 +48,12 @@ export const useSmartPosition = (
           space.below < height && space.above > space.below ? "top" : "bottom",
         horizontal:
           space.right < width && space.left > space.right ? "left" : "right",
+        ready: true,
       });
     };
 
-    // CRITICAL FIX: wait for first paint of dropdown
-    const id = requestAnimationFrame(() => {
+    // compute BEFORE paint
+    requestAnimationFrame(() => {
       requestAnimationFrame(compute);
     });
 
@@ -57,7 +61,6 @@ export const useSmartPosition = (
     window.addEventListener("scroll", compute, true);
 
     return () => {
-      cancelAnimationFrame(id);
       window.removeEventListener("resize", compute);
       window.removeEventListener("scroll", compute, true);
     };

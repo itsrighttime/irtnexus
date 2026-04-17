@@ -11,11 +11,6 @@ export type DropdownItem = {
   description?: string;
 };
 
-type Position = {
-  vertical: "top" | "bottom";
-  horizontal: "left" | "right";
-};
-
 type DropdownSimpleProps = {
   items: DropdownItem[];
   onSelect?: (key: string | number) => void;
@@ -29,13 +24,17 @@ export const DropdownSimple: React.FC<DropdownSimpleProps> = ({
 }): JSX.Element | null => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const position = useSmartPosition(dropdownRef, isOpen) as Position;
+  const position = useSmartPosition(dropdownRef, isOpen);
 
   if (!isOpen) return null;
 
   return (
     <div
       ref={dropdownRef}
+      style={{
+        opacity: position.ready ? 1 : 0,
+        pointerEvents: position.ready ? "auto" : "none",
+      }}
       className={`${styles.dropdownMenu} ${
         position.vertical === "top" ? styles.dropTop : styles.dropBottom
       } ${
