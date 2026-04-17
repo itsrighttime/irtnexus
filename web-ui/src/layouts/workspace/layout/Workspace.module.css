@@ -51,14 +51,12 @@
 .rightSecondary {
   width: var(--barSize);
   height: 100%;
-  /* border: 1px solid gray; */
 }
 
 .leftSidebar,
 .rightSidebar {
   width: var(--sidebarSize);
   height: 100%;
-  /* border: 1px solid gray; */
 }
 .topPrimary,
 .topSecondary,
@@ -66,7 +64,6 @@
 .bottomSecondary {
   width: 100%;
   height: var(--barSize);
-  /* border: 1px solid gray; */
 }
 
 .topPrimary,
