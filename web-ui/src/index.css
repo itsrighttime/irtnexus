@@ -47,8 +47,8 @@
   --spacing-xxl: 32px;
 
   /* Typography */
-  --font-family: "Wix Madefor Display", sans-serif;
-  /* --font-family: "Ubuntu", sans-serif; */
+  /* --font-family: "Wix Madefor Display", sans-serif; */
+  --font-family: "Ubuntu", sans-serif;
 
   --font-size: 1rem;
   --font-size-xs: 12px;

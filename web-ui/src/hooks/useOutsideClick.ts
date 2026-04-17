@@ -3,17 +3,25 @@
 import { useEffect } from "react";
 import type { RefObject } from "react";
 
+type MaybeArray<T> = T | T[];
+
 export const useOutsideClick = (
-  ref: RefObject<HTMLElement | null>,
+  refs: MaybeArray<RefObject<HTMLElement | null>>,
   handler: () => void,
 ): void => {
   useEffect(() => {
     if (typeof document === "undefined") return;
 
-    const listener = (event: MouseEvent) => {
-      const el = ref.current;
+    const refArray = Array.isArray(refs) ? refs : [refs];
 
-      if (!el || el.contains(event.target as Node)) return;
+    const listener = (event: MouseEvent) => {
+      const target = event.target as Node;
+
+      const isInside = refArray.some(
+        (ref) => ref.current && ref.current.contains(target),
+      );
+
+      if (isInside) return;
 
       handler();
     };
@@ -23,5 +31,12 @@ export const useOutsideClick = (
     return () => {
       document.removeEventListener("mousedown", listener);
     };
-  }, [ref, handler]);
+  }, [refs, handler]);
 };
+
+/*
+
+useOutsideClick(popoverRef, onClose);
+useOutsideClick([popoverRef, anchorRef], onClose);
+
+*/

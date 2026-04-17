@@ -1,5 +1,7 @@
 .iconButton {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .iconButton:hover .label {

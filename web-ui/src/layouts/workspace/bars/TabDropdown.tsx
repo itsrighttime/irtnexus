@@ -1,27 +1,16 @@
 "use client";
 
-import { useRef, useState } from "react";
-import type { JSX } from "react";
-
-import { TabText } from "./TabText";
-import { TabIcon } from "./TabIcon";
+import { useRef, useState, type ReactNode, type JSX } from "react";
 import { DropdownSimple, Popover, type DropdownItem } from "@/atoms";
 
 type TabDropdownProps = {
-  type: "text" | "icon";
-  text?: string;
-  icon?: any;
-  label?: string;
-
+  trigger: ReactNode;
   items: DropdownItem[];
   onSelect?: (key: string | number) => void;
 };
 
 export const TabDropdown = ({
-  type,
-  text,
-  icon,
-  label,
+  trigger,
   items,
   onSelect,
 }: TabDropdownProps): JSX.Element => {
@@ -29,7 +18,6 @@ export const TabDropdown = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => setIsOpen((prev) => !prev);
-
   const handleClose = () => setIsOpen(false);
 
   const handleSelect = (key: string | number) => {
@@ -39,12 +27,12 @@ export const TabDropdown = ({
 
   return (
     <>
-      <div ref={anchorRef} style={{ display: "inline-block" }}>
-        {type === "text" ? (
-          <TabText text={text || ""} onClick={handleToggle} />
-        ) : (
-          <TabIcon icon={icon} onClick={handleToggle} label={label} />
-        )}
+      <div
+        ref={anchorRef}
+        onClick={handleToggle}
+        style={{ display: "inline-block" }}
+      >
+        {trigger}
       </div>
 
       <Popover anchorRef={anchorRef} isOpen={isOpen} onClose={handleClose}>
