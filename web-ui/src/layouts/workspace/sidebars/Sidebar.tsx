@@ -54,9 +54,17 @@ export const Sidebar = ({ config, position, onAction }: Props) => {
   const isActive = (route?: string) => {
     if (!route) return false;
 
-    console.log("DDDD : ", route, location.pathname.includes(route));
-
     return location.pathname.includes(route);
+  };
+
+  const isGroupActive = (group: SidebarGroup): boolean => {
+    return group.children.some((child) => {
+      if (child.type === TAB_TYPE.GROUP) {
+        return isGroupActive(child);
+      }
+
+      return isActive(child.route);
+    });
   };
 
   const renderTab = (item: SidebarTab, depth = 0) => {
@@ -83,12 +91,17 @@ export const Sidebar = ({ config, position, onAction }: Props) => {
 
   const renderGroup = (group: SidebarGroup, depth = 0) => {
     const isOpen = openGroups[group.id];
+    const hasActiveChild = isGroupActive(group);
+
+    const highlightGroup = hasActiveChild && !isOpen;
 
     return (
       <div key={group.id} className={styles.group}>
         {/* GROUP HEADER */}
         <div
-          className={styles.groupHeader}
+          className={`${styles.groupHeader} ${
+            highlightGroup ? styles.groupActive : ""
+          }`}
           style={{ paddingLeft: BASE_TAB + depth * TAB }}
           onClick={() => group.collapsible !== false && toggleGroup(group.id)}
         >
