@@ -1,4 +1,4 @@
-import type { SidebarTab, BarTabs } from "../bars";
+import type { BarTabs, SidebarItem } from "../bars";
 import type { WORKSPACE_SLOTS } from "../const/layout";
 
 export type WorkspaceConfig = {
@@ -10,6 +10,6 @@ export type WorkspaceConfig = {
   [WORKSPACE_SLOTS.LEFT_SECONDARY]?: BarTabs;
   [WORKSPACE_SLOTS.RIGHT_PRIMARY]?: BarTabs;
   [WORKSPACE_SLOTS.RIGHT_SECONDARY]?: BarTabs;
-  [WORKSPACE_SLOTS.LEFT_SIDEBAR]?: SidebarTab[];
-  [WORKSPACE_SLOTS.RIGHT_SIDEBAR]?: SidebarTab[];
+  [WORKSPACE_SLOTS.LEFT_SIDEBAR]?: SidebarItem[];
+  [WORKSPACE_SLOTS.RIGHT_SIDEBAR]?: SidebarItem[];
 };

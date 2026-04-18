@@ -6,6 +6,7 @@
   flex-direction: column;
   overflow: hidden;
   overflow-y: auto;
+  padding-right: var(--spacing-xs);
 }
 
 .sidebar[data-border-side="left"] {
@@ -14,4 +15,38 @@
 
 .sidebar[data-border-side="right"] {
   border-right: 1px solid var(--color-border);
+}
+
+.item {
+  cursor: pointer;
+  border-left: 1px solid var(--color-border-light);
+  padding-left: var(--spacing-xs);
+}
+
+.item:hover {
+  background: var(--color-hover);
+}
+
+.active {
+  background: var(--color-gray2);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.groupHeader {
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  opacity: 0.7;
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-xs);
+}
+
+.groupChildren {
+  display: flex;
+  flex-direction: column;
 }

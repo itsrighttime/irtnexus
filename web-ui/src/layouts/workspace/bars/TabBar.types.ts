@@ -91,3 +91,14 @@ export type onActionType = (payload: {
   route?: string;
   key?: string | number;
 }) => void;
+
+export type SidebarGroup = {
+  id: string;
+  type: typeof TAB_TYPE.GROUP;
+  title?: string;
+  children: SidebarItem[];
+  collapsible?: boolean;
+  defaultOpen?: boolean;
+};
+
+export type SidebarItem = SidebarTab | SidebarGroup;

@@ -1,38 +1,72 @@
 "use client";
 
-import type { SidebarTab } from "../bars";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 import { TabLabel } from "../bars/TabLabel";
-import type { onActionType } from "../bars/TabBar.types";
+import type {
+  onActionType,
+  SidebarGroup,
+  SidebarItem,
+  SidebarTab,
+} from "../bars/TabBar.types";
+import { TAB_TYPE } from "../const";
+import { IconButton } from "@/atoms";
+import { Icons } from "@/assets";
 
 type Props = {
-  config: SidebarTab[];
+  config: SidebarItem[];
   position: string;
   onAction?: onActionType;
 };
 
+const TAB = 8;
+const BASE_TAB = 4;
+
 export const Sidebar = ({ config, position, onAction }: Props) => {
-  const side = (() => {
-    if (!position) return "";
-    if (position.startsWith("left")) return "right";
-    if (position.startsWith("right")) return "left";
-    return "";
-  })();
+  const location = useLocation();
+
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
+    config.forEach((item) => {
+      if (item.type === TAB_TYPE.GROUP) {
+        initial[item.id] = item.defaultOpen ?? false;
+      }
+    });
+    return initial;
+  });
+
+  const toggleGroup = (id: string) => {
+    setOpenGroups((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   const handleAction = (tab: SidebarTab) => {
     if (tab.route) {
       onAction?.({ route: tab.route });
       return;
     }
-
     tab.onClick?.();
   };
 
-  const renderItem = (item: SidebarTab) => {
+  const isActive = (route?: string) => {
+    if (!route) return false;
+
+    console.log("DDDD : ", route, location.pathname.includes(route));
+
+    return location.pathname.includes(route);
+  };
+
+  const renderTab = (item: SidebarTab, depth = 0) => {
+    const active = isActive(item.route);
+
     return (
       <div
         key={item.id}
-        className={styles.sidebarItems}
+        className={`${styles.item} ${active ? styles.active : ""}`}
+        style={{ marginLeft: BASE_TAB + depth * TAB }}
         onClick={() => handleAction(item)}
       >
         <TabLabel
@@ -40,12 +74,58 @@ export const Sidebar = ({ config, position, onAction }: Props) => {
           leftIcons={item.leftIcons}
           rightIcons={item.rightIcons}
           tokens={item.tokens}
-          background={item.background || "var(--color-gray2)"}
+          background={active ? "var(--color-gray2)" : ""}
           border={item.border}
         />
       </div>
     );
   };
+
+  const renderGroup = (group: SidebarGroup, depth = 0) => {
+    const isOpen = openGroups[group.id];
+
+    return (
+      <div key={group.id} className={styles.group}>
+        {/* GROUP HEADER */}
+        <div
+          className={styles.groupHeader}
+          style={{ paddingLeft: BASE_TAB + depth * TAB }}
+          onClick={() => group.collapsible !== false && toggleGroup(group.id)}
+        >
+          <span>{group.title}</span>
+          <span>
+            <IconButton
+              icon={isOpen ? Icons.arrowDownIcon : Icons.arrowRightIcon}
+              color="var(--color-text)"
+              size={0.8}
+            />
+          </span>
+        </div>
+
+        {/* CHILDREN */}
+        {isOpen && (
+          <div className={styles.groupChildren}>
+            {group.children.map((child) =>
+              child.type === TAB_TYPE.GROUP
+                ? renderGroup(child, depth + 1)
+                : renderTab(child, depth + 1),
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderItem = (item: SidebarItem) => {
+    if (item.type === TAB_TYPE.GROUP) return renderGroup(item);
+    return renderTab(item);
+  };
+
+  const side = position.startsWith("left")
+    ? "right"
+    : position.startsWith("right")
+      ? "left"
+      : "";
 
   return (
     <div className={styles.sidebar} data-border-side={side}>
