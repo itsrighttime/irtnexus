@@ -13,6 +13,16 @@
 
 /* -------------------- Root Tokens (Light Theme Default) -------------------- */
 :root {
+  /* Brand Colors */
+  --colorSimple: #404040;
+  --colorBlue: #00b0f0;
+  --colorDarkBlue: #5b9bd5;
+  --colorYellow: #dbac2b;
+  --colorRed: #ff5969;
+  --colorCyan: #52c9bd;
+  --colorGreen: #92d050;
+  --colorSkyBlue: #05e1e7;
+
   /* Colors */
   --color-primary: #5b9bd5;
   --color-secondary: #0f2854;

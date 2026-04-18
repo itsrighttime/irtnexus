@@ -97,6 +97,7 @@
   flex: 1;
   font: inherit;
   color: var(--color-text);
+  width: 100%;
 }
 
 /* Icons */

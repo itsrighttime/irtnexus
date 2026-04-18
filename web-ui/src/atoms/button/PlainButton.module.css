@@ -1,0 +1,13 @@
+.btn {
+  all: unset;
+  cursor: pointer;
+  color: var(--color);
+  font-weight: var(--fontWeight);
+  font-size: var(--fontSize);
+  text-decoration: var(--underline);
+}
+
+.btn:hover {
+  opacity: 0.7;
+  text-decoration: var(--underlineHover);
+}

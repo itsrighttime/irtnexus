@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import styles from "./LoginForm.module.css";
-import { IconButton } from "@/atoms";
-import { Icons } from "@/assets";
+import { Button, PasswordInput, PlainButton, TextInput } from "@/atoms";
 
 /* -------------------- Types -------------------- */
 
@@ -13,7 +12,6 @@ type ExtraButtonsProps = {
 };
 
 type LoginFormProps = {
-  handleToggleFullscreen?: (() => void) | null;
   handleForgotId?: (() => void) | null;
   handleForgotPassword?: (() => void) | null;
   handleRegister?: (() => void) | null;
@@ -48,7 +46,6 @@ const ExtraButtons: React.FC<ExtraButtonsProps> = ({
 );
 
 export const LoginForm: React.FC<LoginFormProps> = ({
-  handleToggleFullscreen = null,
   handleForgotId = null,
   handleForgotPassword = null,
   handleRegister = null,
@@ -64,18 +61,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   return (
     <div className={styles.loginFormWrapper}>
-      {handleToggleFullscreen && (
-        <div className={styles.extraIcons}>
-          <IconButton
-            icon={Icons.screenModeIcon}
-            label={workspaceLabels.toggleFullscreen}
-            onClick={handleToggleFullscreen}
-            size={1.2}
-            color="var(--colorRed)"
-          />
-        </div>
-      )}
-
       <div className={styles.loginForm}>
         <div className={styles.formMeta}>
           {formIcon && (
@@ -85,24 +70,33 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         </div>
 
         <div className={styles.inputs}>
-          <TextField
+          <TextInput
             label="Any Valid Id"
             placeholder="Any Valid Id"
-            setResult={setId}
+            onChange={setId}
+            variant={"underline"}
+            radius={"none"}
+            width="100%"
           />
-          <PasswordField setResult={setPassword} />
+          <PasswordInput
+            placeholder="Password"
+            onChange={setPassword}
+            variant={"underline"}
+            width="100%"
+            radius={"none"}
+          />
         </div>
 
         <div className={styles.buttonsWrapper}>
           <div className={styles.buttons}>
-            <Button text="Login" onClick={() => handleLogin(id, password)} />
+            <Button variant="primary" onClick={() => handleLogin(id, password)}>
+              Login
+            </Button>
 
             {handleRegister ? (
-              <Button
-                text="Register"
-                onClick={handleRegister}
-                isBackground={false}
-              />
+              <Button variant="secondary" onClick={handleRegister}>
+                Register
+              </Button>
             ) : (
               <ExtraButtons
                 handleForgotId={handleForgotId}
@@ -117,9 +111,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               handleForgotPassword={handleForgotPassword}
             />
           )}
-        </div>
 
-        {errorMsg && <p className={styles.error}>{errorMsg}</p>}
+          {errorMsg && <p className={styles.error}>{errorMsg}</p>}
+        </div>
       </div>
     </div>
   );

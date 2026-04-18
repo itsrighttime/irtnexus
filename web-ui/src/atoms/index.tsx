@@ -52,3 +52,4 @@ export { Tooltip } from "./tooltip/Tooltip";
 export { TextInput } from "./text-input/TextInput";
 export { Button } from "./button/Button";
 export { IconButton } from "./button/IconButton";
+export { PlainButton } from "./button/PlainButton";
