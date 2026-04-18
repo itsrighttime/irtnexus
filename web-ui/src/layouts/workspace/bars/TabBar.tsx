@@ -31,6 +31,12 @@ export const TabBar = ({ config, onAction }: Props) => {
     return "";
   })();
 
+  const isActive = (route?: string) => {
+    if (!route) return false;
+
+    return location.pathname.includes(route);
+  };
+
   const props = {
     "data-border-side": side,
   };
@@ -62,6 +68,7 @@ export const TabBar = ({ config, onAction }: Props) => {
             key={tab.id}
             text={tab.text}
             onClick={() => handleAction(tab)}
+            isActive={isActive(tab.route)}
           />
         );
 
@@ -86,6 +93,7 @@ export const TabBar = ({ config, onAction }: Props) => {
             icon={tab.icon}
             label={tab.label}
             onClick={() => handleAction(tab)}
+            isActive={isActive(tab.route)}
           />
         );
 
@@ -95,9 +103,15 @@ export const TabBar = ({ config, onAction }: Props) => {
             key={tab.id}
             trigger={
               tab.trigger.type === TAB_TYPE.TEXT ? (
-                <TabText text={tab.trigger.text || ""} />
+                <TabText
+                  text={tab.trigger.text || ""}
+                  isActive={isActive(tab.route)}
+                />
               ) : (
-                <TabIcon icon={tab.trigger.icon!} />
+                <TabIcon
+                  icon={tab.trigger.icon!}
+                  isActive={isActive(tab.route)}
+                />
               )
             }
             items={tab.items}
