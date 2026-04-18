@@ -57,7 +57,7 @@ const renderIcons = (items?: TabIconItem[]) => {
               color={item.color}
               label={item.label}
               disabled={item.disabled}
-              size={1.3}
+              size={1}
             />
           );
         }
@@ -80,7 +80,7 @@ const renderIcons = (items?: TabIconItem[]) => {
             color={item.color || "var(--color-text-light)"}
             label={item.label}
             disabled={false}
-            size={1.3}
+            size={1}
           />
         );
       })}
