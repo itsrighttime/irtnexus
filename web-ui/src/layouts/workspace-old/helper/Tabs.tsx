@@ -5,7 +5,7 @@ import styles from "../css/Navigator.module.css";
 import { Tab } from "./Tab.js";
 import type { TabItem } from "./types.js";
 import { useOutsideClick } from "@/hooks/useOutsideClick.js";
-import { FlexContainer } from "@/layouts/containers";
+import { FlexContainer } from "@/layouts/workspace-old/containers/index.js";
 
 interface TabsProps {
   tabs?: TabItem[];

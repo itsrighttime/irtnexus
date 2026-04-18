@@ -6,7 +6,7 @@ import { Tabs } from "../helper/Tabs.js";
 import { validateTabsIcons } from "../helper/validateTabsIcons.js";
 import { workspaceLayoutKeys } from "../helper/workspaceLayoutKeys.js";
 import type { TabsMap } from "../helper/types.js";
-import { FlexContainer } from "@/layouts/containers/FlexContainer.js";
+import { FlexContainer } from "@/layouts/workspace-old/containers/FlexContainer.js";
 
 const { POSITIONS } = workspaceLayoutKeys;
 
