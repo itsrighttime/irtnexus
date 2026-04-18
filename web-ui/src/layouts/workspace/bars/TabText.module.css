@@ -10,7 +10,7 @@
   user-select: none;
 
   font-weight: var(--font-weight-medium);
-  font-size: var(--font-size);
+  font-size: var(--font-size-sm);
   background-color: transparent;
   padding: 0 var(--spacing-xs);
 }

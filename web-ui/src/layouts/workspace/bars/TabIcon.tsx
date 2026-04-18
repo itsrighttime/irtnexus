@@ -11,6 +11,6 @@ export const TabIcon = ({
   label?: string;
 }) => {
   return (
-    <IconButton icon={Icons[icon]} size={1.6} onClick={onClick} label={label} />
+    <IconButton icon={Icons[icon]} size={1.3} onClick={onClick} label={label} />
   );
 };
