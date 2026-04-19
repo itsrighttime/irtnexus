@@ -4,3 +4,5 @@
 - Dynamically adding and removing the Tabs : We need to linked that to the backend
 - Mobile Version : Mobile version also user friendly
 - Sidebar Text : Extra text should visible as ellipses and onhove full text visible
+- Sidebar width should be customisable like we can increase and decrease it at runtime
+- Tabs should have notification number, warnings, ect
