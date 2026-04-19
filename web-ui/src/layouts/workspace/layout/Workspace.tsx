@@ -60,6 +60,7 @@ export const Workspace = () => {
     key?: string | number;
   }): void => {
     const { route } = payload;
+
     if (!route) return;
     navigate(route);
   };

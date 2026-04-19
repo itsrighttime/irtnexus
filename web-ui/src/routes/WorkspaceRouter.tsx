@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { Workspace } from "@/layouts/workspace";
 import { PageLogin, PageWorkspace } from "@/pages";
 import { TestIconGallery } from "@/tests";
@@ -11,6 +11,9 @@ export const WorkspaceRouter = () => {
         <Route path="/icons" element={<TestIconGallery />} />
         <Route path="/login" element={<PageLogin />} />
         <Route path="/workspace" element={<Workspace />}>
+          <Route path="onboarding" element={<Outlet />}>
+            <Route path="*" element={<>Onboarding</>} />
+          </Route>
           <Route index element={<PageWorkspace />} />
           <Route path="home" element={<> Home </>} />
           <Route path="settings" element={<> settings </>} />

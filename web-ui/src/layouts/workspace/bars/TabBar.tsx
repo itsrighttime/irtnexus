@@ -7,6 +7,7 @@ import { TabDropdown } from "./TabDropdown";
 import type { onActionType, TabBarConfig, TabConfig } from "./TabBar.types";
 import { TabLabel } from "./TabLabel";
 import { TAB_TYPE, TAB_ORIENTATION } from "../const";
+import { isActive } from "../helper/isActive";
 
 type Props = {
   config: TabBarConfig;
@@ -30,12 +31,6 @@ export const TabBar = ({ config, onAction }: Props) => {
     if (position.startsWith("right")) return "left";
     return "";
   })();
-
-  const isActive = (route?: string) => {
-    if (!route) return false;
-
-    return location.pathname.includes(route);
-  };
 
   const props = {
     "data-border-side": side,

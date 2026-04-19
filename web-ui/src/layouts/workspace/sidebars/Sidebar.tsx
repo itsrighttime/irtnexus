@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 import { TabLabel } from "../bars/TabLabel";
 import type {
@@ -13,6 +12,7 @@ import type {
 import { TAB_TYPE } from "../const";
 import { IconButton } from "@/atoms";
 import { Icons } from "@/assets";
+import { isActive } from "../helper/isActive";
 
 type Props = {
   config: SidebarItem[];
@@ -24,8 +24,6 @@ const TAB = 8;
 const BASE_TAB = 4;
 
 export const Sidebar = ({ config, position, onAction }: Props) => {
-  const location = useLocation();
-
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
     config.forEach((item) => {
@@ -49,12 +47,6 @@ export const Sidebar = ({ config, position, onAction }: Props) => {
       return;
     }
     tab.onClick?.();
-  };
-
-  const isActive = (route?: string) => {
-    if (!route) return false;
-
-    return location.pathname.includes(route);
   };
 
   const isGroupActive = (group: SidebarGroup): boolean => {
