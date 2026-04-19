@@ -4,7 +4,7 @@
   align-items: center;
   padding: 10px;
   /* overflow-y: auto; */
-  min-height: 100vh;
+  /* min-height: 100vh; */
 }
 
 .stepHeader {
@@ -22,16 +22,9 @@
 
 .form {
   display: flex;
-  height: 100%;
-  width: 100%;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  background: #fff;
   padding: 1.5rem;
-  border-radius: 8px;
-  width: 450px;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .meta {

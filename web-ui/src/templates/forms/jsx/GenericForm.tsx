@@ -39,7 +39,6 @@ interface GenericFormProps {
   onSubmit?: (data: Record<string, any>) => void;
   submitLabel?: string;
   style?: CSSProperties;
-  settings?: Record<string, any>;
   scrollRef?: React.RefObject<HTMLElement> | null;
 }
 
@@ -48,7 +47,6 @@ export function GenericForm({
   onSubmit,
   submitLabel = "Submit",
   style,
-  settings = {},
   scrollRef = null,
 }: GenericFormProps) {
   const mode = config.mode ?? "single";
@@ -68,7 +66,7 @@ export function GenericForm({
     };
   }, []);
 
-  const { _settings, formStyle } = useFormSettings(settings, style);
+  const { _settings, formStyle } = useFormSettings(config.settings, style);
   const color = _settings.color;
 
   // --- Flatten all fields for initial state ---
@@ -209,7 +207,10 @@ export function GenericForm({
 
   // --- Render form ---
   return (
-    <div className={styles.formWrapper}>
+    <div
+      className={styles.formWrapper}
+      style={{ height: formStyle.height, width: formStyle.width }}
+    >
       <AlertContainer
         alertContainer={alertContainer}
         removeAlert={removeAlert}

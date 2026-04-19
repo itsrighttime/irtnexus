@@ -15,6 +15,7 @@ export interface FormSettings {
   [FPs.LABEL_COLOR]?: string;
   [FPs.BORDER]?: string;
   [FPs.BORDER_RADIUS]?: string;
+  [FPs.BOX_SHADOW]?: string;
 }
 
 // Step definition

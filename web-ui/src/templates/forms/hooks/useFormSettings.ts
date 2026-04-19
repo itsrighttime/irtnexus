@@ -1,17 +1,5 @@
 import { type CSSProperties } from "react";
-
-type FormSettings = {
-  showLabelAlways?: boolean;
-  gap?: string;
-  color?: string;
-  width?: string;
-  height?: string;
-  backgroundColor?: string;
-  textColor?: string;
-  labelColor?: string;
-  border?: string;
-  borderRadius?: string;
-};
+import type { FormSettings } from "../types/formConfig.types";
 
 type ResolvedFormSettings = Required<FormSettings>;
 
@@ -31,8 +19,9 @@ export function useFormSettings(
     backgroundColor: "var(--color-background)",
     textColor: "var(--color-text)",
     labelColor: "var(--color-text-muted)",
-    border: "none",
+    border: "1px solid var(--color-border)",
     borderRadius: "5px",
+    boxShadow: "var(--shadow-lg)",
     ...settings,
   };
 
@@ -42,6 +31,7 @@ export function useFormSettings(
     height: _settings.height,
     border: _settings.border,
     borderRadius: _settings.borderRadius,
+    boxShadow: _settings.boxShadow,
     ...style,
   };
 
