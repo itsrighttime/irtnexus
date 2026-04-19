@@ -88,11 +88,11 @@ export const useWorkspaceConfig = () => {
         defaultOpen: true,
         children: [
           {
-            id: "onboarding-p-requests",
+            id: "onboarding-p-request",
             type: "label",
             text: "Request Form",
             leftIcons: [{ icon: "editIcon" }],
-            route: "onboarding/requests",
+            route: "onboarding/request",
           },
           {
             id: "onboarding-p-application-status",
@@ -109,18 +109,18 @@ export const useWorkspaceConfig = () => {
             route: "onboarding/information-gathering",
           },
           {
-            id: "onboarding-p-negotiations",
+            id: "onboarding-p-negotiation",
             type: "label",
             text: "Negotiations",
             leftIcons: [{ icon: "NegotiationIcon" }],
-            route: "onboarding/negotiations",
+            route: "onboarding/negotiation",
           },
           {
             id: "onboarding-p-final-fit",
             type: "label",
-            text: "Final Fit Assessment",
+            text: "Final Fit-In Result",
             leftIcons: [{ icon: "FinalFitIcon" }],
-            route: "onboarding/final-fit",
+            route: "onboarding/final-fit-in",
           },
         ],
       },
