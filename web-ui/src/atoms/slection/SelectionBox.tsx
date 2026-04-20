@@ -3,9 +3,10 @@
 import React, { useState, useEffect, type CSSProperties } from "react";
 import styles from "./SelectionBox.module.css";
 import { Icons } from "@/assets/icons";
-import { Button } from "../button/Button";
+import { IconButton } from "../button/IconButton";
 
-const { tickSingleIcon } = Icons;
+const { cirlceFilledIcon, circleThikIcon, squareFilledIcon, squareIcon } =
+  Icons;
 
 interface Option {
   value: string | number;
@@ -94,19 +95,14 @@ export const SelectionBox: React.FC<SelectionBoxProps> = ({
     return disabled || option.disabled ? "#bbb9b9" : color;
   };
 
-  const setIconStyle = (option: Option) => {
+  const setIcon = (selected: boolean) => {
     return multiple
-      ? {
-          width: "25px",
-          height: "25px",
-          cursor: disabled || option.disabled ? "not-allowed" : "pointer",
-        }
-      : {
-          width: "25px",
-          height: "25px",
-          cursor: disabled || option.disabled ? "not-allowed" : "pointer",
-          borderRadius: "50%",
-        };
+      ? selected
+        ? squareFilledIcon
+        : squareIcon
+      : selected
+        ? cirlceFilledIcon
+        : circleThikIcon;
   };
 
   return (
@@ -131,12 +127,9 @@ export const SelectionBox: React.FC<SelectionBoxProps> = ({
             }`}
             style={customStyles.item}
           >
-            <Button
-              iconLeft={selectedOption ? tickSingleIcon : <></>}
+            <IconButton
+              icon={setIcon(selectedOption)}
               color={setIconColor(option)}
-              style={setIconStyle(option)}
-              iconOnly
-              variant="secondary"
               onClick={(e) => {
                 e.stopPropagation();
                 if (!disabled && !option.disabled) handleChange(option.value);
