@@ -8,7 +8,7 @@ interface CustomStyles {
   label?: CSSProperties;
 }
 
-interface SwitchProps {
+export interface SwitchProps {
   initialValue: boolean;
   setResult: (value: boolean) => void;
   color?: string;

@@ -2,7 +2,7 @@
 
 import { Dropdown } from "./Dropdown";
 
-type SingleDropdownProps = Omit<
+export type SingleDropdownProps = Omit<
   React.ComponentProps<typeof Dropdown>,
   "multiple" | "value" | "setResult"
 > & {
@@ -25,7 +25,7 @@ export const SingleDropdown: React.FC<SingleDropdownProps> = ({
   );
 };
 
-type MultipleDropdownProps = Omit<
+export type MultipleDropdownProps = Omit<
   React.ComponentProps<typeof Dropdown>,
   "multiple"
 >;

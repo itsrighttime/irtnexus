@@ -57,7 +57,7 @@ export const configData04: FormConfig = {
       label: "Upload Resume",
       multiple: false,
       maxFiles: 1,
-      maxSize: 2 * 1024 * 1024, // 2MB
+      maxSizeMb: 2 * 1024 * 1024, // 2MB
       allowedTypes: ["application/pdf"],
     },
     {

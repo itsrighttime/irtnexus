@@ -1,15 +1,15 @@
 import React from "react";
 import { TextInput } from "./TextInput";
-import type { TextInputProps } from "./TextInput.types";
+import type { TextInputVarientType } from "./TextInput.types";
 
 export const PasswordInput = React.forwardRef<
   HTMLInputElement,
-  Omit<TextInputProps, "type">
+  TextInputVarientType
 >((props, ref) => {
   return (
     <TextInput
       ref={ref}
-      type="password"
+      textType="password"
       autoComplete="current-password"
       {...props}
     />

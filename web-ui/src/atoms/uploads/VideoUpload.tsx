@@ -9,13 +9,13 @@ import { IconButton } from "../button/IconButton.js";
 
 const { crossIcon, resetFieldIcon } = Icons;
 
-interface VideoUploadProps {
+export interface VideoUploadProps {
   label?: string;
   color?: string;
   setResult: (file: File | null) => void;
   setIsFieldValid?: (isValid: boolean | null) => void;
   allowedTypes?: string[];
-  maxSizeMB?: number;
+  maxSizeMb?: number;
   preview?: boolean;
   width?: string;
   height?: string;
@@ -30,7 +30,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({
   setResult,
   setIsFieldValid = () => {},
   allowedTypes = ["video/mp4", "video/webm"],
-  maxSizeMB = 50,
+  maxSizeMb: maxSizeMB = 50,
   preview = false,
   width = "300px",
   height = "200px",

@@ -11,12 +11,14 @@ export interface TextInputProps
 
   variant?: "outline" | "filled" | "ghost" | "underline";
 
-  type?: "text" | "password" | "number" | "email" | "tel";
+  textType?: "text" | "password" | "number" | "email" | "tel";
 
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
 
   block?: boolean;
 
-  onChange?: (value: string) => void;
+  setResult?: (value: string) => void;
 }
+
+export type TextInputVarientType = Omit<TextInputProps, "type">;

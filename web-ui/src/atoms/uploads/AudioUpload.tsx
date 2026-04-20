@@ -5,13 +5,13 @@ import style from "./AudioUpload.module.css";
 import { AudioPlayer } from "./AudioPlayer";
 import React from "react";
 
-type AudioUploadProps = {
-  label: string;
+export type AudioUploadProps = {
+  label?: string;
   setResult: (file: File | null) => void;
   color?: string;
   setIsFieldValid?: (isValid: boolean) => void;
   allowedTypes?: string[];
-  maxSizeMB?: number;
+  maxSizeMb?: number;
   width?: string;
   height?: string;
   value?: string | File | Blob | null;
@@ -25,7 +25,7 @@ export const AudioUpload: React.FC<AudioUploadProps> = ({
   color,
   setIsFieldValid = () => {},
   allowedTypes = ["audio/mpeg", "audio/wav"],
-  maxSizeMB = 10,
+  maxSizeMb: maxSizeMB = 10,
   width = "300px",
   height = "100px",
   backendError = "",

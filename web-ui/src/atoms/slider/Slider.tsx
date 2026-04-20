@@ -9,7 +9,7 @@ const { minusIcon, plusIcon } = Icons;
 
 export type SliderValueSide = "none" | "left" | "right" | "top" | "bottom";
 
-interface SliderProps {
+export interface SliderProps {
   value?: number;
   setResult: (val: number) => void;
   color?: string;

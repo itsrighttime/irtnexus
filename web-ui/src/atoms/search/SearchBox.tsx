@@ -13,7 +13,7 @@ import { Button } from "../button/Button";
 
 const { searchIcon } = Icons;
 
-interface SearchBoxProps {
+export interface SearchBoxProps {
   suggestions: Suggestion[];
   setResult: (value: string | number) => void;
   color?: string;

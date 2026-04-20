@@ -1,8 +1,8 @@
 import type { JsonConfig, JsonValue } from "../../types/register.types";
 import { validationEngine as engine } from "../ValidationEngine";
-import { FORM_FIELDS_TYPE, type FormFieldType } from "../helper/fields";
+import { FORM_FIELDS_TYPE } from "../helper/fields";
 
-engine.register(FORM_FIELDS_TYPE.JSON as FormFieldType, {
+engine.register(FORM_FIELDS_TYPE.JSON, {
   validateConfig: (field: JsonConfig) => ({ valid: true }),
 
   validateResponse: (field: JsonConfig, value: JsonValue) => {

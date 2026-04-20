@@ -6,7 +6,7 @@ import styles from "./JsonField.module.css";
 import { getCommonCssVariables } from "./getCommonCssVariables";
 import { Button } from "../button/Button";
 
-type JsonFieldProps = {
+export type JsonFieldProps = {
   label?: string;
   setResult: (json: string) => void;
   setIsFieldValid: (isValid: boolean) => void;

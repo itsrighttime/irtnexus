@@ -4,9 +4,9 @@ import type {
 } from "../../types/register.types";
 import { validationEngine as engine } from "../ValidationEngine";
 import { FIELDS_PROPS as FPs } from "../helper/fields";
-import { FORM_FIELDS_TYPE, type FormFieldType } from "../helper/fields";
+import { FORM_FIELDS_TYPE} from "../helper/fields";
 
-engine.register(FORM_FIELDS_TYPE.TEXT_AREA as FormFieldType, {
+engine.register(FORM_FIELDS_TYPE.TEXT_AREA, {
   validateConfig: (field: TextAreaFieldConfig) => {
     const { [FPs.MIN_LENGTH]: MIN_LENGTH, [FPs.MAX_LENGTH]: MAX_LENGTH } =
       field;

@@ -1,17 +1,24 @@
 import type { FormField } from "../types/register.types.js";
-import { FIELDS_PROPS } from "./helper/fields.js";
+import { FIELDS_PROPS, type FormFieldType } from "./helper/fields.js";
 
 export interface ValidatorResult {
   valid: boolean;
   error?: string;
 }
 
-interface FieldValidator {
-  validateConfig: (field: FormField) => ValidatorResult;
-  validateResponse: (field: FormField, value: any) => ValidatorResult;
+type RegisteredFieldType = FormField["type"];
+
+interface FieldValidator<TField extends FormField = FormField, TValue = any> {
+  validateConfig: (field: TField) => ValidatorResult;
+  validateResponse: (field: TField, value: TValue) => ValidatorResult;
 }
 
-type ValidatorRegistry = Record<string, FieldValidator>;
+type ValidatorRegistry = Partial<{
+  [K in RegisteredFieldType]: FieldValidator<
+    Extract<FormField, { type: K }>,
+    any
+  >;
+}>;
 
 class ValidationEngine {
   private registry: ValidatorRegistry = {};
@@ -19,32 +26,37 @@ class ValidationEngine {
   /**
    * Register validators for a field type
    */
-  register(fieldType: string, validator: FieldValidator) {
-    this.registry[fieldType] = validator;
+  register<K extends RegisteredFieldType>(
+    fieldType: K,
+    validator: FieldValidator<Extract<FormField, { type: K }>>,
+  ) {
+    this.registry[fieldType] = validator as ValidatorRegistry[K];
   }
 
   /**
    * Validate a field's config
    */
   validateConfig(field: FormField): ValidatorResult {
-    const type = field[FIELDS_PROPS.TYPE];
-    const validator = this.registry[type];
+    const validator = this.registry[field.type];
+
     if (!validator) {
-      throw new Error(`No validator registered for field type: ${type}`);
+      throw new Error(`No validator for ${field.type}`);
     }
-    return validator.validateConfig(field);
+
+    return validator.validateConfig(field as any);
   }
 
   /**
    * Validate a field's response value
    */
-  validateResponse(field: FormField, value: any): ValidatorResult {
-    const type = field[FIELDS_PROPS.TYPE];
-    const validator = this.registry[type];
+  validateResponse(field: FormField, value: unknown): ValidatorResult {
+    const validator = this.registry[field.type];
+
     if (!validator) {
-      throw new Error(`No validator registered for field type: ${type}`);
+      throw new Error(`No validator for ${field.type}`);
     }
-    return validator.validateResponse(field, value);
+
+    return validator.validateResponse(field as any, value);
   }
 
   /**
@@ -57,7 +69,7 @@ class ValidationEngine {
   /**
    * Get a validator for a specific type
    */
-  get(type: string): FieldValidator | undefined {
+  get(type: RegisteredFieldType) {
     return this.registry[type];
   }
 }

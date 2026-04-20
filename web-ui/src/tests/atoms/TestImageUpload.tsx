@@ -17,7 +17,7 @@ export const TestImageUpload = () => {
         setResult={setImageFile}
         setIsFieldValid={setIsValid}
         allowedTypes={["image/jpeg", "image/png"]}
-        maxSizeMB={5}
+        maxSizeMb={5}
         requireSquare={true}
         previewBorderRadius="50%"
         width="250px"

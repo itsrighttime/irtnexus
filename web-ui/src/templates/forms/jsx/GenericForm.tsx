@@ -111,6 +111,7 @@ export function GenericForm({
   // --- Change handler ---
   const handleChange = useCallback(
     (name: string, value: any, isError?: boolean) => {
+      console.log("DDDD : ", { name, value, isError });
       if (!isError) setFormData((prev) => ({ ...prev, [name]: value }));
       setFormError((prev) => ({
         ...prev,

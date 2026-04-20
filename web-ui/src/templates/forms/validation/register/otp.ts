@@ -5,9 +5,9 @@ import type {
 } from "../../types/register.types";
 import { validationEngine as engine } from "../ValidationEngine";
 import { FIELDS_PROPS as FPs } from "../helper/fields";
-import { FORM_FIELDS_TYPE, type FormFieldType } from "../helper/fields";
+import { FORM_FIELDS_TYPE } from "../helper/fields";
 
-engine.register(FORM_FIELDS_TYPE.OTP as FormFieldType, {
+engine.register(FORM_FIELDS_TYPE.OTP, {
   validateConfig: (field: FormField) => {
     const field_ = field as OTPFieldConfig;
     const { [FPs.LENGTH]: length } = field_;

@@ -2,6 +2,7 @@
 export const FORM_FIELDS_TYPE = {
   DROPDOWN: "dropdown",
   MULTI_DROPDOWN: "multi-dropdown",
+  SIMPLE_DROPDOWN: "simple-dropdown",
   EMAIL: "email",
   PASSWORD: "password",
   MOBILE: "mobile",
@@ -65,7 +66,7 @@ const IS_BORDER = "isBorder";
 const MAX_FILES = "maxFiles";
 const ALLOWED_TYPES = "allowedTypes";
 const HEIGHT = "height";
-const MAX_SIZE_MB = "maxSizeMB";
+const MAX_SIZE_MB = "maxSizeMb";
 const REQUIRE_SQUARE = "requireSquare";
 const PREVIEW_BORDER_RADIUS = "previewBorderRadius";
 const PREVIEW = "preview";
@@ -136,6 +137,7 @@ export type CoreFieldsPropsMap = Record<FormFieldType, CoreFieldProps>;
 
 export const CORE_FIELDS_PROPS: CoreFieldsPropsMap = {
   [FORM_FIELDS_TYPE.DROPDOWN]: { compulsory: [OPTIONS], optional: [] },
+  [FORM_FIELDS_TYPE.SIMPLE_DROPDOWN]: { compulsory: [OPTIONS], optional: [] },
   [FORM_FIELDS_TYPE.MULTI_DROPDOWN]: {
     compulsory: [OPTIONS],
     optional: [MULTIPLE],

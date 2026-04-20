@@ -1,9 +1,9 @@
 import type { VideoFieldConfig, VideoFile } from "../../types/register.types";
 import { validationEngine as engine } from "../ValidationEngine";
 import { FIELDS_PROPS as FPs } from "../helper/fields";
-import { FORM_FIELDS_TYPE, type FormFieldType } from "../helper/fields";
+import { FORM_FIELDS_TYPE } from "../helper/fields";
 
-engine.register(FORM_FIELDS_TYPE.VIDEO as FormFieldType, {
+engine.register(FORM_FIELDS_TYPE.VIDEO, {
   validateConfig: (field: VideoFieldConfig) => {
     const {
       [FPs.MAX_SIZE_MB]: MAX_SIZE_MB,

@@ -4,9 +4,9 @@ import type {
 } from "../../types/register.types";
 import { validationEngine as engine } from "../ValidationEngine";
 import { FIELDS_PROPS as FPs } from "../helper/fields";
-import { FORM_FIELDS_TYPE, type FormFieldType } from "../helper/fields";
+import { FORM_FIELDS_TYPE} from "../helper/fields";
 
-engine.register(FORM_FIELDS_TYPE.TIME as FormFieldType, {
+engine.register(FORM_FIELDS_TYPE.TIME, {
   validateConfig: (field: TimeFieldConfig) => {
     // Currently, no extra validation for TIME config
     return { valid: true };

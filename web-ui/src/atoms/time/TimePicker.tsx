@@ -5,7 +5,7 @@ import styles from "./TimePicker.module.css";
 import type { BaseProps } from "@/types";
 import { CustomDropdown } from "./CustomDropdown";
 
-interface TimePickerProps extends BaseProps {
+export interface TimePickerProps extends BaseProps {
   label?: string;
   value?: string;
   setResult: (time: string) => void;

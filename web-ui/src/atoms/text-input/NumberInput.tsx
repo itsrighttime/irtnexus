@@ -1,17 +1,17 @@
 import React from "react";
 import { TextInput } from "./TextInput";
-import type { TextInputProps } from "./TextInput.types";
+import type { TextInputVarientType } from "./TextInput.types";
 
 export const NumberInput = React.forwardRef<
   HTMLInputElement,
-  Omit<TextInputProps, "type">
+  TextInputVarientType
 >((props, ref) => {
   return (
     <TextInput
       ref={ref}
-      type="number"
-      inputMode="email"
-      autoComplete="email"
+      textType="number"
+      inputMode="numeric"
+      autoComplete="cc-number"
       {...props}
     />
   );

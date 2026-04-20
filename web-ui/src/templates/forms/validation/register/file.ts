@@ -1,10 +1,10 @@
-import type { ImageFieldConfig, ImageValue } from "../../types/register.types";
+import type { FileFieldConfig, ImageFieldConfig, ImageValue } from "../../types/register.types";
 import { validationEngine as engine } from "../ValidationEngine";
 import { FIELDS_PROPS as FPs } from "../helper/fields";
 import { FORM_FIELDS_TYPE, type FormFieldType } from "../helper/fields";
 
-engine.register(FORM_FIELDS_TYPE.FILE as FormFieldType, {
-  validateConfig: (field: ImageFieldConfig) => {
+engine.register(FORM_FIELDS_TYPE.FILE, {
+  validateConfig: (field: FileFieldConfig) => {
     // Destructure for clarity
     const MAX_SIZE_MB = field[FPs.MAX_SIZE_MB];
     const ALLOWED_TYPES = field[FPs.ALLOWED_TYPES];
@@ -23,7 +23,7 @@ engine.register(FORM_FIELDS_TYPE.FILE as FormFieldType, {
     return { valid: true };
   },
 
-  validateResponse: (field: ImageFieldConfig, value: ImageValue) => {
+  validateResponse: (field: FileFieldConfig, value: ImageValue) => {
     if (typeof value !== "object" || !value) {
       return { valid: false, error: "Value must be an image file" };
     }
@@ -31,7 +31,7 @@ engine.register(FORM_FIELDS_TYPE.FILE as FormFieldType, {
     // Destructure config
     const MAX_SIZE_MB = field[FPs.MAX_SIZE_MB];
     const ALLOWED_TYPES = field[FPs.ALLOWED_TYPES];
-    const REQUIRE_SQUARE = field[FPs.REQUIRE_SQUARE];
+    // const REQUIRE_SQUARE = field[FPs.REQUIRE_SQUARE];
 
     if (MAX_SIZE_MB !== undefined && value.size > MAX_SIZE_MB * 1024 * 1024) {
       return {
@@ -44,9 +44,9 @@ engine.register(FORM_FIELDS_TYPE.FILE as FormFieldType, {
       return { valid: false, error: `Image type ${value.type} not allowed` };
     }
 
-    if (REQUIRE_SQUARE && value.width !== value.height) {
-      return { valid: false, error: "Image must be square" };
-    }
+    // if (REQUIRE_SQUARE && value.width !== value.height) {
+    //   return { valid: false, error: "Image must be square" };
+    // }
 
     return { valid: true };
   },

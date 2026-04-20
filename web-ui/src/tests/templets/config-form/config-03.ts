@@ -110,7 +110,7 @@ export const config03: FormConfig = {
       label: "Upload Resume / Documents",
     //   multiple: true,
     //   maxFiles: 5,
-      maxSizeMB: 2 * 1024 * 1024, // 2MB
+      maxSizeMb: 2 * 1024 * 1024, // 2MB
       allowedTypes: ["application/pdf", "image/jpeg", "image/png"],
     },
     {
@@ -118,7 +118,7 @@ export const config03: FormConfig = {
       type: FORM_FIELDS_TYPE.AUDIO,
       label: "Upload Audio",
     //   maxFiles: 5,
-      maxSizeMB: 2 * 1024 * 1024, // 2MB
+      maxSizeMb: 2 * 1024 * 1024, // 2MB
     },
     {
       name: "video",

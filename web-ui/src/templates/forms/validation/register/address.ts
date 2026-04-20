@@ -3,13 +3,13 @@ import type {
   AddressValue,
 } from "../../types/register.types";
 import { FIELDS_PROPS as FPs } from "../helper/fields";
-import { FORM_FIELDS_TYPE, type FormFieldType } from "../helper/fields";
+import { FORM_FIELDS_TYPE} from "../helper/fields";
 import {
   validationEngine as engine,
   type ValidatorResult,
 } from "../ValidationEngine";
 
-engine.register(FORM_FIELDS_TYPE.ADDRESS as FormFieldType, {
+engine.register(FORM_FIELDS_TYPE.ADDRESS, {
   validateConfig: (field: AddressFieldConfig): ValidatorResult => {
     const flags = [
       FPs.IS_HOUSE,

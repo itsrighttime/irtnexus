@@ -7,13 +7,13 @@ import { IconButton } from "../button/IconButton";
 
 const { crossIcon, resetFieldIcon } = Icons;
 
-interface ImageUploadProps {
+export interface ImageUploadProps {
   label?: string;
   setResult: (file: File | null) => void;
   color?: string;
   setIsFieldValid?: (isValid: boolean) => void;
   allowedTypes?: string[];
-  maxSizeMB?: number;
+  maxSizeMb?: number;
   requireSquare?: boolean;
   width?: string;
   height?: string;
@@ -29,7 +29,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   color,
   setIsFieldValid = () => {},
   allowedTypes = ["image/jpeg", "image/png", "image/gif"],
-  maxSizeMB = 5,
+  maxSizeMb: maxSizeMB = 5,
   requireSquare = true,
   width = "300px",
   height = "300px",

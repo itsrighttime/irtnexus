@@ -7,7 +7,7 @@ import { Button } from "../button/Button";
 
 const { minusIcon, plusIcon } = Icons;
 
-interface StepperProps {
+export interface StepperProps {
   value?: number;
   setResult: (val: number) => void;
   color?: string;

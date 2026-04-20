@@ -12,7 +12,7 @@ export type DropdownItem = {
   description?: string;
 };
 
-type DropdownSimpleProps = {
+export type DropdownSimpleProps = {
   items: DropdownItem[];
   onSelect?: (key: string | number) => void;
   isOpen: boolean;

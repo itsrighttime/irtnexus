@@ -1,7 +1,7 @@
 import React from "react";
 import { TextInput } from "./TextInput";
 
-type AddressValue = {
+export type AddressValue = {
   house?: string;
   street?: string;
   city?: string;
@@ -12,9 +12,9 @@ type AddressValue = {
   landmark?: string;
 };
 
-type AddressInputProps = {
+export type AddressInputProps = {
   value?: AddressValue;
-  onChange?: (value: AddressValue) => void;
+  setResult?: (value: AddressValue) => void;
 
   isHouse?: boolean;
   isStreet?: boolean;
@@ -31,7 +31,7 @@ type AddressInputProps = {
 
 export const AddressInput: React.FC<AddressInputProps> = ({
   value = {},
-  onChange,
+  setResult,
 
   isHouse = false,
   isStreet = false,
@@ -47,7 +47,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
 }) => {
   const updateField = (key: keyof AddressValue, val: string) => {
     const updated = { ...value, [key]: val };
-    onChange?.(updated);
+    setResult?.(updated);
   };
 
   return (
@@ -115,7 +115,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
       {isPostal && (
         <TextInput
           label="Postal Code"
-          type="number"
+          textType="number"
           value={value.postal || ""}
           onChange={(val) => updateField("postal", val)}
           disabled={disabled}

@@ -9,7 +9,7 @@ import {
 } from "react";
 import styles from "./TextArea.module.css";
 
-type TextAreaProps = {
+export type TextAreaProps = {
   label?: string;
   value?: string;
   setResult: (value: string) => void;

@@ -116,21 +116,21 @@ const CalendarInput: React.FC<CalendarInputProps> = ({
 };
 
 // Picker prop type
-interface PickerProp extends Omit<CalendarInputProps, "mode"> {}
+export interface CalendarPickerProp extends Omit<CalendarInputProps, "mode"> {}
 
 // Date Picker
-export const DatePicker = (props: PickerProp) => (
+export const DatePicker = (props: CalendarPickerProp) => (
   <CalendarInput {...props} mode="date" />
 );
-export const DayPicker = (props: PickerProp) => (
+export const DayPicker = (props: CalendarPickerProp) => (
   <CalendarInput {...props} mode="day" />
 );
-export const MonthPicker = (props: PickerProp) => (
+export const MonthPicker = (props: CalendarPickerProp) => (
   <CalendarInput {...props} mode="month" />
 );
-export const MonthYearPicker = (props: PickerProp) => (
+export const MonthYearPicker = (props: CalendarPickerProp) => (
   <CalendarInput {...props} mode="month-year" />
 );
-export const YearPicker = (props: PickerProp) => (
+export const YearPicker = (props: CalendarPickerProp) => (
   <CalendarInput {...props} mode="year" />
 );

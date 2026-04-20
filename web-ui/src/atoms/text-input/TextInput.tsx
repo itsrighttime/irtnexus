@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import styles from "./TextInput.module.css";
-import type { TextInputProps } from "./TextInput.types";
+import type { TextInputProps, TextInputVarientType } from "./TextInput.types";
 import { Icons } from "@/assets/icons";
 import { Button } from "../button/Button";
+
+export type { TextInputVarientType, TextInputProps };
 
 export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
   (
@@ -27,28 +29,32 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
       tooltip,
       ariaLabel,
       responsive,
-      type,
-      onChange,
+      textType,
+      setResult,
+      label,
+      placeholder,
       ...rest
     },
     ref,
   ) => {
     const [showPassword, setShowPassword] = useState(false);
+    const [enterText, setEnterText] = useState("");
     const isDisabled = disabled || loading;
+
+    const label_ = rest.required ? `${label} *` : label;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (isDisabled) return;
-      onChange?.(e.target.value);
+      setEnterText(e.target.value);
+      setResult?.(e.target.value);
     };
 
-    const isPassword = type === "password";
+    const isPassword = textType === "password";
     const inputType = isPassword
       ? showPassword
         ? "text"
         : "password"
-      : type === "number"
-        ? "number"
-        : "text";
+      : textType;
 
     const cssVariable = {
       "--width": width,
@@ -61,6 +67,9 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
         style={{ ...style, ...cssVariable }}
         data-responsive={responsive || undefined}
       >
+        {label_ && enterText.length > 0 && (
+          <p className={styles.label}>{label_}</p>
+        )}
         <div
           className={clsx(
             styles.inputContainer,
@@ -89,6 +98,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
             aria-busy={loading}
             title={tooltip}
             onChange={handleChange}
+            placeholder={label_}
             {...rest}
           />
 

@@ -1,11 +1,9 @@
 import type { ImageFieldConfig, ImageValue } from "../../types/register.types";
 import { validationEngine as engine } from "../ValidationEngine";
 import { FIELDS_PROPS as FPs } from "../helper/fields";
-import { FORM_FIELDS_TYPE, type FormFieldType } from "../helper/fields";
+import { FORM_FIELDS_TYPE} from "../helper/fields";
 
-
-
-engine.register(FORM_FIELDS_TYPE.IMAGE as FormFieldType, {
+engine.register(FORM_FIELDS_TYPE.IMAGE, {
   validateConfig: (field: ImageFieldConfig) => {
     // Destructure config properties
     const {

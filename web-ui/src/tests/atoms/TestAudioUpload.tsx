@@ -28,7 +28,7 @@ export const TestAudioUpload = () => {
         setIsFieldValid={setIsValid}
         color="#52C9BD"
         allowedTypes={["audio/mpeg", "audio/wav"]}
-        maxSizeMB={50}
+        maxSizeMb={50}
         width="400px"
         height="120px"
         required

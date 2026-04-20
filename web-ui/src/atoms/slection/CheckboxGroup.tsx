@@ -18,7 +18,7 @@ interface CustomStyles {
   label?: React.CSSProperties;
 }
 
-interface CheckboxGroupProps {
+export interface CheckboxGroupProps {
   options?: OptionType[];
   initialSelectedValues?: Array<string | number>;
   setResult: (value: Array<string | number> | string | number | null) => void;

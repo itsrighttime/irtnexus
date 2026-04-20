@@ -49,7 +49,7 @@ export const configData02: FormConfig = {
       label: "Upload Portfolio",
       multiple: false,
       maxFiles: 1,
-      maxSize: 5 * 1024 * 1024, // 5MB
+      maxSizeMb: 5 * 1024 * 1024, // 5MB
       allowedTypes: ["application/pdf"],
       required: true,
       conditional: {
@@ -82,7 +82,7 @@ export const configData02: FormConfig = {
       label: "Upload Resume / Documents",
       multiple: true,
       maxFiles: 1,
-      maxSize: 2 * 1024 * 1024, // 2MB
+      maxSizeMb: 2 * 1024 * 1024, // 2MB
       allowedTypes: ["application/pdf", "image/jpeg", "image/png"],
     },
   ],

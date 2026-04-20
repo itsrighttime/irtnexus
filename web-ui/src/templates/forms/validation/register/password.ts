@@ -1,8 +1,8 @@
 import type { PasswordConfig, PasswordValue } from "../../types/register.types";
-import { FORM_FIELDS_TYPE, type FormFieldType } from "../helper/fields";
+import { FORM_FIELDS_TYPE } from "../helper/fields";
 import { validationEngine as engine } from "../ValidationEngine";
 
-engine.register(FORM_FIELDS_TYPE.PASSWORD as FormFieldType, {
+engine.register(FORM_FIELDS_TYPE.PASSWORD, {
   validateConfig: (field: PasswordConfig) => ({ valid: true }),
 
   validateResponse: (field: PasswordConfig, value: PasswordValue) => {

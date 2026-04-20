@@ -25,7 +25,7 @@ export const TestVideoUpload = () => {
         setResult={setVideoFile}
         setIsFieldValid={setIsValid}
         allowedTypes={["video/mp4", "video/webm"]}
-        maxSizeMB={10} // limit to 10MB for testing
+        maxSizeMb={10} // limit to 10MB for testing
         preview={true}
         width="480px"
         height="270px"

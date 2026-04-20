@@ -1,26 +1,27 @@
 import React from "react";
 import { TextInput } from "./TextInput";
-import type { TextInputProps } from "./TextInput.types";
+import type { TextInputVarientType } from "./TextInput.types";
 import { Icons } from "@/assets/icons";
 
 export const MobileInput = React.forwardRef<
   HTMLInputElement,
-  Omit<TextInputProps, "type">
->(({ onChange, ...props }, ref) => {
+  TextInputVarientType
+>(({ setResult, ...props }, ref) => {
   const handleChange = (value: string) => {
     // Simple cleanup: allow only digits and +
     const cleaned = value.replace(/[^\d+]/g, "");
-    onChange?.(cleaned);
+
+    setResult?.(cleaned);
   };
 
   return (
     <TextInput
       ref={ref}
-      type="tel"
+      textType="tel"
       inputMode="tel"
       autoComplete="tel"
       iconLeft={Icons.callIcon}
-      onChange={handleChange}
+      setResult={handleChange}
       {...props}
     />
   );

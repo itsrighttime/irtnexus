@@ -4,6 +4,7 @@
   gap: var(--spacing-xs);
   width: var(--width);
   height: var(--height);
+  position: relative;
 }
 
 .block {
@@ -11,8 +12,14 @@
 }
 
 .label {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
+  position: absolute;
+  top: -9px;
+  left: 9px;
+  background-color: var(--color-background);
+  padding: 0 var(--spacing-xs);
+  color: var(--color-gray5);
 }
 
 /* Container */

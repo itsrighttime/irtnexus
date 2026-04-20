@@ -5,7 +5,7 @@ import style from "./OtpField.module.css";
 import { logger, apiCaller } from "core-ui";
 import type { BaseProps } from "@/types";
 
-interface OtpFieldProps extends BaseProps {
+export interface OtpFieldProps extends BaseProps {
   length?: number;
   setResult: (otp: string | null) => void;
   verifcationEndpoint?: string;

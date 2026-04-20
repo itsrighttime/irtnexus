@@ -21,7 +21,7 @@ export const TestFileUpload: React.FC = () => {
         }}
         setIsFieldValid={setIsValid}
         allowedTypes={["image/png", "image/jpeg", "application/pdf"]}
-        maxSize={5} // 5 MB
+        maxSizeMb={5} // 5 MB
         multiple
         maxFiles={3}
         required

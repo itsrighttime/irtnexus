@@ -9,14 +9,14 @@ import { IconButton } from "../button/IconButton";
 
 const { crossIcon, resetFieldIcon } = Icons;
 
-interface FileUploadProps {
+export interface FileUploadProps {
   value?: File[];
   label?: string;
   setResult: (files: File[]) => void;
   color?: string;
   setIsFieldValid?: (isValid: boolean) => void;
   allowedTypes?: string[];
-  maxSize?: number; // in MB
+  maxSizeMb?: number; // in MB
   multiple?: boolean;
   maxFiles?: number;
   width?: string;
@@ -32,7 +32,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   color,
   setIsFieldValid = () => {},
   allowedTypes = [],
-  maxSize = Infinity,
+  maxSizeMb: maxSize = Infinity,
   multiple = false,
   maxFiles = Infinity,
   width = "300px",

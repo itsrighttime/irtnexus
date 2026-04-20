@@ -17,7 +17,7 @@ interface CustomStyles {
   label?: React.CSSProperties;
 }
 
-interface RadioGroupProps {
+export interface RadioGroupProps {
   options: OptionType[];
   initialSelectedValue?: string | number;
   setResult: (value: string | number | null) => void;

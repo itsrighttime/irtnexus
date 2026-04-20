@@ -26,4 +26,5 @@ export type OmitProp =
   | "type"
   | "height"
   | "value"
+  | "name"
   | "width";

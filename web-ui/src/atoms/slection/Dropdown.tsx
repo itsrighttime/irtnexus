@@ -10,7 +10,7 @@ import { getFittedText } from "./helper/getFittedText";
 
 const { arrowDownIcon, arrowUpIcon } = Icons;
 
-type DropdownProps = {
+export type DropdownProps = {
   options?: string[];
   multiple?: boolean;
   placeholder?: string;

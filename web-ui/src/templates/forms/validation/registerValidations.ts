@@ -2,7 +2,7 @@ import "./register/address";
 import "./register/audio";
 import "./register/checkbox";
 import "./register/color";
-import "./register/date";
+import "./register/calendar-date";
 import "./register/dropdown";
 import "./register/email";
 import "./register/file";

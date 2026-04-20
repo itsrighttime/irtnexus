@@ -1,8 +1,8 @@
 import type { ColorConfig, ColorValue } from "../../types/register.types";
 import { validationEngine as engine } from "../ValidationEngine";
-import { FORM_FIELDS_TYPE, type FormFieldType } from "../helper/fields";
+import { FORM_FIELDS_TYPE} from "../helper/fields";
 
-engine.register(FORM_FIELDS_TYPE.COLOR as FormFieldType, {
+engine.register(FORM_FIELDS_TYPE.COLOR, {
   validateConfig: (field: ColorConfig) => ({ valid: true }),
 
   validateResponse: (field: ColorConfig, value: ColorValue) => {
