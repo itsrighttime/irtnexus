@@ -151,6 +151,7 @@ export function GenericForm({
   if (_isValidFormStructure) {
     const schema = configToSchema(config);
     const { valid, errors } = validateSchema(schema);
+    if (!valid) console.error("DDDD : ", errors);
     validStructure = valid;
   }
 

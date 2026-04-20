@@ -37,7 +37,7 @@ export function resolveProps(
   });
 
   // inject onChange globally
-  resolved.onChange = (value: any) => onChange(field.name, value);
+  resolved.setResult = (value: any) => onChange(field.name, value);
 
   return resolved;
 }
