@@ -1,3 +1,4 @@
+import type { ResolvedFormSettings } from "../hooks/useFormSettings";
 import type { PropConfig } from "./types";
 
 type FormValues = Record<string, any>;
@@ -7,6 +8,7 @@ export function resolveProps(
   values: FormValues,
   config: PropConfig,
   onChange: (name: string, value: any) => void,
+  settings: ResolvedFormSettings,
 ): Record<string, any> {
   const resolved: Record<string, any> = {};
 
@@ -38,6 +40,7 @@ export function resolveProps(
 
   // inject onChange globally
   resolved.setResult = (value: any) => onChange(field.name, value);
+  resolved.width = settings.width;
 
   return resolved;
 }

@@ -9,6 +9,7 @@ import { isConditional } from "../validation/isConditional";
 import { RepeatableGroup } from "./RepeatableGroup";
 import { createFieldUIConfig } from "../registry/createFieldUIConfig";
 import { resolveProps } from "../registry/resolveProps";
+import type { ResolvedFormSettings } from "../hooks/useFormSettings";
 
 const FIELD_UI_CONFIG = createFieldUIConfig();
 
@@ -16,7 +17,7 @@ interface FieldRendererProps {
   field: FormField;
   value: Record<string, any>;
   onChange: (name: string, value: any, isError?: boolean) => void;
-  settings: Record<string, any>;
+  settings: ResolvedFormSettings;
 }
 
 export function FieldRenderer({
@@ -55,7 +56,7 @@ export function FieldRenderer({
   }
 
   // Props resolution
-  const props = resolveProps(field, value, uiConfig.props, onChange);
+  const props = resolveProps(field, value, uiConfig.props, onChange, settings);
 
   return <Component {...props} />;
 }

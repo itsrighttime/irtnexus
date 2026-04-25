@@ -1,7 +1,7 @@
 import { type CSSProperties } from "react";
 import type { FormSettings } from "../types/formConfig.types";
 
-type ResolvedFormSettings = Required<FormSettings>;
+export type ResolvedFormSettings = Required<FormSettings>;
 
 export function useFormSettings(
   settings: FormSettings = {},

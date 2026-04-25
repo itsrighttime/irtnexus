@@ -7,6 +7,8 @@ export const BASE_PROP_RULES: PropConfig = {
   name: FPs.NAME,
   label: FPs.LABEL,
   required: FPs.REQUIRED,
+  width: FPs.WIDTH,
+  color: FPs.COLOR,
 
   value: {
     fromState: true,

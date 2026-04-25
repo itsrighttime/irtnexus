@@ -8,13 +8,9 @@ import { Icons } from "@/assets/icons";
 import { useInitializeForm } from "../hooks/useInitializeForm";
 import { Button } from "@/atoms";
 import type { FormField } from "../types/register.types";
+import type { ResolvedFormSettings } from "../hooks/useFormSettings";
 
 const { crossIcon } = Icons;
-
-interface RepeatableGroupSettings {
-  color?: string;
-  [key: string]: any;
-}
 
 // Each repeated item can have _uid plus arbitrary dynamic fields
 interface RepeatableItem {
@@ -26,7 +22,7 @@ interface RepeatableGroupProps {
   field: FormField;
   values?: RepeatableItem[];
   onChange: (updatedValues: RepeatableItem[], isError?: boolean) => void;
-  settings: RepeatableGroupSettings;
+  settings: ResolvedFormSettings;
 }
 
 /**
@@ -81,10 +77,13 @@ export function RepeatableGroup({
   const color = settings.color;
 
   return (
-    <div className={styles.repeatableGroup}>
+    <div className={styles.repeatableGroup} style={{ width: settings.width }}>
       <label>{field[FIELDS_PROPS.LABEL]}</label>
       {itemsWithIds.map((item, idx) => (
-        <div key={item._uid} className={styles.repeatableItem}>
+        <div
+          key={item._uid}
+          className={styles.repeatableItem}
+        >
           {values.length > 1 && (
             <div className={styles.repeatableCross}>
               <Button
@@ -108,7 +107,7 @@ export function RepeatableGroup({
               onChange={(name, val, isError) =>
                 handleItemChange(idx, name, val, isError)
               }
-              settings={settings}
+              settings={{ ...settings, width: "100%" }}
             />
           ))}
         </div>

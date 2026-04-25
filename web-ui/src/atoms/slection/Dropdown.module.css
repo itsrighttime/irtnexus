@@ -8,12 +8,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 7px;
-  border: 1px solid var(--color);
+  border: 1px solid var(--color-border);
+
   border-radius: 5px;
   cursor: pointer;
 }
 
 .dropdownHeader.open {
+  border-color: var(--color);
   border-bottom: none;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;

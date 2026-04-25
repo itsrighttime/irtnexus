@@ -1,9 +1,9 @@
 "use client";
 
-import { Dropdown } from "./Dropdown";
+import { Dropdown, type DropdownProps } from "./Dropdown";
 
 export type SingleDropdownProps = Omit<
-  React.ComponentProps<typeof Dropdown>,
+  DropdownProps,
   "multiple" | "value" | "setResult"
 > & {
   value?: string;
@@ -25,10 +25,7 @@ export const SingleDropdown: React.FC<SingleDropdownProps> = ({
   );
 };
 
-export type MultipleDropdownProps = Omit<
-  React.ComponentProps<typeof Dropdown>,
-  "multiple"
->;
+export type MultipleDropdownProps = Omit<DropdownProps, "multiple">;
 
 export const MultipleDropdown: React.FC<MultipleDropdownProps> = (props) => {
   return <Dropdown {...props} multiple />;
