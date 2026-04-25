@@ -33,8 +33,6 @@ export function useFormSettings(
 
   const formStyle: CSSProperties = {
     gap: _settings.gap,
-    width: _settings.width,
-    height: _settings.height,
     border: _settings.border,
     borderRadius: _settings.borderRadius,
     boxShadow: _settings.boxShadow,

@@ -2,6 +2,7 @@ import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { Workspace } from "@/layouts/workspace";
 import { PageLogin, PagePartnershipForm, PageWorkspace } from "@/pages";
 import { TestIconGallery } from "@/tests";
+import { Test } from "@/Test";
 
 export const WorkspaceRouter = () => {
   return (
@@ -9,6 +10,7 @@ export const WorkspaceRouter = () => {
       <Routes>
         <Route path="/" element={<Navigate to="/workspace" replace />} />
         <Route path="/icons" element={<TestIconGallery />} />
+        <Route path="/test" element={<Test />} />
         <Route path="/login" element={<PageLogin />} />
         <Route path="/workspace" element={<Workspace />}>
           <Route path="partnership" element={<Outlet />}>

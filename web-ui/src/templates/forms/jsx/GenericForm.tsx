@@ -222,10 +222,7 @@ export function GenericForm({
     );
   } else
     content = (
-      <div
-        className={styles.formWrapper}
-        style={{ height: formStyle.height, width: formStyle.width }}
-      >
+      <div style={{ height: "100%", width: "100%" }}>
         <AlertContainer
           alertContainer={alertContainer}
           removeAlert={removeAlert}

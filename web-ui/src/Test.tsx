@@ -21,9 +21,9 @@ export function Test() {
   return (
     <>
       {/* <TestTabs /> */}
-      <TestLayout />
+      {/* <TestLayout /> */}
       {/* <TestTable /> */}
-      {/* <TestGenericForm /> */}
+      <TestGenericForm />
       {/* <TestMarkdown />
       <TestFileUpload />
       <TestImageUpload />
