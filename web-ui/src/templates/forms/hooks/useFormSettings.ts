@@ -22,6 +22,12 @@ export function useFormSettings(
     border: "1px solid var(--color-border)",
     borderRadius: "5px",
     boxShadow: "var(--shadow-lg)",
+    successPage: {
+      show: false,
+      message: "Your form has been submitted successfully!",
+      label: "Go to Home",
+      href: "/",
+    },
     ...settings,
   };
 

@@ -111,7 +111,6 @@ export function GenericForm({
   // --- Change handler ---
   const handleChange = useCallback(
     (name: string, value: any, isError?: boolean) => {
-      console.log("DDDD : ", { name, value, isError });
       if (!isError) setFormData((prev) => ({ ...prev, [name]: value }));
       setFormError((prev) => ({
         ...prev,
@@ -156,8 +155,10 @@ export function GenericForm({
     validStructure = valid;
   }
 
+  let content;
+
   if (!validStructure) {
-    return (
+    content = (
       <div className={styles.formWrapper}>
         <SuccessMessage
           color="var(--color-error)"
@@ -167,21 +168,19 @@ export function GenericForm({
         />
       </div>
     );
-  }
-
-  // --- Loading / submitting states ---
-  if (formStatus === FORM_STATUS.submitting) {
-    return (
+  } else if (formStatus === FORM_STATUS.submitting) {
+    content = (
       <div className={styles.formWrapper}>
         <div className={styles.loading}>
           <Loading color={color} text="Submitting..." showText />
         </div>
       </div>
     );
-  }
-
-  if (formStatus === FORM_STATUS.error || formStatus === FORM_STATUS.failed) {
-    return (
+  } else if (
+    formStatus === FORM_STATUS.error ||
+    formStatus === FORM_STATUS.failed
+  ) {
+    content = (
       <div className={styles.formWrapper}>
         <ErrorList
           errors={formStatusError}
@@ -193,21 +192,91 @@ export function GenericForm({
         />
       </div>
     );
-  }
-
-  if (formStatus === FORM_STATUS.submitted) {
-    return (
+  } else if (
+    formStatus === FORM_STATUS.submitted &&
+    _settings.successPage.show
+  ) {
+    content = (
       <div className={styles.formWrapper}>
         <SuccessMessage
           color={color}
-          message="Your form has been submitted successfully!"
-          onHomeClick={() => (window.location.href = "/")}
+          message={_settings.successPage.message}
+          label={_settings.successPage.label}
+          onHomeClick={() =>
+            (window.location.href = _settings.successPage.href || "/")
+          }
         />
       </div>
     );
-  }
+  } else
+    content = (
+      <div
+        className={styles.formWrapper}
+        style={{ height: formStyle.height, width: formStyle.width }}
+      >
+        <AlertContainer
+          alertContainer={alertContainer}
+          removeAlert={removeAlert}
+        />
 
-  // --- Render form ---
+        <form className={styles.form} style={formStyle} onSubmit={handleSubmit}>
+          {/* Form title and description */}
+          <div className={styles.stepHeader}>
+            <h3>{config[FPs.TITLE]}</h3>
+            {config[FPs.DESCRIPTION] && <p>{config[FPs.DESCRIPTION]}</p>}
+          </div>
+
+          {/* Multi-step current step title & description */}
+          {config.mode === "multi" && (
+            <div className={styles.stepHeader}>
+              <h3>
+                {
+                  (config as MultiStepFormConfig)[FPs.STEP]?.[currentStep]?.[
+                    FPs.TITLE
+                  ]
+                }
+              </h3>
+              {(config as MultiStepFormConfig)[FPs.STEP]?.[currentStep]?.[
+                FPs.DESCRIPTION
+              ] && (
+                <p>
+                  {
+                    (config as MultiStepFormConfig)[FPs.STEP]?.[currentStep]?.[
+                      FPs.DESCRIPTION
+                    ]
+                  }
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Render fields */}
+          {fieldsToRender.map((field: FormField) => (
+            <FieldRenderer
+              key={field[FPs.NAME]}
+              field={field}
+              value={formData}
+              onChange={handleChange}
+              settings={_settings}
+            />
+          ))}
+
+          {/* Footer buttons */}
+          <FormFooter
+            mode={mode}
+            config={config}
+            currentStep={currentStep}
+            color={color}
+            submitLabel={submitLabel}
+            next={next}
+            back={back}
+            handleSubmit={handleSubmit}
+            clearFormPersistence={clearFormPersistence}
+          />
+        </form>
+      </div>
+    );
+
   return (
     <div
       className={styles.formWrapper}
@@ -218,61 +287,7 @@ export function GenericForm({
         removeAlert={removeAlert}
       />
 
-      <form className={styles.form} style={formStyle} onSubmit={handleSubmit}>
-        {/* Form title and description */}
-        <div className={styles.stepHeader}>
-          <h3>{config[FPs.TITLE]}</h3>
-          {config[FPs.DESCRIPTION] && <p>{config[FPs.DESCRIPTION]}</p>}
-        </div>
-
-        {/* Multi-step current step title & description */}
-        {config.mode === "multi" && (
-          <div className={styles.stepHeader}>
-            <h3>
-              {
-                (config as MultiStepFormConfig)[FPs.STEP]?.[currentStep]?.[
-                  FPs.TITLE
-                ]
-              }
-            </h3>
-            {(config as MultiStepFormConfig)[FPs.STEP]?.[currentStep]?.[
-              FPs.DESCRIPTION
-            ] && (
-              <p>
-                {
-                  (config as MultiStepFormConfig)[FPs.STEP]?.[currentStep]?.[
-                    FPs.DESCRIPTION
-                  ]
-                }
-              </p>
-            )}
-          </div>
-        )}
-
-        {/* Render fields */}
-        {fieldsToRender.map((field: FormField) => (
-          <FieldRenderer
-            key={field[FPs.NAME]}
-            field={field}
-            value={formData}
-            onChange={handleChange}
-            settings={_settings}
-          />
-        ))}
-
-        {/* Footer buttons */}
-        <FormFooter
-          mode={mode}
-          config={config}
-          currentStep={currentStep}
-          color={color}
-          submitLabel={submitLabel}
-          next={next}
-          back={back}
-          handleSubmit={handleSubmit}
-          clearFormPersistence={clearFormPersistence}
-        />
-      </form>
+      {content}
     </div>
   );
 }

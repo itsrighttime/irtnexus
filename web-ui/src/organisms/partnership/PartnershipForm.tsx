@@ -9,7 +9,7 @@ import styles from "./PartnershipForm.module.css";
 export const PartnershipForm = () => {
   const handleSubmit = (data: Record<string, any>) => {
     console.log("Form Submitted:", data);
-    alert("Form Submitted! Check console.");
+    // alert("Form Submitted! Check console.");
   };
 
   const config: FormConfig = {

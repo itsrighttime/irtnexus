@@ -16,6 +16,12 @@ export interface FormSettings {
   [FPs.BORDER]?: string;
   [FPs.BORDER_RADIUS]?: string;
   [FPs.BOX_SHADOW]?: string;
+  [FPs.SUCCESS_PAGE]?: {
+    show?: boolean;
+    message?: string;
+    label?: string;
+    href?: string;
+  };
 }
 
 // Step definition

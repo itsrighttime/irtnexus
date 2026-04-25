@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import style from "./Alert.module.css";
 import { Icons } from "@/assets/icons";
-import { Button } from "../button/Button";
+import { IconButton } from "../button/IconButton";
 
 const { crossIcon } = Icons;
 
@@ -64,15 +64,12 @@ export const Alert: React.FC<AlertProps> = ({ message, type, onDismiss }) => {
       {message}
       <div className={style.statusBar} style={{ width: `${width}%` }}></div>
       <div className={style.crossIcon}>
-        <Button
-          iconOnly
-          iconLeft={crossIcon}
+        <IconButton
+          icon={crossIcon}
           onClick={handleManualDismiss}
-          size="small"
+          size="1"
           color="#fff"
           style={{
-            height: "22px",
-            width: "22px",
             borderRadius: "50%",
             backgroundColor: "#ff5969",
           }}

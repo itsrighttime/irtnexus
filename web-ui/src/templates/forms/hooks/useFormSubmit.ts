@@ -60,10 +60,12 @@ export function useFormSubmit({
       // const endpoint = config?.[FPs.ENDPOINT]
       const endpoint = ""; // TODO
 
-      const response: BackendResponse = await submitToBackend(
-        formData,
-        endpoint,
-      );
+      // const response: BackendResponse = await submitToBackend(
+      //   formData,
+      //   endpoint,
+      // );
+
+      const response = { success: true, data: { message: "" }, message: "" };
 
       if (response?.success) {
         // Clear localStorage

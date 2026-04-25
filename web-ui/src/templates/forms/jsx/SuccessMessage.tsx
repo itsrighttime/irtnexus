@@ -7,6 +7,7 @@ import { type MouseEventHandler } from "react";
 interface SuccessMessageProps {
   /** The success message to display */
   message?: string;
+  label?: string;
   /** Optional color for the title and button */
   color?: string;
   /** Callback when "Go to Home" button is clicked */
@@ -23,6 +24,7 @@ interface SuccessMessageProps {
  */
 export const SuccessMessage: React.FC<SuccessMessageProps> = ({
   message = "Form submitted successfully!",
+  label = "Go to Home",
   color = "var(--colorGreen)",
   onHomeClick,
   title = "Success!",
@@ -34,7 +36,7 @@ export const SuccessMessage: React.FC<SuccessMessageProps> = ({
       </p>
       <p className={styles.message}>{message}</p>
       <Button color={color} onClick={onHomeClick}>
-        Go to Home
+        {label}
       </Button>
     </div>
   );

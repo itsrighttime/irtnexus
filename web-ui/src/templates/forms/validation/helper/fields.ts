@@ -105,6 +105,7 @@ const LABEL_COLOR = "labelColor";
 const BORDER = "border";
 const BORDER_RADIUS = "borderRadius";
 const BOX_SHADOW = "boxShadow";
+const SUCCESS_PAGE = "successPage";
 
 // --- Generic Properties ---
 export interface GenericProps {
@@ -345,4 +346,5 @@ export const FIELDS_PROPS = {
   BORDER,
   BORDER_RADIUS,
   BOX_SHADOW,
+  SUCCESS_PAGE,
 } as const;
