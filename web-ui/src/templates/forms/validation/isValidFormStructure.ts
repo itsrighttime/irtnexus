@@ -55,6 +55,7 @@ export function isValidFormStructure(config?: FormConfig): boolean {
   if (config[FPs.MODE] === "single") {
     // TS now knows this is SingleStepFormConfig
     const fields = (config as SingleStepFormConfig)[FPs.FIELDS];
+
     if (!Array.isArray(fields)) return false;
     if (!fields.every(validateField)) return false;
   }

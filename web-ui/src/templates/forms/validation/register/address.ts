@@ -3,7 +3,7 @@ import type {
   AddressValue,
 } from "../../types/register.types";
 import { FIELDS_PROPS as FPs } from "../helper/fields";
-import { FORM_FIELDS_TYPE} from "../helper/fields";
+import { FORM_FIELDS_TYPE } from "../helper/fields";
 import {
   validationEngine as engine,
   type ValidatorResult,

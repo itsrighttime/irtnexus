@@ -1,3 +1,5 @@
+/* -------------------- IMPORTS -------------------- */
+
 import {
   FORM_FIELDS_TYPE,
   FIELDS_PROPS as FPs,
@@ -23,13 +25,22 @@ import type {
   TextAreaProps,
   TextInputProps,
   AddressInputProps,
-  AddressValue,
+  AddressValue as AddressValue_,
   FileUploadProps,
   ImageUploadProps,
   VideoUploadProps,
   TextInputVarientType,
   TimePickerProps,
 } from "@/atoms";
+
+/* -------------------- UTIL -------------------- */
+
+/**
+ * Removes all function-type props (e.g. onChange, setResult)
+ */
+type NonFunctionProps<T> = {
+  [K in keyof T as Extract<T[K], Function> extends never ? K : never]: T[K];
+};
 
 /* -------------------- CONDITIONAL -------------------- */
 
@@ -53,204 +64,209 @@ interface BaseField<T extends FormFieldType> {
   moreLabel?: string;
 }
 
-/* -------------------- FIELD UNION -------------------- */
+type GroupField = BaseField<typeof FORM_FIELDS_TYPE.GROUP>;
+
+/* -------------------- FIELD → PROPS MAP -------------------- */
+
+type FieldPropsMap = {
+  [FORM_FIELDS_TYPE.ADDRESS]: AddressInputProps;
+  [FORM_FIELDS_TYPE.AUDIO]: AudioUploadProps;
+  [FORM_FIELDS_TYPE.CHECKBOX]: CheckboxGroupProps;
+  [FORM_FIELDS_TYPE.COLOR]: {};
+  [FORM_FIELDS_TYPE.DATE]: CalendarPickerProp;
+  [FORM_FIELDS_TYPE.DAY]: CalendarPickerProp;
+  [FORM_FIELDS_TYPE.MONTH]: CalendarPickerProp;
+  [FORM_FIELDS_TYPE.MONTH_YEAR]: CalendarPickerProp;
+  [FORM_FIELDS_TYPE.YEAR]: CalendarPickerProp;
+  [FORM_FIELDS_TYPE.DROPDOWN]: SingleDropdownProps;
+  [FORM_FIELDS_TYPE.SIMPLE_DROPDOWN]: DropdownSimpleProps;
+  [FORM_FIELDS_TYPE.MULTI_DROPDOWN]: MultipleDropdownProps;
+  [FORM_FIELDS_TYPE.EMAIL]: EmailInputType;
+  [FORM_FIELDS_TYPE.IMAGE]: ImageUploadProps;
+  [FORM_FIELDS_TYPE.JSON]: JsonFieldProps;
+  [FORM_FIELDS_TYPE.MOBILE]: TextInputVarientType;
+  [FORM_FIELDS_TYPE.OTP]: OtpFieldProps;
+  [FORM_FIELDS_TYPE.PASSWORD]: TextInputVarientType;
+  [FORM_FIELDS_TYPE.RADIO]: RadioGroupProps;
+  [FORM_FIELDS_TYPE.SEARCH]: SearchBoxProps;
+  [FORM_FIELDS_TYPE.SECURITY_QUESTION]: {
+    options: string[];
+  };
+  [FORM_FIELDS_TYPE.SLIDER]: SliderProps;
+  [FORM_FIELDS_TYPE.STEPPER]: StepperProps;
+  [FORM_FIELDS_TYPE.SWITCH]: SwitchProps;
+  [FORM_FIELDS_TYPE.TEXT]: TextInputProps;
+  [FORM_FIELDS_TYPE.TEXT_AREA]: TextAreaProps;
+  [FORM_FIELDS_TYPE.TIME]: TimePickerProps;
+  [FORM_FIELDS_TYPE.URL]: {};
+  [FORM_FIELDS_TYPE.VIDEO]: VideoUploadProps;
+  [FORM_FIELDS_TYPE.FILE]: FileUploadProps;
+};
+
+/* -------------------- FIELD CONFIG -------------------- */
+
+type FieldConfig<T extends keyof FieldPropsMap> = BaseField<T> &
+  NonFunctionProps<FieldPropsMap[T]>;
+
+/* -------------------- FINAL UNION -------------------- */
 
 export type FormField =
-  | VideoFieldConfig
-  | URLFieldConfig
-  | TimeFieldConfig
-  | TextAreaFieldConfig
-  | TextFieldConfig
-  | SwitchFieldConfig
-  | StepperFieldConfig
-  | SliderFieldConfig
-  | SecurityQuestionFieldConfig
-  | SearchFieldConfig
-  | RadioFieldConfig
-  | PasswordConfig
-  | OTPFieldConfig
-  | MultiDropdownFieldConfig
-  | MobileFieldConfig
-  | JsonConfig
-  | ImageFieldConfig
-  | EmailConfig
-  | DropdownFieldConfig
-  | SimpleDropdownFieldConfig
-  | DatePickerConfig
-  | DayPickerConfig
-  | MonthPickerConfig
-  | MonthYearPickerConfig
-  | YearPickerConfig
-  | ColorConfig
-  | CheckboxFieldConfig
-  | AudioFieldConfig
-  | FileFieldConfig
-  | AddressFieldConfig;
+  | {
+      [K in keyof FieldPropsMap]: FieldConfig<K>;
+    }[keyof FieldPropsMap]
+  | GroupField;
 
-/* -------------------- FIELDS -------------------- */
-export interface AddressFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.ADDRESS>, AddressInputProps {}
+/* -------------------- VALUES MAP -------------------- */
 
-export interface AudioFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.AUDIO>, AudioUploadProps {}
+type FieldValueMap = {
+  [FORM_FIELDS_TYPE.ADDRESS]: AddressValue_;
+  [FORM_FIELDS_TYPE.AUDIO]: { size: number; type: string };
+  [FORM_FIELDS_TYPE.CHECKBOX]: string[];
+  [FORM_FIELDS_TYPE.COLOR]: string;
+  [FORM_FIELDS_TYPE.DATE]: string;
+  [FORM_FIELDS_TYPE.DAY]: string;
+  [FORM_FIELDS_TYPE.MONTH]: string;
+  [FORM_FIELDS_TYPE.MONTH_YEAR]: string;
+  [FORM_FIELDS_TYPE.YEAR]: string;
+  [FORM_FIELDS_TYPE.DROPDOWN]: string | string[];
+  [FORM_FIELDS_TYPE.SIMPLE_DROPDOWN]: string | string[];
+  [FORM_FIELDS_TYPE.MULTI_DROPDOWN]: string[];
+  [FORM_FIELDS_TYPE.EMAIL]: string;
+  [FORM_FIELDS_TYPE.IMAGE]: {
+    size: number;
+    type: string;
+    width: number;
+    height: number;
+  };
+  [FORM_FIELDS_TYPE.JSON]: string;
+  [FORM_FIELDS_TYPE.MOBILE]: string;
+  [FORM_FIELDS_TYPE.OTP]: string;
+  [FORM_FIELDS_TYPE.PASSWORD]: string;
+  [FORM_FIELDS_TYPE.RADIO]: string;
+  [FORM_FIELDS_TYPE.SEARCH]: string;
+  [FORM_FIELDS_TYPE.SECURITY_QUESTION]: {
+    question: string;
+    answer: string;
+  };
+  [FORM_FIELDS_TYPE.SLIDER]: number;
+  [FORM_FIELDS_TYPE.STEPPER]: number;
+  [FORM_FIELDS_TYPE.SWITCH]: boolean;
+  [FORM_FIELDS_TYPE.TEXT]: string;
+  [FORM_FIELDS_TYPE.TEXT_AREA]: string;
+  [FORM_FIELDS_TYPE.TIME]: string;
+  [FORM_FIELDS_TYPE.URL]: string;
+  [FORM_FIELDS_TYPE.VIDEO]: { size: number; type: string };
+  [FORM_FIELDS_TYPE.FILE]: { size: number; type: string };
+};
 
-export interface CheckboxFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.CHECKBOX>, CheckboxGroupProps {}
+/* -------------------- VALUE HELPER -------------------- */
 
-export interface ColorConfig extends BaseField<typeof FORM_FIELDS_TYPE.COLOR> {
-  setResult?: () => void;
-}
+export type FieldValue<T extends keyof FieldValueMap> = FieldValueMap[T];
+type FieldOf<T extends FormFieldType> = Extract<FormField, { type: T }>;
+type ValueOf<T extends keyof FieldValueMap> = FieldValue<T>;
 
-export interface DatePickerConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.DATE>, CalendarPickerProp {}
-export interface DayPickerConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.DAY>, CalendarPickerProp {}
-export interface MonthPickerConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.MONTH>, CalendarPickerProp {}
-export interface MonthYearPickerConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.MONTH_YEAR>, CalendarPickerProp {}
-export interface YearPickerConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.YEAR>, CalendarPickerProp {}
+/* -------------------- EXPORT -------------------- */
 
-export interface DropdownFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.DROPDOWN>, SingleDropdownProps {}
+/* -------------------- BACKWARD COMPAT TYPES -------------------- */
 
-export interface SimpleDropdownFieldConfig
-  extends
-    BaseField<typeof FORM_FIELDS_TYPE.SIMPLE_DROPDOWN>,
-    DropdownSimpleProps {}
+export type AudioFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.AUDIO>;
+export type AudioValue = ValueOf<typeof FORM_FIELDS_TYPE.AUDIO>;
 
-export interface MultiDropdownFieldConfig
-  extends
-    BaseField<typeof FORM_FIELDS_TYPE.MULTI_DROPDOWN>,
-    MultipleDropdownProps {}
+export type CheckboxFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.CHECKBOX>;
+export type CheckboxValue = ValueOf<typeof FORM_FIELDS_TYPE.CHECKBOX>;
 
-export interface EmailConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.EMAIL>, EmailInputType {}
+export type ColorConfig = FieldOf<typeof FORM_FIELDS_TYPE.COLOR>;
+export type ColorValue = ValueOf<typeof FORM_FIELDS_TYPE.COLOR>;
 
-export interface ImageFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.IMAGE>, ImageUploadProps {}
+export type DatePickerConfig = FieldOf<typeof FORM_FIELDS_TYPE.DATE>;
+export type DateValue = ValueOf<typeof FORM_FIELDS_TYPE.DATE>;
 
-export interface JsonConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.JSON>, JsonFieldProps {}
+export type DayPickerConfig = FieldOf<typeof FORM_FIELDS_TYPE.DAY>;
+export type DayValue = ValueOf<typeof FORM_FIELDS_TYPE.DAY>;
 
-export interface MobileFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.MOBILE>, TextInputVarientType {}
+export type MonthPickerConfig = FieldOf<typeof FORM_FIELDS_TYPE.MONTH>;
+export type MonthValue = ValueOf<typeof FORM_FIELDS_TYPE.MONTH>;
 
-export interface OTPFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.OTP>, OtpFieldProps {}
+export type MonthYearPickerConfig = FieldOf<typeof FORM_FIELDS_TYPE.MONTH_YEAR>;
+export type MonthYearValue = ValueOf<typeof FORM_FIELDS_TYPE.MONTH_YEAR>;
 
-export interface PasswordConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.PASSWORD>, TextInputVarientType {}
+export type YearPickerConfig = FieldOf<typeof FORM_FIELDS_TYPE.YEAR>;
+export type YearPickerValue = ValueOf<typeof FORM_FIELDS_TYPE.YEAR>;
 
-export interface RadioFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.RADIO>, RadioGroupProps {}
+export type DropdownFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.DROPDOWN>;
+export type DropdownValue = ValueOf<typeof FORM_FIELDS_TYPE.DROPDOWN>;
 
-export interface SearchFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.SEARCH>, SearchBoxProps {}
+export type SimpleDropdownFieldConfig = FieldOf<
+  typeof FORM_FIELDS_TYPE.SIMPLE_DROPDOWN
+>;
+export type DropdownSimpleValue = ValueOf<
+  typeof FORM_FIELDS_TYPE.SIMPLE_DROPDOWN
+>;
 
-export interface SecurityQuestionFieldConfig extends BaseField<
+export type MultiDropdownFieldConfig = FieldOf<
+  typeof FORM_FIELDS_TYPE.MULTI_DROPDOWN
+>;
+export type MultiDropdownValue = ValueOf<
+  typeof FORM_FIELDS_TYPE.MULTI_DROPDOWN
+>;
+
+export type EmailConfig = FieldOf<typeof FORM_FIELDS_TYPE.EMAIL>;
+export type EmailValue = ValueOf<typeof FORM_FIELDS_TYPE.EMAIL>;
+
+export type ImageFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.IMAGE>;
+export type ImageValue = ValueOf<typeof FORM_FIELDS_TYPE.IMAGE>;
+
+export type JsonConfig = FieldOf<typeof FORM_FIELDS_TYPE.JSON>;
+export type JsonValue = ValueOf<typeof FORM_FIELDS_TYPE.JSON>;
+
+export type MobileFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.MOBILE>;
+export type MobileValue = ValueOf<typeof FORM_FIELDS_TYPE.MOBILE>;
+
+export type OTPFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.OTP>;
+export type OTPValue = ValueOf<typeof FORM_FIELDS_TYPE.OTP>;
+
+export type PasswordConfig = FieldOf<typeof FORM_FIELDS_TYPE.PASSWORD>;
+export type PasswordValue = ValueOf<typeof FORM_FIELDS_TYPE.PASSWORD>;
+
+export type RadioFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.RADIO>;
+export type RadioValue = ValueOf<typeof FORM_FIELDS_TYPE.RADIO>;
+
+export type SearchFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.SEARCH>;
+export type SearchValue = ValueOf<typeof FORM_FIELDS_TYPE.SEARCH>;
+
+export type SecurityQuestionFieldConfig = FieldOf<
   typeof FORM_FIELDS_TYPE.SECURITY_QUESTION
-> {
-  options: string[];
-  setResult?: () => void;
-}
+>;
+export type SecurityQuestionValue = ValueOf<
+  typeof FORM_FIELDS_TYPE.SECURITY_QUESTION
+>;
 
-export interface SliderFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.SLIDER>, SliderProps {}
+export type SliderFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.SLIDER>;
+export type SliderValue = ValueOf<typeof FORM_FIELDS_TYPE.SLIDER>;
 
-export interface StepperFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.STEPPER>, StepperProps {}
+export type StepperFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.STEPPER>;
+export type StepperValue = ValueOf<typeof FORM_FIELDS_TYPE.STEPPER>;
 
-export interface SwitchFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.SWITCH>, SwitchProps {}
+export type SwitchFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.SWITCH>;
+export type SwitchValue = ValueOf<typeof FORM_FIELDS_TYPE.SWITCH>;
 
-export interface TextFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.TEXT>, TextInputProps {}
+export type TextFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.TEXT>;
+export type TextValue = ValueOf<typeof FORM_FIELDS_TYPE.TEXT>;
 
-export interface TextAreaFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.TEXT_AREA>, TextAreaProps {}
+export type TextAreaFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.TEXT_AREA>;
+export type TextAreaValue = ValueOf<typeof FORM_FIELDS_TYPE.TEXT_AREA>;
 
-export interface TimeFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.TIME>, TimePickerProps {}
+export type TimeFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.TIME>;
+export type TimeFieldValue = ValueOf<typeof FORM_FIELDS_TYPE.TIME>;
 
-export interface URLFieldConfig extends BaseField<typeof FORM_FIELDS_TYPE.URL> {
-  setResult?: () => void;
-}
+export type URLFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.URL>;
+export type URLFieldValue = ValueOf<typeof FORM_FIELDS_TYPE.URL>;
 
-export interface VideoFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.VIDEO>, VideoUploadProps {}
+export type VideoFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.VIDEO>;
+export type VideoFile = ValueOf<typeof FORM_FIELDS_TYPE.VIDEO>;
 
-export interface FileFieldConfig
-  extends BaseField<typeof FORM_FIELDS_TYPE.FILE>, FileUploadProps {}
+export type FileFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.FILE>;
+export type FileFile = ValueOf<typeof FORM_FIELDS_TYPE.FILE>;
 
-// ########################
-
-export type { AddressValue };
-
-export interface AudioValue {
-  size: number;
-  type: string;
-}
-
-export type CheckboxValue = string[];
-
-export type ColorValue = string;
-
-export type DateValue = string;
-
-export type DropdownValue = string | string[];
-
-export type DropdownSimpleValue = string | string[];
-
-export type MultiDropdownValue = string[];
-
-export type EmailValue = string;
-
-export interface ImageValue {
-  size: number;
-  type: string;
-  width: number;
-  height: number;
-}
-
-export type JsonValue = string;
-
-export type MobileValue = string
-
-export type OTPValue = string;
-
-export type PasswordValue = string;
-
-export type RadioValue = string;
-
-export type SearchValue = string;
-
-export interface SecurityQuestionValue {
-  question: string;
-  answer: string;
-}
-
-export type SliderValue = number;
-
-export type StepperValue = number;
-
-export type SwitchValue = boolean;
-
-export type TextValue = string;
-
-export type TextAreaValue = string;
-
-export type TimeFieldValue = string;
-
-export type URLFieldValue = string;
-
-export interface VideoFile {
-  size: number;
-  type: string;
-}
-
-export interface FileFile {
-  size: number;
-  type: string;
-}
+export type AddressFieldConfig = FieldOf<typeof FORM_FIELDS_TYPE.ADDRESS>;
+export type AddressValue = ValueOf<typeof FORM_FIELDS_TYPE.ADDRESS>;
