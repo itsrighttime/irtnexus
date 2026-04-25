@@ -1,0 +1,7 @@
+# TODO
+
+- Clearing file uploads took two clicks. 
+- Label fixation. When we do a refresh our form, then after refresh the labels are not visible of the content which are already filled. 
+- Need to fix label and required column. 
+- Dropdown data is not removed after refresh. 
+-Checkboxes data is not coming after refresh.

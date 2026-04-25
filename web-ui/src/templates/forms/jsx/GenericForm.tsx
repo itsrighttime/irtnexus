@@ -93,7 +93,7 @@ export function GenericForm({
     isFileLike,
     isFileArray,
     clearFormPersistence,
-  } = useFormPersistence(STORAGE_KEY, initialState, initialError);
+  } = useFormPersistence(STORAGE_KEY, initialState, initialError, allFields);
 
   useEffect(() => {
     if (formStatus === FORM_STATUS.submitted) {

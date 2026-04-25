@@ -46,7 +46,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const isMultiple = maxFiles !== 1;
 
   useEffect(() => {
-    if (value.length > 0 && files.length === 0) setFiles(value);
+    if (value && value.length > 0 && files.length === 0) setFiles(value);
   }, [value]);
 
   useEffect(() => {

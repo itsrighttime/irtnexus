@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { loadFile, saveFile, deleteFile } from "../helper/indexedDb.js";
-import type { FormValues, ValidateResult } from "../types/formConfig.types";
+import type {
+  FormField,
+  FormValues,
+  ValidateResult,
+} from "../types/formConfig.types";
 
 const EXPIRY_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -10,11 +14,13 @@ export function useFormPersistence(
   STORAGE_KEY: string,
   initialState: FormValues,
   initialError: ValidateResult["errors"],
+  allFields: FormField[] = [],
 ) {
   // --- Stable refs ---
   const initialStateRef = useRef(initialState);
   const initialErrorRef = useRef(initialError);
   const mountedRef = useRef(true);
+  const persistenceMapRef = useRef<Record<string, boolean>>({});
 
   // --- State ---
   const [formData, setFormData] = useState<FormValues>(initialStateRef.current);
@@ -34,11 +40,24 @@ export function useFormPersistence(
     return v instanceof File || v instanceof Blob;
   }, []);
 
+  const buildPersistenceMap = (fields: FormField[]) => {
+    return fields.reduce<Record<string, boolean>>((acc, field) => {
+      // true = DO NOT STORE
+      acc[field.type] = field.type === "password";
+      // Can add more rules
+      return acc;
+    }, {});
+  };
+
   const isFileArray = useCallback(
     (v: unknown): v is (File | Blob)[] =>
       Array.isArray(v) && v.every(isFileLike),
     [isFileLike],
   );
+
+  useEffect(() => {
+    persistenceMapRef.current = buildPersistenceMap(allFields);
+  }, [allFields]);
 
   // --- Save files (optimized) ---
   const saveFilesFromFormData = useCallback(
@@ -47,6 +66,8 @@ export function useFormPersistence(
       const promises: Promise<boolean>[] = [];
 
       Object.entries(data).forEach(([key, value]) => {
+        if (persistenceMapRef.current[key]) return;
+
         if (isFileLike(value)) {
           const fileKey = `${STORAGE_KEY}::${key}`;
           filesManifest[key] = fileKey;
@@ -164,7 +185,6 @@ export function useFormPersistence(
 
   // --- Persist updates (debounced + optimized) ---
   useEffect(() => {
-
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
@@ -186,6 +206,7 @@ export function useFormPersistence(
         // --- Prepare data ---
         const formDataSnapshot: FormValues = {};
         Object.entries(formData).forEach(([k, v]) => {
+          if (persistenceMapRef.current[k]) return;
           formDataSnapshot[k] = isFileLike(v) || isFileArray(v) ? null : v;
         });
 
