@@ -40,7 +40,7 @@ export const TestTextInput = () => {
         <TextInput
           label="Controlled Input"
           value={value}
-          onChange={(v) => setValue(v)}
+          setResult={(v) => setValue(v)}
         />
         <div>Value: {value}</div>
       </section>
@@ -81,7 +81,7 @@ export const TestTextInput = () => {
         <TextInput
           label="Email"
           value={email}
-          onChange={(e) => validateEmail(e)}
+          setResult={(e) => validateEmail(e)}
           error={error}
           helperText="We’ll never share your email"
         />

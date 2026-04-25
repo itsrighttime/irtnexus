@@ -6,8 +6,9 @@ export const config03: FormConfig = {
   mode: "single",
   settings: {
     showLabelAlways: true,
-    color: "var(--colorCyan)",
+    color: "var(--colorRed)",
     gap: "2rem",
+    width: "50%",
   },
   fields: [
     {
@@ -16,8 +17,8 @@ export const config03: FormConfig = {
       label: "Full Name",
       placeholder: "Enter your full name",
       required: true,
-    //   min: 3,
-    //   max: 50,
+      //   min: 3,
+      //   max: 50,
     },
     {
       name: "email",
@@ -32,7 +33,7 @@ export const config03: FormConfig = {
       label: "Password",
       placeholder: "Enter a secure password",
       required: true,
-    //   min: 8,
+      //   min: 8,
     },
     {
       name: "mobile",
@@ -108,8 +109,8 @@ export const config03: FormConfig = {
       name: "resume",
       type: FORM_FIELDS_TYPE.FILE,
       label: "Upload Resume / Documents",
-    //   multiple: true,
-    //   maxFiles: 5,
+      //   multiple: true,
+      //   maxFiles: 5,
       maxSizeMb: 2 * 1024 * 1024, // 2MB
       allowedTypes: ["application/pdf", "image/jpeg", "image/png"],
     },
@@ -117,21 +118,21 @@ export const config03: FormConfig = {
       name: "audio",
       type: FORM_FIELDS_TYPE.AUDIO,
       label: "Upload Audio",
-    //   maxFiles: 5,
+      //   maxFiles: 5,
       maxSizeMb: 2 * 1024 * 1024, // 2MB
     },
     {
       name: "video",
       type: FORM_FIELDS_TYPE.VIDEO,
       label: "Upload Vidoe",
-    //   maxSize: 2 * 1024 * 1024, // 2MB
-    //   preview: true,
+      //   maxSize: 2 * 1024 * 1024, // 2MB
+      //   preview: true,
     },
     {
       name: "image",
       type: FORM_FIELDS_TYPE.IMAGE,
       label: "Upload Image",
-    //   maxFiles: 5,
+      //   maxFiles: 5,
       requireSquare: false,
     },
   ],

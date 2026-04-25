@@ -6,7 +6,7 @@ import styles from "../css/GenericForm.module.css";
 import { FIELDS_PROPS } from "../validation/helper/fields";
 import { Icons } from "@/assets/icons";
 import { useInitializeForm } from "../hooks/useInitializeForm";
-import { Button } from "@/atoms";
+import { Button, IconButton } from "@/atoms";
 import type { FormField } from "../types/register.types";
 import type { ResolvedFormSettings } from "../hooks/useFormSettings";
 
@@ -80,16 +80,13 @@ export function RepeatableGroup({
     <div className={styles.repeatableGroup} style={{ width: settings.width }}>
       <label>{field[FIELDS_PROPS.LABEL]}</label>
       {itemsWithIds.map((item, idx) => (
-        <div
-          key={item._uid}
-          className={styles.repeatableItem}
-        >
+        <div key={item._uid} className={styles.repeatableItem}>
           {values.length > 1 && (
             <div className={styles.repeatableCross}>
-              <Button
-                iconOnly
-                iconLeft={crossIcon}
-                color="var(--colorWhite)"
+              <IconButton
+                icon={crossIcon}
+                color="var(--color-white)"
+                size={"1.3"}
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "var(--colorRed)",
@@ -112,7 +109,7 @@ export function RepeatableGroup({
           ))}
         </div>
       ))}
-      <Button onClick={handleMore} color={color}>
+      <Button onClick={handleMore} type="button" color={color}>
         {field[FIELDS_PROPS.MORE_LABEL]}
       </Button>
     </div>

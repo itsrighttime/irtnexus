@@ -88,8 +88,9 @@ export const ErrorList: React.FC<ErrorListProps> = ({
             onClick();
           }}
           color="var(--color-error)"
+          type="button"
         />
-        <Button color={color} onClick={onClick}>
+        <Button color={color} onClick={onClick} type="button">
           Let's Update
         </Button>
       </div>

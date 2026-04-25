@@ -44,7 +44,7 @@ export function TableControls<T>({
         {showSearch && (
           <TextInput
             placeholder="Search..."
-            onChange={(value) => onSearch?.(value)}
+            setResult={(value) => onSearch?.(value)}
             width="200px"
           />
         )}
@@ -83,7 +83,7 @@ export function TableControls<T>({
             {showSearch && (
               <TextInput
                 placeholder="Search..."
-                onChange={(value) => onSearch?.(value)}
+                setResult={(value) => onSearch?.(value)}
                 width="100%"
               />
             )}

@@ -22,7 +22,7 @@ export const TestCalendar: React.FC = () => {
       <div style={{ marginBottom: 40 }}>
         <h2>Date Mode (dd-mm-yyyy)</h2>
         <DatePicker
-          onChange={(value) => setSelectedValue(value)}
+          setResult={(value) => setSelectedValue(value)}
           restrictionStartDate="01-01-2024"
           restrictionEndDate="31-12-2024"
           color="#00bcd4"
@@ -34,7 +34,7 @@ export const TestCalendar: React.FC = () => {
       <div style={{ marginBottom: 40 }}>
         <h2>Day Mode (dd)</h2>
         <DayPicker
-          onChange={(value) => setSelectedValue(value)}
+          setResult={(value) => setSelectedValue(value)}
           restrictionStartDate="01-01-2024"
           restrictionEndDate="31-12-2024"
           color="#00bcd4"
@@ -45,7 +45,7 @@ export const TestCalendar: React.FC = () => {
       <div style={{ marginBottom: 40 }}>
         <h2>Month-Year Mode (MM-YYYY)</h2>
         <MonthPicker
-          onChange={(value) => setSelectedValue(value)}
+          setResult={(value) => setSelectedValue(value)}
           restrictionStartDate="01-03-2023"
           restrictionEndDate="31-10-2025"
           color="#ff5722"
@@ -56,7 +56,7 @@ export const TestCalendar: React.FC = () => {
       <div style={{ marginBottom: 40 }}>
         <h2>Month Only Mode (0-11)</h2>
         <MonthYearPicker
-          onChange={(value) => setSelectedValue(value)}
+          setResult={(value) => setSelectedValue(value)}
           restrictionStartDate="01-01-2023"
           restrictionEndDate="31-12-2024"
           color="#4caf50"
@@ -67,7 +67,7 @@ export const TestCalendar: React.FC = () => {
       <div style={{ marginBottom: 40 }}>
         <h2>Year Only Mode</h2>
         <YearPicker
-          onChange={(value) => setSelectedValue(value)}
+          setResult={(value) => setSelectedValue(value)}
           restrictionStartDate="01-01-1020"
           restrictionEndDate="31-12-2030"
           color="#9c27b0"

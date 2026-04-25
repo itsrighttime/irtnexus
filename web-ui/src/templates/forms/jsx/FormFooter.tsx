@@ -45,6 +45,7 @@ export function FormFooter({
               onClick={back}
               color={color}
               variant="ghost"
+              type="button"
             />
           )}
 
@@ -65,6 +66,7 @@ export function FormFooter({
               onClick={next}
               variant="ghost"
               color={color}
+              type="button"
             />
           ) : (
             <Button onClick={handleSubmit} color={color}>

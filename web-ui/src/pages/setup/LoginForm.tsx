@@ -73,14 +73,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <TextInput
             label="Any Valid Id"
             placeholder="Any Valid Id"
-            onChange={setId}
+            setResult={setId}
             variant={"underline"}
             radius={"none"}
             width="100%"
           />
           <PasswordInput
             placeholder="Password"
-            onChange={setPassword}
+            setResult={setPassword}
             variant={"underline"}
             width="100%"
             radius={"none"}

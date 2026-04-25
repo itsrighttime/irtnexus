@@ -116,7 +116,7 @@ export const TextArea: React.FC<TextAreaProps> = ({
   };
 
   const cssVariable: React.CSSProperties = {
-    ["--color" as any]: color || "var(--colorCyan)",
+    ["--color" as any]: color || "var(--color-primary)",
     ["--width" as any]: width,
   };
 

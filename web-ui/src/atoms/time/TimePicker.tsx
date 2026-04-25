@@ -52,7 +52,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   radius = "md",
   color,
   disabled = false,
-  onChange,
+  setResult: onChange,
   ariaLabel,
 }) => {
   const [_time, _period] = value.split(" ");

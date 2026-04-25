@@ -8,7 +8,7 @@ export interface BaseProps {
   disabled?: boolean; // Disabled state
   loading?: boolean; // Loading state
   onClick?: (event: React.MouseEvent) => void; // Generic click handler
-  onChange?: (value: any) => void; // Generic change handler
+  setResult?: (value: any) => void; // Generic change handler
   responsive?: boolean; // Container-query based responsiveness
   tooltip?: string; // Optional tooltip text
   ariaLabel?: string; // Accessibility label

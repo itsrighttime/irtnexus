@@ -65,7 +65,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
         <TextInput
           label="House / Flat No."
           value={value.house || ""}
-          onChange={(val) => updateField("house", val)}
+          setResult={(val) => updateField("house", val)}
           disabled={disabled}
           loading={loading}
           width="100%"
@@ -76,7 +76,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
         <TextInput
           label="Street"
           value={value.street || ""}
-          onChange={(val) => updateField("street", val)}
+          setResult={(val) => updateField("street", val)}
           disabled={disabled}
           loading={loading}
           width="100%"
@@ -87,7 +87,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
         <TextInput
           label="Landmark"
           value={value.landmark || ""}
-          onChange={(val) => updateField("landmark", val)}
+          setResult={(val) => updateField("landmark", val)}
           disabled={disabled}
           loading={loading}
           width="100%"
@@ -98,7 +98,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
         <TextInput
           label="City"
           value={value.city || ""}
-          onChange={(val) => updateField("city", val)}
+          setResult={(val) => updateField("city", val)}
           disabled={disabled}
           loading={loading}
           width="100%"
@@ -109,7 +109,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
         <TextInput
           label="State"
           value={value.state || ""}
-          onChange={(val) => updateField("state", val)}
+          setResult={(val) => updateField("state", val)}
           disabled={disabled}
           loading={loading}
           width="100%"
@@ -121,7 +121,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
           label="Postal Code"
           textType="number"
           value={value.postal || ""}
-          onChange={(val) => updateField("postal", val)}
+          setResult={(val) => updateField("postal", val)}
           disabled={disabled}
           loading={loading}
           width="100%"
@@ -132,7 +132,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
         <TextInput
           label="Country"
           value={value.country || ""}
-          onChange={(val) => updateField("country", val)}
+          setResult={(val) => updateField("country", val)}
           disabled={disabled}
           loading={loading}
           width="100%"
@@ -143,7 +143,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
         <TextInput
           label="Address Line"
           value={value.addressLine || ""}
-          onChange={(val) => updateField("addressLine", val)}
+          setResult={(val) => updateField("addressLine", val)}
           disabled={disabled}
           loading={loading}
           width="100%"

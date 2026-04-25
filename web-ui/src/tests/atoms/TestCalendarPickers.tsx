@@ -18,7 +18,7 @@ export const TestCalendarPickers: React.FC = () => {
           label="Date Picker"
           required
           value={selectedDate}
-          onChange={setSelectedDate}
+          setResult={setSelectedDate}
           placeholder="Select a date"
           variant="full"
           color="#5b9bd5"
@@ -32,7 +32,7 @@ export const TestCalendarPickers: React.FC = () => {
         <DayPicker
           label="Day Picker"
           value={selectedDay}
-          onChange={setSelectedDay}
+          setResult={setSelectedDay}
           placeholder="Select a day"
           variant="underline"
           color="#17a2b8"
@@ -47,7 +47,7 @@ export const TestCalendarPickers: React.FC = () => {
           label="Month Picker"
           required
           value={selectedMonth}
-          onChange={setSelectedMonth}
+          setResult={setSelectedMonth}
           placeholder="Select a month"
           variant="full"
           color="#8a244b"
@@ -63,7 +63,7 @@ export const TestCalendarPickers: React.FC = () => {
         <MonthYearPicker
           label="Month-Year Picker"
           value={selectedMonthYear}
-          onChange={setSelectedMonthYear}
+          setResult={setSelectedMonthYear}
           placeholder="Select month and year"
           variant="underline"
           color="#0f2854"

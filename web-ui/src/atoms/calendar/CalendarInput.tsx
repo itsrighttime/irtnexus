@@ -6,7 +6,7 @@ import type { BaseProps } from "@/types";
 interface CalendarInputProps extends BaseProps {
   mode: "date" | "day" | "month" | "month-year" | "year";
   value?: string | number | null;
-  onChange: (value: any) => void;
+  setResult: (value: any) => void;
   placeholder?: string;
   restrictionStartDate?: string | null;
   restrictionEndDate?: string | null;
@@ -19,7 +19,7 @@ interface CalendarInputProps extends BaseProps {
 const CalendarInput: React.FC<CalendarInputProps> = ({
   mode,
   value,
-  onChange,
+  setResult,
   placeholder = "",
   color,
   restrictionStartDate = null,
@@ -35,7 +35,6 @@ const CalendarInput: React.FC<CalendarInputProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [internalValue, setInternalValue] = useState(value || "");
   const [inputWidth, setInputWidth] = useState<number | undefined>(undefined);
 
   useEffect(() => {
@@ -59,8 +58,7 @@ const CalendarInput: React.FC<CalendarInputProps> = ({
   }, []);
 
   const handleSelect = (val: any) => {
-    setInternalValue(val);
-    onChange(val);
+    setResult(val);
     setOpen(false);
   };
 
@@ -95,7 +93,7 @@ const CalendarInput: React.FC<CalendarInputProps> = ({
         style={inputStyle}
       >
         <span style={{ color: color || "var(--color-text)" }}>
-          {internalValue || placeholder}
+          {value || placeholder}
         </span>
       </div>
 

@@ -35,7 +35,7 @@ export const SuccessMessage: React.FC<SuccessMessageProps> = ({
         {title}
       </p>
       <p className={styles.message}>{message}</p>
-      <Button color={color} onClick={onHomeClick}>
+      <Button color={color} onClick={onHomeClick} type="button">
         {label}
       </Button>
     </div>
