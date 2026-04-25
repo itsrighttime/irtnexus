@@ -56,6 +56,7 @@ export function FormFooter({
             onClick={clearFormPersistence}
             variant="ghost"
             color="var(--color-error)"
+            type="button"
           />
 
           {currentStep < steps.length - 1 ? (
