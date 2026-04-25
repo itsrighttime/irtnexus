@@ -6,6 +6,10 @@
   padding: var(--spacing-xs);
 }
 
+.label {
+  color: var(--color-gray4);
+}
+
 .fileUpload {
   width: 100%;
   height: calc(var(--height) - 20px);
@@ -18,10 +22,6 @@
   cursor: pointer;
   text-align: center;
   color: var(--color);
-}
-
-.fileUpload .label {
-  color: var(--color-gray4);
 }
 
 .fileUpload.dragging {

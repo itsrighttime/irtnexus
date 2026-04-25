@@ -172,24 +172,30 @@ export const Dropdown: React.FC<DropdownProps> = ({
           />
 
           <div className={styles.dropdownOptions}>
-            <div className={styles.selectedHeader}>Selected Options</div>
-            {selectedOptions.length > 0 ? (
-              <ul className={styles.optionList}>
-                {selectedOptions.map((option) => (
-                  <li
-                    key={option}
-                    className={`${styles.optionItem} ${styles.selected}`}
-                    onClick={() => handleSelectOption(option)} // optional: allow deselect
-                  >
-                    {option}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className={styles.emptyState}>Nothing selected</div>
+            {multiple && (
+              <>
+                <div className={styles.selectedHeader}>Selected Options</div>
+                {selectedOptions.length > 0 ? (
+                  <ul className={styles.optionList}>
+                    {selectedOptions.map((option) => (
+                      <li
+                        key={option}
+                        className={`${styles.optionItem} ${styles.selected}`}
+                        onClick={() => handleSelectOption(option)} // optional: allow deselect
+                      >
+                        {option}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className={styles.emptyState}>Nothing selected</div>
+                )}
+              </>
             )}
 
-            <div className={styles.selectedHeader}>All Options</div>
+            {multiple && (
+              <div className={styles.selectedHeader}>All Options</div>
+            )}
             <ul className={styles.optionList}>
               {filteredOptions.length > 0 ? (
                 filteredOptions.map((option) => (

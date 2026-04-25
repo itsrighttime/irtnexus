@@ -88,7 +88,7 @@ export const Slider: React.FC<SliderProps> = ({
   };
 
   const cssVariable: React.CSSProperties = {
-    "--color": color ? color : "var(--colorCyan)",
+    "--color": color ? color : "var(--color-primary)",
     "--width": width,
   } as React.CSSProperties;
 
