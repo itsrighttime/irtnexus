@@ -77,7 +77,7 @@ export function RepeatableGroup({
   const color = settings.color;
 
   return (
-    <div className={styles.repeatableGroup} style={{ width: settings.width }}>
+    <div className={styles.repeatableGroup} style={{ width: "100%" }}>
       <label>{field[FIELDS_PROPS.LABEL]}</label>
       {itemsWithIds.map((item, idx) => (
         <div key={item._uid} className={styles.repeatableItem}>

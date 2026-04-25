@@ -169,14 +169,12 @@ export function GenericForm({
 
   if (!validStructure) {
     content = (
-      <div className={styles.formWrapper}>
-        <SuccessMessage
-          color="var(--color-error)"
-          message="Something wrong with the structure, contact the admin!"
-          onHomeClick={() => (window.location.href = "/")}
-          title="ERROR !!!"
-        />
-      </div>
+      <SuccessMessage
+        color="var(--color-error)"
+        message="Something wrong with the structure, contact the admin!"
+        onHomeClick={() => (window.location.href = "/")}
+        title="ERROR !!!"
+      />
     );
   } else if (formStatus === FORM_STATUS.submitting) {
     content = (
@@ -191,34 +189,28 @@ export function GenericForm({
     formStatus === FORM_STATUS.failed
   ) {
     content = (
-      <div className={styles.formWrapper}>
-        <ErrorList
-          errors={formStatusError}
-          color={
-            formStatus === FORM_STATUS.error ? color : "var(--color-error)"
-          }
-          onClick={() => setFormStatus(FORM_STATUS.fill)}
-          clearFormPersistence={clearFormPersistence}
-        />
-      </div>
+      <ErrorList
+        errors={formStatusError}
+        color={formStatus === FORM_STATUS.error ? color : "var(--color-error)"}
+        onClick={() => setFormStatus(FORM_STATUS.fill)}
+        clearFormPersistence={clearFormPersistence}
+      />
     );
   } else if (
     formStatus === FORM_STATUS.submitted &&
     _settings.successPage.show
   ) {
     content = (
-      <div className={styles.formWrapper}>
-        <SuccessMessage
-          color={color}
-          message={_settings.successPage.message}
-          label={_settings.successPage.label}
-          onHomeClick={() => {
-            clearFormPersistence();
-            setFormStatus(FORM_STATUS.fill);
-            window.location.href = _settings.successPage.href || "/";
-          }}
-        />
-      </div>
+      <SuccessMessage
+        color={color}
+        message={_settings.successPage.message}
+        label={_settings.successPage.label}
+        onHomeClick={() => {
+          clearFormPersistence();
+          setFormStatus(FORM_STATUS.fill);
+          window.location.href = _settings.successPage.href || "/";
+        }}
+      />
     );
   } else
     content = (
@@ -289,7 +281,7 @@ export function GenericForm({
   return (
     <div
       className={styles.formWrapper}
-      style={{ height: formStyle.height, width: formStyle.width }}
+      style={{ height: _settings.height, width: _settings.width }}
     >
       <AlertContainer
         alertContainer={alertContainer}

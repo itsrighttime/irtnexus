@@ -40,7 +40,7 @@ export function resolveProps(
 
   // inject onChange globally
   resolved.setResult = (value: any) => onChange(field.name, value);
-  resolved.width = settings.width;
+  resolved.width = "100%";
 
   return resolved;
 }

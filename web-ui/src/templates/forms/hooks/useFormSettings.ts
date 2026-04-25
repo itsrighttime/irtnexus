@@ -39,5 +39,7 @@ export function useFormSettings(
     ...style,
   };
 
+  console.log("DDDD : ", { settings, style, _settings, formStyle });
+
   return { _settings, formStyle };
 }
