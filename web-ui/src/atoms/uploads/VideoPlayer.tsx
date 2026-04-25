@@ -41,7 +41,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }
 
   const cssVariable: React.CSSProperties = {
-    "--color": color || "var(--colorCyan)",
+    "--color": color || "var(--color-primary)",
     "--width": width,
     "--height": height,
   } as React.CSSProperties;
@@ -63,12 +63,12 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
               <IconButton
                 icon={resetFieldIcon}
                 onClick={onReupload}
-                color={color || "#52C9BD"}
+                color={color || "var(--color-primary)"}
                 label="Re-Upload"
               />
             )}
             {onRemove && (
-              <IconButton icon={crossIcon} onClick={onRemove} color="#FF5969" />
+              <IconButton icon={crossIcon} onClick={onRemove} color="var(--color-error)" />
             )}
           </div>
         </div>

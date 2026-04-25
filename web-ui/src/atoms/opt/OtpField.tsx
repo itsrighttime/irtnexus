@@ -8,7 +8,7 @@ import type { BaseProps } from "@/types";
 export interface OtpFieldProps extends BaseProps {
   length?: number;
   setResult: (otp: string | null) => void;
-  verifcationEndpoint?: string;
+  verificationEndpoint?: string;
   userId?: string | number;
   setError?: (err: string) => void;
   isNumeric?: boolean;
@@ -19,7 +19,7 @@ export const OtpField: React.FC<OtpFieldProps> = ({
   setResult,
   color,
   width = "300px",
-  verifcationEndpoint,
+  verificationEndpoint,
   userId,
   setError,
   isNumeric = true,
@@ -47,14 +47,14 @@ export const OtpField: React.FC<OtpFieldProps> = ({
   };
 
   const handleResult = async (value: string) => {
-    if (!verifcationEndpoint) {
+    if (!verificationEndpoint) {
       logger.warn({ message: "Verification endpoint is not passed as prop" });
       return;
     }
 
     try {
       const response = await apiCaller({
-        endpoint: verifcationEndpoint,
+        endpoint: verificationEndpoint,
         method: "POST",
         data: {
           userId,

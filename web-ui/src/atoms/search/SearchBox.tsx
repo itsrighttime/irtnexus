@@ -144,6 +144,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({
             color={color}
             variant="ghost"
             size="small"
+            type="button"
           />
         </div>
       </div>

@@ -159,7 +159,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({
   };
 
   const cssVariable: React.CSSProperties = {
-    "--color": color || "var(--colorCyan)",
+    "--color": color || "var(--color-primary)",
     "--width": width,
     "--height": height,
   } as React.CSSProperties;
@@ -172,6 +172,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({
 
   return (
     <div className={style.videoUploadContainer} style={cssVariable}>
+      {label && <p className={style.label}>{label}</p>}
       {required && <p className={style.required}>*</p>}
 
       {!video && (
@@ -203,13 +204,13 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({
             <IconButton
               icon={resetFieldIcon}
               onClick={handleReupload}
-              color={color || "#52C9BD"}
+              color={color || "var(--color-primary)"}
               label="Re-Upload"
             />
             <IconButton
               icon={crossIcon}
               onClick={handleRemoveVideo}
-              color="#FF5969"
+              color="var(--color-error)"
             />
           </div>
         </div>
@@ -221,8 +222,8 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({
           onRemove={handleRemoveVideo}
           onReupload={handleReupload}
           color={color}
-          width={width}
-          height={height}
+          width={"100%"}
+          height={"auto"}
         />
       )}
 

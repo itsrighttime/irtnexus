@@ -17,7 +17,6 @@ export interface FileUploadProps {
   setIsFieldValid?: (isValid: boolean) => void;
   allowedTypes?: string[];
   maxSizeMb?: number; // in MB
-  multiple?: boolean;
   maxFiles?: number;
   width?: string;
   height?: string;
@@ -33,7 +32,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   setIsFieldValid = () => {},
   allowedTypes = [],
   maxSizeMb: maxSize = Infinity,
-  multiple = false,
   maxFiles = Infinity,
   width = "300px",
   height = "200px",
@@ -45,6 +43,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const _maxSize = maxSize * 1024 * 1024;
+  const isMultiple = maxFiles !== 1;
 
   useEffect(() => {
     if (value.length > 0 && files.length === 0) setFiles(value);
@@ -96,10 +95,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   };
 
   const createFileInput = ({
-    multiple = false,
+    isMultiple = false,
     onChange,
   }: {
-    multiple?: boolean;
+    isMultiple?: boolean;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   }) => {
     if (typeof document === "undefined") return;
@@ -107,7 +106,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     const input = document.createElement("input");
     input.type = "file";
     input.accept = allowedTypes.join(",");
-    input.multiple = multiple;
+    input.multiple = isMultiple;
     input.onchange = onChange as any; // TypeScript requires casting
     input.click();
   };
@@ -149,7 +148,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
   const handleAddMoreFiles = () => {
     createFileInput({
-      multiple: true,
+      isMultiple: true,
       onChange: (e) => handleFileChange((e.target as HTMLInputElement).files),
     });
   };
@@ -193,13 +192,14 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   };
 
   const cssVariable = {
-    "--color": color || "var(--colorCyan)",
+    "--color": color || "var(--color-primary)",
     "--width": width,
     "--height": height,
   } as React.CSSProperties;
 
   return (
     <div className={styles.fileUploadContainer} style={cssVariable}>
+      {label && <p className={styles.label}>{label}</p>}
       {required && <p className={styles.required}>*</p>}
 
       {files.length === 0 && (
@@ -216,7 +216,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             className={styles.formControl}
             title=""
             aria-label={label}
-            multiple={multiple}
+            multiple={isMultiple}
           />
           <span className={styles.label}>{label}</span>
         </div>
@@ -243,13 +243,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                   <IconButton
                     icon={resetFieldIcon}
                     onClick={() => handleReupload(index)}
-                    color={color || "#52C9BD"}
+                    color={color || "var(--color-primary)"}
                     label={"Re-Upload"}
                   />
                   <IconButton
                     icon={crossIcon}
                     onClick={() => handleRemoveFile(index)}
-                    color="#FF5969"
+                    color="var(--color-error)"
                     label={"Remove"}
                   />
                 </div>
@@ -266,7 +266,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             <p className={styles.buttonLink} onClick={handleResetFile}>
               Reset All
             </p>
-            {multiple && files.length < maxFiles && (
+            {isMultiple && files.length < maxFiles && (
               <p className={styles.buttonLink} onClick={handleAddMoreFiles}>
                 Add More Files
               </p>

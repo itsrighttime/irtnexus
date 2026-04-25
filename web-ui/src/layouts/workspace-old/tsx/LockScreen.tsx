@@ -27,7 +27,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
     <div className={styles.lockScreen}>
       <OtpField
         setResult={handleSubmit}
-        verifcationEndpoint={"/verify-otp"}
+        verificationEndpoint={"/verify-otp"}
         userId={userDetails.user.userId}
         setError={setError}
         isNumeric={false}

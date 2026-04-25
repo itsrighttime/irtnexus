@@ -1,6 +1,12 @@
 "use client";
 
-import { useState, useEffect, type ChangeEvent, type DragEvent } from "react";
+import {
+  useState,
+  useEffect,
+  type ChangeEvent,
+  type DragEvent,
+  useRef,
+} from "react";
 import style from "./ImageUpload.module.css"; // Adjust path as needed
 import { Icons } from "@/assets/icons";
 import { IconButton } from "../button/IconButton";
@@ -32,8 +38,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   maxSizeMb: maxSizeMB = 5,
   requireSquare = true,
   width = "300px",
-  height = "300px",
-  previewBorderRadius = "0%",
+  height = "auto",
+  previewBorderRadius = "var(--radius-md)",
   backendError = "",
   value = null,
   required = false,
@@ -41,44 +47,45 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [image, setImage] = useState<string | null>(null); // URL for preview
   const [error, setError] = useState<string | null>(null);
-
+  const objectUrlRef = useRef<string | null>(null);
   const maxSize = maxSizeMB * 1024 * 1024;
 
   // Initialize image from value prop
   useEffect(() => {
     if (!value) {
       setImage(null);
+      setError(null);
       return;
     }
 
     if (typeof value === "string") {
       setImage(value);
-      setIsFieldValid(true);
       setError(null);
-    } else if (value instanceof File || value instanceof Blob) {
-      const url = URL.createObjectURL(value);
-      setImage(url);
-      setIsFieldValid(true);
-      setError(null);
-
-      return () => URL.revokeObjectURL(url);
+      return;
     }
-  }, [value, setIsFieldValid]);
+
+    if (value instanceof File || value instanceof Blob) {
+      const url = URL.createObjectURL(value);
+
+      // revoke previous safely
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+      }
+
+      objectUrlRef.current = url;
+      setImage(url);
+      setError(null);
+    }
+  }, [value]);
 
   // Sync backend error
   useEffect(() => {
-    if (backendError) {
-      setError(backendError);
+    if (error) {
       setIsFieldValid(false);
+    } else if (image) {
+      setIsFieldValid(true);
     }
-  }, [backendError, setIsFieldValid]);
-
-  // Cleanup previous object URL
-  useEffect(() => {
-    return () => {
-      if (image) URL.revokeObjectURL(image);
-    };
-  }, [image]);
+  }, [error, image]);
 
   // Validate file type and size
   const validateImage = (file: File) => {
@@ -106,6 +113,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     if (!selectedFile || !validateImage(selectedFile)) return;
 
     const url = URL.createObjectURL(selectedFile);
+    objectUrlRef.current = url;
     const isSquare = await checkIfSquare(url);
 
     if (requireSquare && !isSquare) {
@@ -158,13 +166,14 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const cssVariable: React.CSSProperties = {
-    "--color": color || "var(--colorCyan)",
+    "--color": color || "var(--color-primary)",
     "--width": width,
     "--height": height,
   } as React.CSSProperties;
 
   return (
     <div className={style.imageUploadContainer} style={cssVariable}>
+      {label && <p className={style.label}>{label}</p>}
       {required && <p className={style.required}>*</p>}
 
       {!image && (
@@ -194,16 +203,24 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             src={image}
             alt="Preview"
             className={style.image}
-            style={{ borderRadius: previewBorderRadius }}
+            style={{
+              borderRadius: previewBorderRadius,
+              width: "100%",
+              height: "auto",
+            }}
           />
           <div className={style.resetRemove}>
             <IconButton
               icon={resetFieldIcon}
               onClick={handleReupload}
-              color={color || "#52C9BD"}
+              color={color || "var(--color-primary)"}
               label="Re-Upload"
             />
-            <IconButton icon={crossIcon} onClick={resetAll} color="#FF5969" />
+            <IconButton
+              icon={crossIcon}
+              onClick={resetAll}
+              color="var(--color-error)"
+            />
           </div>
         </div>
       )}

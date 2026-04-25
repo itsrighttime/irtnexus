@@ -16,6 +16,7 @@ export function ActionColumn<T>({ row, actions = [] }: Props<T>) {
           onClick={() => action.onClick(row)}
           variant="secondary"
           size="small"
+          type="button"
         >
           {action.label}
         </Button>

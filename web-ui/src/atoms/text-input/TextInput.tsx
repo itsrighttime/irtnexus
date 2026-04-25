@@ -111,6 +111,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
               onClick={() => setShowPassword((prev) => !prev)}
               iconOnly
               iconLeft={showPassword ? Icons["eyeCrossIcon"] : Icons["eyeIcon"]}
+              type="button"
             />
           ) : (
             !loading &&

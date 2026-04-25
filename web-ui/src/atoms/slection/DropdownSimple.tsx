@@ -4,28 +4,37 @@ import { useRef, type JSX } from "react";
 import styles from "./DropdownSimple.module.css";
 import { useSmartPosition } from "@/hooks";
 
-export type DropdownItem = {
-  key: string | number;
-  route: string;
-  value: string;
-  box?: string[];
-  description?: string;
-};
+export type DropdownItem =
+  | {
+      key: string | number;
+      route?: string;
+      value: string;
+      box?: string[];
+      description?: string;
+    }
+  | string;
 
 export type DropdownSimpleProps = {
   items: DropdownItem[];
   onSelect?: (key: string | number) => void;
-  isOpen: boolean;
+  isOpen?: boolean;
 };
 
 export const DropdownSimple: React.FC<DropdownSimpleProps> = ({
   items,
   onSelect,
-  isOpen,
+  isOpen = false,
 }): JSX.Element | null => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const position = useSmartPosition(dropdownRef, isOpen);
+
+  // Normalize options to match SelectionBox expected format
+  const normalizedItems = items.map((itm) =>
+    typeof itm === "string"
+      ? { key: itm, label: itm, value: itm, box: [], description: "" }
+      : itm,
+  );
 
   if (!isOpen) return null;
 
@@ -42,7 +51,7 @@ export const DropdownSimple: React.FC<DropdownSimpleProps> = ({
         position.horizontal === "left" ? styles.alignLeft : styles.alignRight
       }`}
     >
-      {items.map((item) => (
+      {normalizedItems.map((item) => (
         <div
           key={item.key}
           className={styles.dropdownItem}

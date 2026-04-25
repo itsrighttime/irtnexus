@@ -132,13 +132,14 @@ export const AudioUpload: React.FC<AudioUploadProps> = ({
   };
 
   const cssVariable: React.CSSProperties = {
-    "--color": color || "var(--colorCyan)",
+    "--color": color || "var(--color-primary)",
     "--width": width,
     "--height": height,
   } as React.CSSProperties;
 
   return (
     <div className={style.audioUploadContainer} style={cssVariable}>
+      {label && <p className={style.label}>{label}</p>}
       {required && <p className={style.required}>*</p>}
 
       {!audio ? (
@@ -165,7 +166,7 @@ export const AudioUpload: React.FC<AudioUploadProps> = ({
           onRemove={handleRemoveAudio}
           onReupload={handleReupload}
           color={color}
-          width={width}
+          width={"100%"}
         />
       )}
       {error && <p className={style.error}>{error}</p>}

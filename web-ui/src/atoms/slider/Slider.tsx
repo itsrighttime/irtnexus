@@ -114,6 +114,7 @@ export const Slider: React.FC<SliderProps> = ({
             style={{ border: "none", borderRadius: "50%" }}
             iconOnly
             variant="ghost"
+            type="button"
           />
           {showRange && <p>{min}</p>}
           <input
@@ -134,6 +135,7 @@ export const Slider: React.FC<SliderProps> = ({
             style={{ border: "none", borderRadius: "50%" }}
             iconOnly
             variant="ghost"
+            type="button"
           />
           {required && <p className={styles.required}>*</p>}
         </div>

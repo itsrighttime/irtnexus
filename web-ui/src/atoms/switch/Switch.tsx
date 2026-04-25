@@ -9,23 +9,25 @@ interface CustomStyles {
 }
 
 export interface SwitchProps {
-  initialValue: boolean;
+  value?: boolean;
   setResult: (value: boolean) => void;
   color?: string;
   label?: string;
   disabled?: boolean;
   customStyles?: CustomStyles;
   required?: boolean;
+  width?: string;
 }
 
 export const Switch: React.FC<SwitchProps> = ({
-  initialValue,
+  value: initialValue = false,
   setResult,
   color,
   label,
   disabled = false,
   customStyles = {},
   required = false,
+  width = "300px",
 }) => {
   const [switchValue, setSwitchValue] = useState<boolean>(initialValue);
 
@@ -39,6 +41,7 @@ export const Switch: React.FC<SwitchProps> = ({
 
   const cssVariable: CSSProperties = {
     "--color": color || "var(--color-primary)",
+    width: width,
   } as CSSProperties;
 
   return (

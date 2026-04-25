@@ -3,13 +3,15 @@
 import React from "react";
 import { SelectionBox } from "./SelectionBox";
 
-type OptionType = {
-  key: string | number;
-  value: string | number;
-  label?: string;
-  help?: string;
-  disabled?: boolean;
-};
+type OptionType =
+  | {
+      key: string | number;
+      value: string | number;
+      label: string;
+      help?: string;
+      disabled?: boolean;
+    }
+  | string;
 
 interface CustomStyles {
   group?: React.CSSProperties;
@@ -43,12 +45,9 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   required = false,
 }) => {
   // Normalize options to match SelectionBox expected format
-  const normalizedOptions = options.map((opt) => ({
-    value: opt.value ?? opt.key,
-    label: opt.label ?? String(opt.value),
-    help: opt.help,
-    disabled: opt.disabled,
-  }));
+  const normalizedOptions = options.map((opt) =>
+    typeof opt === "string" ? { label: opt, value: opt } : opt,
+  );
 
   return (
     <SelectionBox

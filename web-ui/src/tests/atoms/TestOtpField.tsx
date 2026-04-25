@@ -17,7 +17,7 @@ export const TestOtpField: React.FC = () => {
           color="#1E90FF"
         //   width="250px"
           userId="user123"
-          verifcationEndpoint="/api/verify-otp"
+          verificationEndpoint="/api/verify-otp"
           setResult={setNumericOtp}
           setError={setErrorMsg}
           isNumeric={true}
@@ -33,7 +33,7 @@ export const TestOtpField: React.FC = () => {
           color="#FF69B4"
           width="300px"
           userId="user456"
-          verifcationEndpoint="/api/verify-otp"
+          verificationEndpoint="/api/verify-otp"
           setResult={setAlphaOtp}
           setError={setErrorMsg}
           isNumeric={false}

@@ -16,6 +16,8 @@ engine.register(FORM_FIELDS_TYPE.RADIO, {
     }
 
     for (const opt of options) {
+      if (typeof opt === "string") continue;
+
       if (!opt.label || typeof opt.label !== "string") {
         return { valid: false, error: "Each option must have a label" };
       }
@@ -34,7 +36,9 @@ engine.register(FORM_FIELDS_TYPE.RADIO, {
       return { valid: false, error: "Radio value must be a string" };
     }
 
-    const validValues = options.map((opt) => opt.value);
+    const validValues = options.map((opt) =>
+      typeof opt === "string" ? opt : opt.value,
+    );
 
     if (!validValues.includes(value)) {
       return { valid: false, error: `Invalid radio selection: ${value}` };

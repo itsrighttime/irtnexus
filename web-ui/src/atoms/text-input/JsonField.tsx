@@ -35,22 +35,11 @@ export const JsonField: React.FC<JsonFieldProps> = ({
   value = "",
   required = false,
 }) => {
+  // Initialize only once to avoid re-sync loops
   const [jsonInput, setJsonInput] = useState<string>(value);
   const [error, setError] = useState<string>("");
   const [onSave, setOnSave] = useState<boolean>(true);
   const [formattedJson, setFormattedJson] = useState<string>("");
-
-  // Sync external value
-  useEffect(() => {
-    if (value !== "" && jsonInput === "") {
-      setJsonInput(value);
-    }
-  }, [value, jsonInput]);
-
-  // Emit formatted JSON
-  useEffect(() => {
-    setResult(formattedJson);
-  }, [formattedJson, setResult]);
 
   const handleValidateJson = () => {
     try {
@@ -63,6 +52,9 @@ export const JsonField: React.FC<JsonFieldProps> = ({
 
       setFormattedJson(prettyJson);
       setJsonInput(prettyJson);
+
+      // emit final result here (instead of useEffect)
+      setResult(prettyJson);
 
       if (hideOnSave) setOnSave(false);
     } catch (err) {
@@ -109,6 +101,7 @@ export const JsonField: React.FC<JsonFieldProps> = ({
                 size="small"
                 onClick={handleValidateJson}
                 width="150px"
+                type="button"
               >
                 Validate & Save
               </Button>

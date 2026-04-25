@@ -14,7 +14,7 @@ export const TestSwitch: React.FC = () => {
       <div style={{ marginBottom: "30px" }}>
         <Switch
           label="Enable Notifications"
-          initialValue={notifications}
+          value={notifications}
           setResult={setNotifications}
           color="#1E90FF"
           required
@@ -26,7 +26,7 @@ export const TestSwitch: React.FC = () => {
       <div style={{ marginBottom: "30px" }}>
         <Switch
           label="Dark Mode"
-          initialValue={darkMode}
+          value={darkMode}
           setResult={setDarkMode}
           color="#333"
         />
@@ -37,7 +37,7 @@ export const TestSwitch: React.FC = () => {
       <div style={{ marginBottom: "30px" }}>
         <Switch
           label="Auto Save (Disabled)"
-          initialValue={autoSave}
+          value={autoSave}
           setResult={setAutoSave}
           color="#28a745"
           disabled
@@ -49,7 +49,7 @@ export const TestSwitch: React.FC = () => {
       <div style={{ marginBottom: "30px" }}>
         <Switch
           label="Custom Styled Switch"
-          initialValue={true}
+          value={true}
           setResult={(val) => console.log("Custom Switch:", val)}
           color="#FF69B4"
           customStyles={{
@@ -65,19 +65,19 @@ export const TestSwitch: React.FC = () => {
         <div style={{ display: "flex", gap: "20px" }}>
           <Switch
             label="A"
-            initialValue={false}
+            value={false}
             setResult={(val) => console.log("A:", val)}
             color="#00b894"
           />
           <Switch
             label="B"
-            initialValue={true}
+            value={true}
             setResult={(val) => console.log("B:", val)}
             color="#e17055"
           />
           <Switch
             label="C"
-            initialValue={false}
+            value={false}
             setResult={(val) => console.log("C:", val)}
             color="#6c5ce7"
           />

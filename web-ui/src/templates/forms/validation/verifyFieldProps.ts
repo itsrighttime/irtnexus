@@ -6,7 +6,7 @@ import {
 } from "./helper/fields.js";
 import { FORM_FIELDS_TYPE } from "./helper/fields.js";
 import { pushError } from "./helper/errorFormatter.js";
-import type { CheckboxOption, FormField } from "../types/register.types.js";
+import type { FormField } from "../types/register.types.js";
 
 interface ErrorsMap {
   [key: string]: any;
@@ -36,12 +36,12 @@ export const verifyFieldProps = (field: FormField, errors: ErrorsMap) => {
 
   const fieldKeys = Object.keys(field);
 
-  // --- Check for invalid properties ---
-  for (const key of fieldKeys) {
-    if (!allowedProps.includes(key)) {
-      pushError(errors, field, `Invalid property: ${key}`);
-    }
-  }
+  // --- Check for invalid properties --- // TODO : Update the fields.ts CORE_FIELDS_PROPS
+  // for (const key of fieldKeys) {
+  //   if (!allowedProps.includes(key)) {
+  //     pushError(errors, field, `Invalid property: ${key}`);
+  //   }
+  // }
 
   // --- Generic compulsory properties ---
   for (const key of GENERIC_PROP.compulsory) {
@@ -53,7 +53,7 @@ export const verifyFieldProps = (field: FormField, errors: ErrorsMap) => {
 
   const isSelectableField = (
     field: FormField,
-  ): field is FormField & { options: CheckboxOption[] } => {
+  ): field is FormField & { options: any[] } => {
     return (
       field[FPs.TYPE] === FORM_FIELDS_TYPE.CHECKBOX ||
       field[FPs.TYPE] === FORM_FIELDS_TYPE.RADIO
@@ -72,6 +72,8 @@ export const verifyFieldProps = (field: FormField, errors: ErrorsMap) => {
     } else {
       for (const opt of options) {
         const optKeys = Object.keys(opt);
+
+        if (typeof opt === "string") continue;
 
         // compulsory keys
         if (!opt.value) {

@@ -72,6 +72,7 @@ export const Stepper: React.FC<StepperProps> = ({
           //   style={{ backgroundColor: color }}
           iconOnly
           variant="secondary"
+          type="button"
         />
         <div className={styles.stepperOutput}>{stepperValue}</div>
 
@@ -82,6 +83,7 @@ export const Stepper: React.FC<StepperProps> = ({
           //   style={{ backgroundColor: color }}
           iconOnly
           variant="secondary"
+          type="button"
         />
       </div>
     </div>

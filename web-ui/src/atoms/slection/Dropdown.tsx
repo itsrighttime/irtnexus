@@ -220,6 +220,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                   onClick={handleAddOption}
                   color={color}
                   variant="secondary"
+                  type="button"
                 >
                   Add
                 </Button>
@@ -234,6 +235,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                   color={color}
                   variant="secondary"
                   size="small"
+                  type="button"
                 >
                   Clear Selection
                 </Button>
@@ -242,6 +244,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                   width="90%"
                   size="small"
                   color={color}
+                  type="button"
                 >
                   Done
                 </Button>

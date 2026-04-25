@@ -113,7 +113,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   }, [currentTime, duration]);
 
   const cssVars: React.CSSProperties = {
-    "--color": color || "var(--colorCyan)",
+    "--color": color || "var(--color-primary)",
     "--width": width,
   } as React.CSSProperties;
 
@@ -126,7 +126,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
           <IconButton
             icon={isPlaying ? pauseIcon : playIcon}
             onClick={handlePlayPause}
-            color={isPlaying ? color || "#52C9BD" : "#FF5969"}
+            color={isPlaying ? color || "var(--color-primary)" : "var(--color-error)"}
             size="1.2"
             style={{ border: "none" }}
           />
@@ -159,7 +159,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
             <IconButton
               icon={isMuted ? speakerOffIcon : speakerOnIcon}
               onClick={handleMute}
-              color={color || "#52C9BD"}
+              color={color || "var(--color-primary)"}
             />
             <Slider
               setResult={handleVolumeChange}
@@ -176,12 +176,12 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
               <IconButton
                 icon={resetFieldIcon}
                 onClick={onReupload}
-                color={color || "#52C9BD"}
+                color={color || "var(--color-primary)"}
                 label="Re-Upload"
               />
             )}
             {onRemove && (
-              <IconButton icon={crossIcon} onClick={onRemove} color="#FF5969" />
+              <IconButton icon={crossIcon} onClick={onRemove} color="var(--color-error)" />
             )}
           </div>
         </div>
