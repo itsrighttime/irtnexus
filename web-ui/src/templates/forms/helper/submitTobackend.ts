@@ -1,4 +1,4 @@
-import { useAPICaller } from "@/hooks";
+import { apiCaller } from "core-ui";
 
 type Primitive = string | number | boolean;
 type FormValue =
@@ -67,7 +67,7 @@ export const submitToBackend = async (
     appendToFormData(key, value);
   });
 
-  const response: any = await useAPICaller({
+  const response: any = await apiCaller({
     endpoint,
     method: "POST",
     body,

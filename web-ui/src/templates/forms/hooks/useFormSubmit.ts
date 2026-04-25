@@ -57,15 +57,25 @@ export function useFormSubmit({
     }
 
     try {
-      // const endpoint = config?.[FPs.ENDPOINT]
-      const endpoint = ""; // TODO
+      const endpoint = config?.[FPs.ENDPOINT];
 
-      // const response: BackendResponse = await submitToBackend(
-      //   formData,
-      //   endpoint,
-      // );
+      if (!endpoint) {
+        onSubmit?.(formData);
+        setFormStatus(FORM_STATUS.submitted);
 
-      const response = { success: true, data: { message: "" }, message: "" };
+        addAlert(
+          `${config[FPs.TITLE] || "Details"} Submitted Successfully`,
+          "success",
+        );
+        return;
+      }
+
+      const response: BackendResponse = await submitToBackend(
+        formData,
+        endpoint,
+      );
+
+      // const response = { success: true, data: { message: "" }, message: "" };
 
       if (response?.success) {
         // Clear localStorage

@@ -36,6 +36,7 @@ export interface SingleStepFormConfig {
   [FPs.MODE]?: "single";
   [FPs.TITLE]?: string;
   [FPs.DESCRIPTION]?: string;
+  [FPs.ENDPOINT]?: string;
   [FPs.SETTINGS]?: FormSettings;
   [FPs.FIELDS]: FormField[];
 }
@@ -43,6 +44,7 @@ export interface SingleStepFormConfig {
 export interface MultiStepFormConfig {
   [FPs.MODE]: "multi";
   [FPs.TITLE]?: string;
+  [FPs.ENDPOINT]?: string;
   [FPs.DESCRIPTION]?: string;
   [FPs.SETTINGS]?: FormSettings;
   [FPs.STEP]: FormStep[];
