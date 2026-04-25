@@ -4,23 +4,30 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { loadFile, saveFile, deleteFile } from "../helper/indexedDb.js";
 import type { FormValues, ValidateResult } from "../types/formConfig.types";
 
-const EXPIRY_DURATION = 24 * 60 * 60 * 1000; // 24 hours in ms
+const EXPIRY_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
 export function useFormPersistence(
   STORAGE_KEY: string,
   initialState: FormValues,
   initialError: ValidateResult["errors"],
 ) {
+  // --- Stable refs ---
   const initialStateRef = useRef(initialState);
   const initialErrorRef = useRef(initialError);
   const mountedRef = useRef(true);
 
+  // --- State ---
   const [formData, setFormData] = useState<FormValues>(initialStateRef.current);
   const [formError, setFormError] = useState<ValidateResult["errors"]>(
     initialErrorRef.current,
   );
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isInitialized, setIsInitialized] = useState(false);
+
+  // --- Optimization refs ---
+  const debounceRef = useRef<any>(null);
+  const prevSnapshotRef = useRef<string>("");
+  const lastFilesSignatureRef = useRef<string>("");
 
   // --- Helpers ---
   const isFileLike = useCallback((v: unknown): v is File | Blob => {
@@ -33,6 +40,7 @@ export function useFormPersistence(
     [isFileLike],
   );
 
+  // --- Save files (optimized) ---
   const saveFilesFromFormData = useCallback(
     async (data: FormValues): Promise<Record<string, string | string[]>> => {
       const filesManifest: Record<string, string | string[]> = {};
@@ -77,6 +85,7 @@ export function useFormPersistence(
   const cleanupFiles = useCallback(
     async (filesManifest?: Record<string, string | string[]>) => {
       if (!filesManifest) return;
+
       for (const value of Object.values(filesManifest)) {
         if (Array.isArray(value)) {
           for (const key of value) await deleteFile(key);
@@ -88,7 +97,7 @@ export function useFormPersistence(
     [],
   );
 
-  // --- Manual Clear Function ---
+  // --- Clear persistence ---
   const clearFormPersistence = useCallback(async () => {
     try {
       const savedRaw = localStorage.getItem(STORAGE_KEY);
@@ -104,17 +113,10 @@ export function useFormPersistence(
       setFormError(initialErrorRef.current);
       setCurrentStep(0);
     }
-  }, [
-    STORAGE_KEY,
-    initialStateRef.current,
-    initialErrorRef.current,
-    cleanupFiles,
-  ]);
+  }, [STORAGE_KEY, cleanupFiles]);
 
   // --- Load persisted data ---
   useEffect(() => {
-    if (isInitialized) return;
-
     const loadAll = async () => {
       try {
         const savedRaw = localStorage.getItem(STORAGE_KEY);
@@ -123,22 +125,23 @@ export function useFormPersistence(
         const saved = JSON.parse(savedRaw);
         const { savedAt } = saved;
 
-        // Auto-expire after 24h
         if (Date.now() - savedAt > EXPIRY_DURATION) {
-          console.info(`[FormPersistence] Data expired for ${STORAGE_KEY}`);
           await cleanupFiles(saved.files);
           localStorage.removeItem(STORAGE_KEY);
           return;
         }
 
         let loadedFiles: FormValues = {};
-        if (saved.files) loadedFiles = await loadFilesFromManifest(saved.files);
+        if (saved.files) {
+          loadedFiles = await loadFilesFromManifest(saved.files);
+        }
 
         setFormData({
           ...initialStateRef.current,
           ...(saved.formData || {}),
           ...loadedFiles,
         });
+
         setFormError(saved.formError || initialErrorRef.current);
         setCurrentStep(saved.currentStep || 0);
       } catch (e) {
@@ -153,37 +156,77 @@ export function useFormPersistence(
     };
 
     loadAll();
+
     return () => {
       mountedRef.current = false;
     };
   }, [STORAGE_KEY, loadFilesFromManifest, cleanupFiles]);
 
-  // --- Persist updates ---
+  // --- Persist updates (debounced + optimized) ---
   useEffect(() => {
-    let cancelled = false;
 
-    const persist = async () => {
-      const formDataSnapshot: FormValues = {};
-      Object.entries(formData).forEach(([k, v]) => {
-        formDataSnapshot[k] = isFileLike(v) || isFileArray(v) ? null : v;
-      });
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
 
-      const manifest = await saveFilesFromFormData(formData);
-      if (cancelled) return;
+    debounceRef.current = setTimeout(() => {
+      let cancelled = false;
 
-      const storageData = {
-        formData: formDataSnapshot,
-        formError,
-        currentStep,
-        files: manifest,
-        savedAt: Date.now(),
+      const persist = async () => {
+        // --- Diff check ---
+        const snapshot = JSON.stringify({
+          formData,
+          formError,
+          currentStep,
+        });
+
+        if (prevSnapshotRef.current === snapshot) return;
+        prevSnapshotRef.current = snapshot;
+
+        // --- Prepare data ---
+        const formDataSnapshot: FormValues = {};
+        Object.entries(formData).forEach(([k, v]) => {
+          formDataSnapshot[k] = isFileLike(v) || isFileArray(v) ? null : v;
+        });
+
+        // --- File optimization ---
+        const fileSignature = JSON.stringify(
+          Object.entries(formData).filter(
+            ([_, v]) => isFileLike(v) || isFileArray(v),
+          ),
+        );
+
+        let manifest: Record<string, string | string[]> = {};
+
+        if (fileSignature !== lastFilesSignatureRef.current) {
+          lastFilesSignatureRef.current = fileSignature;
+          manifest = await saveFilesFromFormData(formData);
+        }
+
+        if (cancelled) return;
+
+        const storageData = {
+          formData: formDataSnapshot,
+          formError,
+          currentStep,
+          files: manifest,
+          savedAt: Date.now(),
+        };
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(storageData));
       };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(storageData));
-    };
 
-    persist();
+      persist();
+
+      return () => {
+        cancelled = true;
+      };
+    }, 400);
+
     return () => {
-      cancelled = true;
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
     };
   }, [
     formData,
@@ -195,7 +238,7 @@ export function useFormPersistence(
     isFileArray,
   ]);
 
-  // --- Return API ---
+  // --- API ---
   return {
     formData,
     setFormData,
