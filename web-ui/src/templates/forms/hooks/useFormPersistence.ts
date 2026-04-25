@@ -11,14 +11,16 @@ export function useFormPersistence(
   initialState: FormValues,
   initialError: ValidateResult["errors"],
 ) {
-  const [formData, setFormData] = useState<FormValues>(initialState);
-  const [formError, setFormError] =
-    useState<ValidateResult["errors"]>(initialError);
+  const initialStateRef = useRef(initialState);
+  const initialErrorRef = useRef(initialError);
+  const mountedRef = useRef(true);
+
+  const [formData, setFormData] = useState<FormValues>(initialStateRef.current);
+  const [formError, setFormError] = useState<ValidateResult["errors"]>(
+    initialErrorRef.current,
+  );
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isInitialized, setIsInitialized] = useState(false);
-
-  const isLoadingRef = useRef(false);
-  const mountedRef = useRef(true);
 
   // --- Helpers ---
   const isFileLike = useCallback((v: unknown): v is File | Blob => {
@@ -95,19 +97,23 @@ export function useFormPersistence(
         await cleanupFiles(saved.files);
       }
       localStorage.removeItem(STORAGE_KEY);
-      window.location.reload();
     } catch (err) {
       console.error("Error clearing form persistence:", err);
     } finally {
-      setFormData(initialState);
-      setFormError(initialError);
+      setFormData(initialStateRef.current);
+      setFormError(initialErrorRef.current);
       setCurrentStep(0);
     }
-  }, [STORAGE_KEY, initialState, initialError, cleanupFiles]);
+  }, [
+    STORAGE_KEY,
+    initialStateRef.current,
+    initialErrorRef.current,
+    cleanupFiles,
+  ]);
 
   // --- Load persisted data ---
   useEffect(() => {
-    isLoadingRef.current = true;
+    if (isInitialized) return;
 
     const loadAll = async () => {
       try {
@@ -129,20 +135,19 @@ export function useFormPersistence(
         if (saved.files) loadedFiles = await loadFilesFromManifest(saved.files);
 
         setFormData({
-          ...initialState,
+          ...initialStateRef.current,
           ...(saved.formData || {}),
           ...loadedFiles,
         });
-        setFormError(saved.formError || initialError);
+        setFormError(saved.formError || initialErrorRef.current);
         setCurrentStep(saved.currentStep || 0);
       } catch (e) {
         console.warn("Failed to load persisted form data:", e);
-        setFormData(initialState);
-        setFormError(initialError);
+        setFormData(initialStateRef.current);
+        setFormError(initialErrorRef.current);
       } finally {
         if (mountedRef.current) {
           setIsInitialized(true);
-          isLoadingRef.current = false;
         }
       }
     };
@@ -151,17 +156,10 @@ export function useFormPersistence(
     return () => {
       mountedRef.current = false;
     };
-  }, [
-    STORAGE_KEY,
-    initialState,
-    initialError,
-    loadFilesFromManifest,
-    cleanupFiles,
-  ]);
+  }, [STORAGE_KEY, loadFilesFromManifest, cleanupFiles]);
 
   // --- Persist updates ---
   useEffect(() => {
-    if (!isInitialized || isLoadingRef.current) return;
     let cancelled = false;
 
     const persist = async () => {

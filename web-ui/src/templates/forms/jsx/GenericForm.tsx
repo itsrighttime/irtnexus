@@ -95,6 +95,16 @@ export function GenericForm({
     clearFormPersistence,
   } = useFormPersistence(STORAGE_KEY, initialState, initialError);
 
+  useEffect(() => {
+    if (formStatus === FORM_STATUS.submitted) {
+      // Clear persistence + reset state
+      clearFormPersistence();
+
+      // Reset UI state
+      if (!_settings.successPage.show) setFormStatus(FORM_STATUS.fill);
+    }
+  }, [formStatus, _settings.successPage.show, clearFormPersistence]);
+
   // --- Form navigation ---
   const { next, back } = useFormNavigation({
     config,
@@ -202,9 +212,11 @@ export function GenericForm({
           color={color}
           message={_settings.successPage.message}
           label={_settings.successPage.label}
-          onHomeClick={() =>
-            (window.location.href = _settings.successPage.href || "/")
-          }
+          onHomeClick={() => {
+            clearFormPersistence();
+            setFormStatus(FORM_STATUS.fill);
+            window.location.href = _settings.successPage.href || "/";
+          }}
         />
       </div>
     );
