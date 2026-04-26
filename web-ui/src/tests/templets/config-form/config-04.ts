@@ -169,12 +169,12 @@ export const config04: FormConfig = {
     //   label: "Security Question",
     //   options: ["Your pet name?", "Your school name?"],
     // },
-    // {
-    //   name: "url",
-    //   type: FORM_FIELDS_TYPE.URL,
-    //   label: "Website URL",
-    //   placeholder: "https://example.com",
-    // },
+    {
+      name: "url",
+      type: FORM_FIELDS_TYPE.URL,
+      label: "Website URL",
+      placeholder: "https://example.com",
+    },
     {
       name: "fileUpload",
       type: FORM_FIELDS_TYPE.FILE,

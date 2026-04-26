@@ -16,10 +16,26 @@ engine.register(FORM_FIELDS_TYPE.URL, {
 
     const trimmed = value.trim();
 
+    const normalizeUrl = (url: string) => {
+      if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        return `https://${url}`;
+      }
+      return url;
+    };
+
+    const isValidUrl = (url: string) => {
+      try {
+        new URL(normalizeUrl(url));
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
     // URL format validation
     try {
-      const url = new URL(trimmed);
-      if (url.protocol !== "http:" && url.protocol !== "https:") {
+      const url = normalizeUrl(trimmed);
+      if (isValidUrl(url)) {
         return { valid: false, error: "Invalid URL protocol" };
       }
     } catch {

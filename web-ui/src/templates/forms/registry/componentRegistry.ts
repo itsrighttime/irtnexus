@@ -23,6 +23,7 @@ import {
   TextArea,
   TextInput,
   TimePicker,
+  UrlInput,
   VideoUpload,
   YearPicker,
 } from "@/atoms";
@@ -60,5 +61,5 @@ export const COMPONENT_REGISTRY: ComponentRegistry = {
   [FFT.SWITCH]: Switch,
   [FFT.SLIDER]: Slider,
   [FFT.STEPPER]: Stepper,
-  //   [FFT.URL]: "",
+  [FFT.URL]: UrlInput,
 } as const;

@@ -16,6 +16,7 @@ export * from "./text-input/EmailInput";
 export * from "./text-input/MobileInput";
 export * from "./text-input/NumberInput";
 export * from "./text-input/PasswordInput";
+export * from "./text-input/UrlInput";
 export * from "./alert/alert.type";
 export * from "./alert/AlertContainer";
 export * from "./alert/ErrorMsg";

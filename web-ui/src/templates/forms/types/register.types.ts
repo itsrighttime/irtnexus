@@ -31,6 +31,7 @@ import type {
   VideoUploadProps,
   TextInputVarientType,
   TimePickerProps,
+  UrlInputProps,
 } from "@/atoms";
 
 /* -------------------- UTIL -------------------- */
@@ -81,12 +82,7 @@ type FieldPropsMap = {
   [FORM_FIELDS_TYPE.DROPDOWN]: SingleDropdownProps;
   [FORM_FIELDS_TYPE.SIMPLE_DROPDOWN]: DropdownSimpleProps;
   [FORM_FIELDS_TYPE.MULTI_DROPDOWN]: MultipleDropdownProps;
-  [FORM_FIELDS_TYPE.EMAIL]: EmailInputType;
   [FORM_FIELDS_TYPE.IMAGE]: ImageUploadProps;
-  [FORM_FIELDS_TYPE.JSON]: JsonFieldProps;
-  [FORM_FIELDS_TYPE.MOBILE]: TextInputVarientType;
-  [FORM_FIELDS_TYPE.OTP]: OtpFieldProps;
-  [FORM_FIELDS_TYPE.PASSWORD]: TextInputVarientType;
   [FORM_FIELDS_TYPE.RADIO]: RadioGroupProps;
   [FORM_FIELDS_TYPE.SEARCH]: SearchBoxProps;
   [FORM_FIELDS_TYPE.SECURITY_QUESTION]: {
@@ -95,10 +91,17 @@ type FieldPropsMap = {
   [FORM_FIELDS_TYPE.SLIDER]: SliderProps;
   [FORM_FIELDS_TYPE.STEPPER]: StepperProps;
   [FORM_FIELDS_TYPE.SWITCH]: SwitchProps;
+
   [FORM_FIELDS_TYPE.TEXT]: TextInputProps;
   [FORM_FIELDS_TYPE.TEXT_AREA]: TextAreaProps;
+  [FORM_FIELDS_TYPE.EMAIL]: EmailInputType;
+  [FORM_FIELDS_TYPE.JSON]: JsonFieldProps;
+  [FORM_FIELDS_TYPE.MOBILE]: TextInputVarientType;
+  [FORM_FIELDS_TYPE.OTP]: OtpFieldProps;
+  [FORM_FIELDS_TYPE.PASSWORD]: TextInputVarientType;
+  [FORM_FIELDS_TYPE.URL]: UrlInputProps;
+
   [FORM_FIELDS_TYPE.TIME]: TimePickerProps;
-  [FORM_FIELDS_TYPE.URL]: {};
   [FORM_FIELDS_TYPE.VIDEO]: VideoUploadProps;
   [FORM_FIELDS_TYPE.FILE]: FileUploadProps;
 };
