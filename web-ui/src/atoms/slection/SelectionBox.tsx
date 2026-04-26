@@ -127,26 +127,28 @@ export const SelectionBox: React.FC<SelectionBoxProps> = ({
             }`}
             style={customStyles.item}
           >
-            <IconButton
-              icon={setIcon(selectedOption)}
-              color={setIconColor(option)}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (!disabled && !option.disabled) handleChange(option.value);
-              }}
-            />
-            <label
-              className={`${styles.selectionLabel} ${
-                (disabled || option.disabled) && styles.disabled
-              } ${selectedOption && styles.selected}`}
-              style={customStyles.label}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (!disabled && !option.disabled) handleChange(option.value);
-              }}
-            >
-              {option.label}
-            </label>
+            <div className={styles.labelIcon}>
+              <IconButton
+                icon={setIcon(selectedOption)}
+                color={setIconColor(option)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!disabled && !option.disabled) handleChange(option.value);
+                }}
+              />
+              <label
+                className={`${styles.selectionLabel} ${
+                  (disabled || option.disabled) && styles.disabled
+                } ${selectedOption && styles.selected}`}
+                style={customStyles.label}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!disabled && !option.disabled) handleChange(option.value);
+                }}
+              >
+                {option.label}
+              </label>
+            </div>
 
             {option.help && (
               <div
