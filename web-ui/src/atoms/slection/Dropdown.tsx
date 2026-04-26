@@ -35,6 +35,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   addNew = false,
   setAddedOptions,
   width = "300px",
+  required = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [allOptions, setAllOptions] = useState(options);
@@ -142,6 +143,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
           ${latestPlacementRef.current === "top" ? styles.openUp : styles.openDown}`}
         onClick={handleHeaderClick}
       >
+        {placeholder && selectedOptions.length > 0 && (
+          <p
+            className={styles.label}
+          >{`${placeholder} ${required ? " *" : ""}`}</p>
+        )}
         {selectedOptions.length ? (
           <div className={styles.selectedContainer}>
             <span className={styles.countBox}>{selectedOptions.length}</span>

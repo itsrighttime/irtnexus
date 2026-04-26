@@ -9,6 +9,18 @@
   width: var(--width);
 }
 
+.label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  position: absolute;
+  top: -9px;
+  left: 9px;
+  background-color: var(--color-background);
+  padding: 0 var(--spacing-xs);
+  color: var(--color-gray5);
+}
+
+
 .textAreaLabel {
   position: absolute;
   top: -18px;

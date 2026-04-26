@@ -8,6 +8,7 @@
 
 .label {
   color: var(--color-gray4);
+  padding-bottom: 10px;
 }
 
 .fileUpload {

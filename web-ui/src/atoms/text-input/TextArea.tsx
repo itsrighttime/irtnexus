@@ -45,6 +45,7 @@ export const TextArea: React.FC<TextAreaProps> = ({
   style = {},
   width = "300px",
   backendError = "",
+  required = false,
 }) => {
   const [inputValue, setInputValue] = useState<string>(value || "");
   const [error, setError] = useState<string>("");
@@ -125,11 +126,14 @@ export const TextArea: React.FC<TextAreaProps> = ({
       className={styles.textAreaContainer}
       style={{ ...style, ...cssVariable }}
     >
+      {label && inputValue != "" && (
+        <p className={styles.label}>{`${label} ${required ? " *" : ""}`}</p>
+      )}
       <textarea
         id={label}
         value={inputValue}
         onChange={handleChange}
-        placeholder={placeholder}
+        placeholder={`${placeholder} ${required ? " *" : ""}`}
         disabled={disabled}
         className={styles.textArea}
         ref={textAreaRef}
