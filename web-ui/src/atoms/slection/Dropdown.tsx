@@ -7,6 +7,7 @@ import { IconButton } from "../button/IconButton";
 import { Button } from "../button/Button";
 import { Popover } from "../over/Popover";
 import { getFittedText } from "./helper/getFittedText";
+import { DynamicPopover } from "../over/DynamicPopOver";
 
 const { arrowDownIcon, arrowUpIcon } = Icons;
 
@@ -45,6 +46,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const latestPlacementRef = useRef<"top" | "bottom">("bottom");
 
   // Sync external value
   useEffect(() => {
@@ -134,7 +136,10 @@ export const Dropdown: React.FC<DropdownProps> = ({
       {/* Header */}
       <div
         ref={containerRef}
-        className={`${styles.dropdownHeader} ${isOpen ? styles.open : ""}`}
+        className={`
+          ${styles.dropdownHeader} 
+          ${isOpen ? styles.open : ""} 
+          ${latestPlacementRef.current === "top" ? styles.openUp : styles.openDown}`}
         onClick={handleHeaderClick}
       >
         {selectedOptions.length ? (
@@ -155,110 +160,126 @@ export const Dropdown: React.FC<DropdownProps> = ({
       </div>
 
       {/* Popover Dropdown */}
-      <Popover
+      <DynamicPopover
         anchorRef={dropdownRef as any}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        offset={0}
       >
-        <div className={styles.dropdownMenu} style={cssVariable}>
-          {/* Search */}
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={handleSearch}
-            placeholder="Search..."
-            className={styles.searchInput}
-          />
+        {({ placement }) => {
+          if (latestPlacementRef.current !== placement) {
+            latestPlacementRef.current = placement;
+          }
 
-          <div className={styles.dropdownOptions}>
-            {multiple && (
-              <>
-                <div className={styles.selectedHeader}>Selected Options</div>
-                {selectedOptions.length > 0 ? (
-                  <ul className={styles.optionList}>
-                    {selectedOptions.map((option) => (
+          return (
+            <div
+              className={`${styles.dropdownMenu} ${
+                placement === "top" ? styles.openUp : styles.openDown
+              }`}
+              style={cssVariable}
+            >
+              {/* Search */}
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearch}
+                placeholder="Search..."
+                className={styles.searchInput}
+              />
+
+              <div className={styles.dropdownOptions}>
+                {multiple && (
+                  <>
+                    <div className={styles.selectedHeader}>
+                      Selected Options
+                    </div>
+                    {selectedOptions.length > 0 ? (
+                      <ul className={styles.optionList}>
+                        {selectedOptions.map((option) => (
+                          <li
+                            key={option}
+                            className={`${styles.optionItem} ${styles.selected}`}
+                            onClick={() => handleSelectOption(option)} // optional: allow deselect
+                          >
+                            {option}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className={styles.emptyState}>Nothing selected</div>
+                    )}
+                  </>
+                )}
+
+                {multiple && (
+                  <div className={styles.selectedHeader}>All Options</div>
+                )}
+                <ul className={styles.optionList}>
+                  {filteredOptions.length > 0 ? (
+                    filteredOptions.map((option) => (
                       <li
                         key={option}
-                        className={`${styles.optionItem} ${styles.selected}`}
-                        onClick={() => handleSelectOption(option)} // optional: allow deselect
+                        className={`${styles.optionItem} ${
+                          selectedOptions.includes(option)
+                            ? styles.selected
+                            : ""
+                        }`}
+                        onClick={() => handleSelectOption(option)}
                       >
                         {option}
                       </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className={styles.emptyState}>Nothing selected</div>
+                    ))
+                  ) : (
+                    <li className={styles.optionItem}>No Options Available</li>
+                  )}
+                </ul>
+
+                {addNew && (
+                  <div className={styles.addNewOption}>
+                    <input
+                      type="text"
+                      value={newOption}
+                      onChange={(e) => setNewOption(e.target.value)}
+                      placeholder="Add new option"
+                    />
+                    <Button
+                      onClick={handleAddOption}
+                      color={color}
+                      variant="secondary"
+                      type="button"
+                    >
+                      Add
+                    </Button>
+                  </div>
                 )}
-              </>
-            )}
 
-            {multiple && (
-              <div className={styles.selectedHeader}>All Options</div>
-            )}
-            <ul className={styles.optionList}>
-              {filteredOptions.length > 0 ? (
-                filteredOptions.map((option) => (
-                  <li
-                    key={option}
-                    className={`${styles.optionItem} ${
-                      selectedOptions.includes(option) ? styles.selected : ""
-                    }`}
-                    onClick={() => handleSelectOption(option)}
-                  >
-                    {option}
-                  </li>
-                ))
-              ) : (
-                <li className={styles.optionItem}>No Options Available</li>
-              )}
-            </ul>
-
-            {addNew && (
-              <div className={styles.addNewOption}>
-                <input
-                  type="text"
-                  value={newOption}
-                  onChange={(e) => setNewOption(e.target.value)}
-                  placeholder="Add new option"
-                />
-                <Button
-                  onClick={handleAddOption}
-                  color={color}
-                  variant="secondary"
-                  type="button"
-                >
-                  Add
-                </Button>
+                {selectedOptions.length > 0 && (
+                  <div className={styles.buttons}>
+                    <Button
+                      onClick={handleClearSelection}
+                      width="90%"
+                      color={color}
+                      variant="secondary"
+                      size="small"
+                      type="button"
+                    >
+                      Clear Selection
+                    </Button>
+                    <Button
+                      onClick={() => setIsOpen(false)}
+                      width="90%"
+                      size="small"
+                      color={color}
+                      type="button"
+                    >
+                      Done
+                    </Button>
+                  </div>
+                )}
               </div>
-            )}
-
-            {selectedOptions.length > 0 && (
-              <div className={styles.buttons}>
-                <Button
-                  onClick={handleClearSelection}
-                  width="90%"
-                  color={color}
-                  variant="secondary"
-                  size="small"
-                  type="button"
-                >
-                  Clear Selection
-                </Button>
-                <Button
-                  onClick={() => setIsOpen(false)}
-                  width="90%"
-                  size="small"
-                  color={color}
-                  type="button"
-                >
-                  Done
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      </Popover>
+            </div>
+          );
+        }}
+      </DynamicPopover>
     </div>
   );
 };

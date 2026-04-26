@@ -1,4 +1,5 @@
 export * from "./over/Popover";
+export * from "./over/DynamicPopOver";
 export * from "./table/Table";
 export * from "./table/table.type";
 export * from "./markdown/MarkdownRenderer";
