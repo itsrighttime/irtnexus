@@ -23,7 +23,7 @@ interface CustomStyles {
 
 interface SelectionBoxProps {
   options: Option[];
-  initialSelectedValues?: Array<string | number>;
+  value?: Array<string | number>;
   setResult: (value: Array<string | number> | string | number | null) => void;
   multiple?: boolean;
   layout?: "vertical" | "horizontal";
@@ -37,7 +37,7 @@ interface SelectionBoxProps {
 
 export const SelectionBox: React.FC<SelectionBoxProps> = ({
   options = [],
-  initialSelectedValues = [],
+  value: selectedValues = [],
   setResult,
   multiple = true,
   layout = "vertical",
@@ -48,19 +48,19 @@ export const SelectionBox: React.FC<SelectionBoxProps> = ({
   width = "300px",
   required = false,
 }) => {
-  const [selectedValues, setSelectedValues] = useState<
-    Array<string | number> | string | number | null
-  >(multiple ? initialSelectedValues : initialSelectedValues[0] || null);
+  // const [selectedValues, setSelectedValues] = useState<
+  //   Array<string | number> | string | number | null
+  // >(multiple ? selectedValues : selectedValues[0] || null);
 
-  useEffect(() => {
-    if (
-      initialSelectedValues?.length > 0 &&
-      Array.isArray(selectedValues) &&
-      !selectedValues?.length
-    ) {
-      setSelectedValues(initialSelectedValues);
-    }
-  }, [initialSelectedValues]);
+  // useEffect(() => {
+  //   if (
+  //     initialSelectedValues?.length > 0 &&
+  //     Array.isArray(selectedValues) &&
+  //     !selectedValues?.length
+  //   ) {
+  //     setSelectedValues(initialSelectedValues);
+  //   }
+  // }, [initialSelectedValues]);
 
   const handleChange = (value: string | number) => {
     let updatedSelections;
@@ -76,14 +76,16 @@ export const SelectionBox: React.FC<SelectionBoxProps> = ({
       updatedSelections = value;
     }
 
-    setSelectedValues(updatedSelections);
+    // setSelectedValues(updatedSelections);
     setResult(updatedSelections);
   };
 
   const isValueSelected = (value: string | number) => {
-    return multiple
-      ? Array.isArray(selectedValues) && selectedValues.includes(value)
-      : selectedValues === value;
+    return selectedValues && selectedValues.includes(value);
+
+    // return multiple
+    //   ? Array.isArray(selectedValues) && selectedValues.includes(value)
+    //   : selectedValues === value;
   };
 
   const cssVariable: CSSProperties = {

@@ -79,7 +79,7 @@ type CheckboxOptionType =
 
 export interface CheckboxGroupProps {
   options?: CheckboxOptionType[];
-  initialSelectedValues?: Array<string | number>;
+  value?: Array<string | number>;
   setResult: (value: Array<string | number> | string | number | null) => void;
   layout?: "vertical" | "horizontal";
   label?: string;
@@ -142,7 +142,7 @@ type RadioOptionType =
 
 export interface RadioGroupProps {
   options: RadioOptionType[];
-  initialSelectedValue?: string | number;
+  value?: string | number;
   setResult: (value: string | number | null) => void;
   layout?: "vertical" | "horizontal";
   label?: string;

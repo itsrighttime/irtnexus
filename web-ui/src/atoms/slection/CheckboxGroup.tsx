@@ -20,7 +20,7 @@ interface CustomStyles {
 
 export interface CheckboxGroupProps {
   options?: OptionType[];
-  initialSelectedValues?: Array<string | number>;
+  value?: Array<string | number>;
   setResult: (value: Array<string | number> | string | number | null) => void;
   layout?: "vertical" | "horizontal";
   label?: string;
@@ -33,7 +33,7 @@ export interface CheckboxGroupProps {
 
 export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   options = [],
-  initialSelectedValues = [],
+  value: initialSelectedValues = [],
   setResult,
   layout = "vertical",
   label,
@@ -51,7 +51,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   return (
     <SelectionBox
       options={normalizedOptions}
-      initialSelectedValues={initialSelectedValues}
+      value={initialSelectedValues}
       setResult={setResult}
       layout={layout}
       label={label}

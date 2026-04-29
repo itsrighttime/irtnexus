@@ -21,7 +21,7 @@ interface CustomStyles {
 
 export interface RadioGroupProps {
   options: OptionType[];
-  initialSelectedValue?: string | number;
+  value?: string | number;
   setResult: (value: string | number | null) => void;
   layout?: "vertical" | "horizontal";
   label?: string;
@@ -34,7 +34,7 @@ export interface RadioGroupProps {
 
 export const RadioGroup: React.FC<RadioGroupProps> = ({
   options = [],
-  initialSelectedValue,
+  value: initialSelectedValue,
   setResult,
   layout = "vertical",
   label,
@@ -52,7 +52,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   return (
     <SelectionBox
       options={normalizedOptions}
-      initialSelectedValues={
+      value={
         initialSelectedValue !== undefined ? [initialSelectedValue] : []
       }
       setResult={(val) => {

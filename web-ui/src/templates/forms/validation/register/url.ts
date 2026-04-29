@@ -35,7 +35,7 @@ engine.register(FORM_FIELDS_TYPE.URL, {
     // URL format validation
     try {
       const url = normalizeUrl(trimmed);
-      if (isValidUrl(url)) {
+      if (!isValidUrl(url)) {
         return { valid: false, error: "Invalid URL protocol" };
       }
     } catch {

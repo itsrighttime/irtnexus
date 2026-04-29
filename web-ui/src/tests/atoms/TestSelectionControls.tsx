@@ -23,7 +23,7 @@ export const TestSelectionControls: React.FC = () => {
             { value: "gaming", label: "Gaming", disabled: true },
             { value: "music", label: "Music", help: "Includes instruments" },
           ]}
-          initialSelectedValues={["reading"]}
+          value={["reading"]}
           setResult={setSelectedCheckboxes}
           layout="horizontal"
           color="#1E90FF"
@@ -47,7 +47,7 @@ export const TestSelectionControls: React.FC = () => {
             { key: 2, value: "female", label: "Female" },
             { key: 3, value: "other", label: "Other" },
           ]}
-          initialSelectedValue="female"
+          value="female"
           setResult={setSelectedRadio}
           layout="vertical"
           color="#FF69B4"

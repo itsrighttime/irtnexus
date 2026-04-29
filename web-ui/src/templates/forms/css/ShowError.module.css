@@ -8,8 +8,9 @@
   background: var(--colorWhite);
   border-radius: var(--radiusL);
   padding: calc(var(--size) * 2);
-  border: 1px solid var(--color-gray3);
+  /* border: 1px solid var(--color-gray3); */
   border-radius: 5px;
+  width: 100% !important;
 }
 
 .title {
