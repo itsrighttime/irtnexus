@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, type CSSProperties } from "react";
 import style from "./OtpField.module.css";
-import { logger, apiCaller } from "core-ui";
+import { logger, apiCaller } from "@/core-ui";
 import type { BaseProps } from "@/types";
 
 export interface OtpFieldProps extends BaseProps {
@@ -56,7 +56,7 @@ export const OtpField: React.FC<OtpFieldProps> = ({
       const response = await apiCaller({
         endpoint: verificationEndpoint,
         method: "POST",
-        data: {
+        body: {
           userId,
           otp: value,
         },

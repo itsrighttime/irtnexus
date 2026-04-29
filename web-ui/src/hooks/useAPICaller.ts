@@ -1,6 +1,6 @@
 "use client";
 
-import { apiCaller } from "core-ui";
+import { apiCaller } from "@/core-ui";
 import { useState, useEffect, useCallback } from "react";
 
 type HTTPMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -14,8 +14,17 @@ interface UseAPICallerParams<TBody = unknown> {
   dependencies?: unknown[];
 }
 
-interface UseAPICallerReturn<TData> {
+type typeResponse<TData> = {
+  code: number;
+  status: string;
+  uniqueCode: string;
+  message: string;
+  meta: Record<string, string>;
   data: TData | null;
+};
+
+interface UseAPICallerReturn<TData> {
+  response: typeResponse<TData> | null;
   error: unknown;
   loading: boolean;
   refetch: () => Promise<void>;
@@ -30,27 +39,28 @@ export const useAPICaller = <TData = unknown, TBody = unknown>({
   params = {},
   dependencies = [],
 }: UseAPICallerParams<TBody>): UseAPICallerReturn<TData> => {
-  const [data, setData] = useState<TData | null>(null);
+  const [response, setResponse] = useState<typeResponse<TData> | null>(null);
   const [error, setError] = useState<unknown>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
 
-    const response = await apiCaller({
+    const rawResponse = await apiCaller({
       endpoint,
       method,
       body,
       headers,
       params,
+      printResult: false,
     });
 
-    if ((response as any)?.error) {
-      setData(null);
-      setError((response as any).error);
+    if ((rawResponse as any)?.error) {
+      setResponse(null);
+      setError((rawResponse as any).error);
     } else {
-      setData(response as TData);
+      setResponse(rawResponse.data as typeResponse<TData>);
       setError(null);
     }
 
@@ -60,16 +70,16 @@ export const useAPICaller = <TData = unknown, TBody = unknown>({
   useEffect(() => {
     if (!endpoint) return;
     fetchData();
-  }, [fetchData, ...dependencies]);
+  }, dependencies);
 
   const reset = () => {
-    setData(null);
+    setResponse(null);
     setError(null);
     setLoading(false);
   };
 
   return {
-    data,
+    response,
     error,
     loading,
     refetch: fetchData,

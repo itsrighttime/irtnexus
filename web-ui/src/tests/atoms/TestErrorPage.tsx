@@ -15,7 +15,7 @@ export const TestErrorPage = () => {
       {/* Example 2: 500 Server Error with custom message */}
       <ErrorPage
         statusCode={500}
-        ErrorMsg="server error"
+        errorMsg="server error"
         statusDetail="Database connection failed"
         responseCode="DB1001"
         handleNavigate={navigateHome}
@@ -25,7 +25,7 @@ export const TestErrorPage = () => {
       {/* Example 3: 401 Unauthorized */}
       <ErrorPage
         statusCode={401}
-        ErrorMsg="unauthorized access"
+        errorMsg="unauthorized access"
         handleNavigate={navigateDashboard}
         navigateTo="Dashboard"
       />
@@ -33,7 +33,7 @@ export const TestErrorPage = () => {
       {/* Example 4: 403 Access Denied */}
       <ErrorPage
         statusCode={403}
-        ErrorMsg="access denied"
+        errorMsg="access denied"
         statusDetail="You do not have permission to view this page"
         handleNavigate={navigateHome}
       />
@@ -41,7 +41,7 @@ export const TestErrorPage = () => {
       {/* Example 5: 404 Page Not Found with response code */}
       <ErrorPage
         statusCode={404}
-        ErrorMsg="page not found"
+        errorMsg="page not found"
         responseCode="NF404"
         handleNavigate={navigateHome}
       />
@@ -49,7 +49,7 @@ export const TestErrorPage = () => {
       {/* Example 6: Custom status code 502 */}
       <ErrorPage
         statusCode={502}
-        ErrorMsg="bad gateway"
+        errorMsg="bad gateway"
         statusDetail="The server received an invalid response from upstream"
         handleNavigate={navigateDashboard}
         navigateTo="Dashboard"

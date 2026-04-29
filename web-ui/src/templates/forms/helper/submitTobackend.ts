@@ -1,4 +1,4 @@
-import { apiCaller } from "core-ui";
+import { apiCaller } from "@/core-ui";
 
 type Primitive = string | number | boolean;
 type FormValue =
