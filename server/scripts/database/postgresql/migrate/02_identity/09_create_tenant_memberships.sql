@@ -8,7 +8,7 @@ CREATE TABLE tenant_memberships (
     deleted_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE(tenant_id, account_id)
+    UNIQUE(tenant_id, account_id, role_id)
 );
 --
 --

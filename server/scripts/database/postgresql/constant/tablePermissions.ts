@@ -14,9 +14,10 @@ export const DB_TABLES_USER_MAP = {
       ...TABLES.TENANTS,
       ...TABLES.SUBS,
       ...TABLES.NOTIFICATION,
+      ...TABLES.PARTNER,
     ]),
   ],
-
+  
   OP: [
     ...TABLES.USERS,
     ...TABLES.AUTH,
@@ -24,6 +25,7 @@ export const DB_TABLES_USER_MAP = {
     ...TABLES.TENANTS,
     ...TABLES.SUBS,
     ...TABLES.NOTIFICATION,
+    ...TABLES.PARTNER,
   ],
 
   REPORT: ["*"],

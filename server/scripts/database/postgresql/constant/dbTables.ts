@@ -60,4 +60,6 @@ export const TABLES = {
     "notification_logs",
     "notification_jobs",
   ],
+
+  PARTNER: ["partnerships"],
 };

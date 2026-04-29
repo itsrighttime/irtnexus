@@ -9,6 +9,7 @@ const TABLES_WITHOUT_TENANT_ID = new Set<string>([
   "role_permissions",
   "account_addresses",
   "verifications",
+  "form_submissions",
 ]);
 
 export function haveTenantId(tableName: string): boolean {
