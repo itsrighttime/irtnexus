@@ -267,8 +267,6 @@ export function useFormPersistence(
     setFormError,
     currentStep,
     setCurrentStep,
-    isFileLike,
-    isFileArray,
     clearFormPersistence,
   };
 }

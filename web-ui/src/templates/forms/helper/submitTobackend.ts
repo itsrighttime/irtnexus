@@ -16,6 +16,21 @@ interface SubmitResponse {
   message?: string;
 }
 
+/** Detect if payload contains any file/blob */
+const hasFile = (value: any): boolean => {
+  if (value instanceof File || value instanceof Blob) return true;
+
+  if (Array.isArray(value)) {
+    return value.some(hasFile);
+  }
+
+  if (value && typeof value === "object") {
+    return Object.values(value).some(hasFile);
+  }
+
+  return false;
+};
+
 export const submitToBackend = async (
   formData: Record<string, FormValue>,
   endpoint?: string,
@@ -24,54 +39,70 @@ export const submitToBackend = async (
     return { success: false, message: "No endpoint provided in config" };
   }
 
-  const body = new FormData();
+  const containsFile = hasFile(formData);
 
-  const appendToFormData = (key: string, value: FormValue): void => {
-    if (value === null || value === undefined) return;
+  let body: any;
+  let headers: Record<string, string> = {};
 
-    // Handle Files / Blobs
-    if (
-      value instanceof File ||
-      value instanceof Blob ||
-      (typeof value === "object" && "type" in value && "size" in value)
-    ) {
-      body.append(key, value as Blob);
-      return;
-    }
+  /**
+   * =========================
+   * CASE 1: JSON REQUEST
+   * =========================
+   * Best for Fastify normal routes (fast + clean)
+   */
+  if (!containsFile) {
+    body = JSON.stringify(formData);
+    headers["Content-Type"] = "application/json";
+  } else {
 
-    // Handle arrays
-    if (Array.isArray(value)) {
-      value.forEach((v, i) => {
-        if (typeof v === "object" && !(v instanceof File)) {
-          body.append(`${key}[${i}]`, JSON.stringify(v));
-        } else {
-          body.append(`${key}[${i}]`, String(v));
-        }
-      });
-      return;
-    }
+  /**
+   * =========================
+   * CASE 2: MULTIPART (FILES)
+   * =========================
+   * Only when File/Blob exists
+   */
+    const fd = new FormData();
 
-    // Handle nested objects
-    if (typeof value === "object") {
-      Object.entries(value).forEach(([subKey, subValue]) => {
-        appendToFormData(`${key}[${subKey}]`, subValue);
-      });
-      return;
-    }
+    const append = (key: string, value: FormValue): void => {
+      if (value === null || value === undefined) return;
 
-    // Handle primitive values
-    body.append(key, String(value));
-  };
+      // File / Blob
+      if (value instanceof File || value instanceof Blob) {
+        fd.append(key, value);
+        return;
+      }
 
-  Object.entries(formData || {}).forEach(([key, value]) => {
-    appendToFormData(key, value);
-  });
+      // Array handling
+      if (Array.isArray(value)) {
+        value.forEach((v, i) => append(`${key}[${i}]`, v));
+        return;
+      }
+
+      // Object handling
+      if (typeof value === "object") {
+        Object.entries(value).forEach(([k, v]) => {
+          append(`${key}[${k}]`, v);
+        });
+        return;
+      }
+
+      // Primitive
+      fd.append(key, String(value));
+    };
+
+    Object.entries(formData).forEach(([key, value]) => {
+      append(key, value);
+    });
+
+    body = fd;
+    // IMPORTANT: DO NOT set Content-Type manually for FormData
+  }
 
   const response: any = await apiCaller({
     endpoint,
     method: "POST",
     body,
-    headers: {},
+    headers,
   });
 
   if (response?.status === 200 || response?.success) {

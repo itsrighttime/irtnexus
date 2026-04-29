@@ -90,8 +90,6 @@ export function GenericForm({
     setFormError,
     currentStep,
     setCurrentStep,
-    isFileLike,
-    isFileArray,
     clearFormPersistence,
   } = useFormPersistence(STORAGE_KEY, initialState, initialError, allFields);
 
@@ -142,9 +140,6 @@ export function GenericForm({
     setFormStatusError,
     addAlert,
     onSubmit,
-    STORAGE_KEY,
-    isFileLike,
-    isFileArray,
   });
 
   // --- Fields to render for current step ---

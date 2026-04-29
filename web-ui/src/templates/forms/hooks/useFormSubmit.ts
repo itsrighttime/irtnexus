@@ -19,9 +19,6 @@ interface UseFormSubmitProps {
     type: "success" | "error" | "info" | "warning",
   ) => void;
   onSubmit?: (data: Record<string, any>) => void;
-  STORAGE_KEY: string;
-  isFileLike: (v: unknown) => v is File | Blob;
-  isFileArray: (v: unknown) => v is (File | Blob)[];
 }
 
 interface BackendResponse {
@@ -39,9 +36,6 @@ export function useFormSubmit({
   setFormStatusError,
   addAlert,
   onSubmit,
-  STORAGE_KEY,
-  isFileLike,
-  isFileArray,
 }: UseFormSubmitProps) {
   const handleSubmit = async (e: FormEvent<Element>) => {
     e.preventDefault();
@@ -79,22 +73,6 @@ export function useFormSubmit({
 
       if (response?.success) {
         // Clear localStorage
-        localStorage.removeItem(STORAGE_KEY);
-
-        // Cleanup files from IndexedDB
-        for (const key of Object.keys(formData)) {
-          const value = formData[key];
-
-          if (isFileLike(value)) {
-            await deleteFile(`${STORAGE_KEY}::${key}`);
-          }
-
-          if (isFileArray(value)) {
-            for (let idx = 0; idx < value.length; idx++) {
-              await deleteFile(`${STORAGE_KEY}::${key}_${idx}`);
-            }
-          }
-        }
 
         onSubmit?.(formData);
 

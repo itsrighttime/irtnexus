@@ -63,13 +63,12 @@ export const apiCaller = async <T = any>({
     const response: AxiosResponse<T> = await axios(axiosConfig);
     const data = response.data;
 
-    logger.info({
-      message: `API Success → ${method} ${endpoint}`,
-      context: { status: response.status, data },
-      code: "00003",
-    });
-
-    if (printResult === "true") {
+    if (printResult === true) {
+      logger.info({
+        message: `API Success → ${method} ${endpoint}`,
+        context: { status: response.status, data },
+        code: "00003",
+      });
       console.log(`API Response of endpoint (${endpoint}):`, data);
     }
 

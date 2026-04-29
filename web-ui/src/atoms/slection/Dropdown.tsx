@@ -155,7 +155,9 @@ export const Dropdown: React.FC<DropdownProps> = ({
             <span className={styles.previewText}>{displayText}</span>
           </div>
         ) : (
-          <span style={{ color: "var(--color-gray4)" }}>{placeholder}</span>
+          <span
+            style={{ color: "var(--color-gray4)" }}
+          >{`${placeholder} ${required ? " *" : ""}`}</span>
         )}
 
         <IconButton
