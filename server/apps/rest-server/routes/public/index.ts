@@ -1,8 +1,6 @@
-// src/routes/public.routes.ts
-import { fastifyUploadAdapter } from "#packages/storage";
 import { FastifyPluginAsync } from "fastify";
 import { tenantRoutes } from "./tenant";
-import { formsRoutes } from "./form";
+import { formsRoutes } from "#modules/forms";
 
 export const publicRoutes: FastifyPluginAsync = async (fastify) => {
   // Root endpoint

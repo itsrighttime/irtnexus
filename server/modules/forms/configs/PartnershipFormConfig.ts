@@ -1,7 +1,7 @@
 import { FormConfig } from "../types";
 import { FORM_FIELDS_TYPE } from "../validation";
 
-export const config: FormConfig = {
+export const PartnershipFormConfig: FormConfig = {
   title: "Complete User Form",
   description: "A single-step form including all field types",
   mode: "single",

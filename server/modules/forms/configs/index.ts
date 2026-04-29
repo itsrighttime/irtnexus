@@ -1,0 +1,1 @@
+export { getFormConfig } from "./formMap";
