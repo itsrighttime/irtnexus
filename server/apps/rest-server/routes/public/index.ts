@@ -2,6 +2,7 @@
 import { fastifyUploadAdapter } from "#packages/storage";
 import { FastifyPluginAsync } from "fastify";
 import { tenantRoutes } from "./tenant";
+import { formsRoutes } from "./form";
 
 export const publicRoutes: FastifyPluginAsync = async (fastify) => {
   // Root endpoint
@@ -27,6 +28,13 @@ export const publicRoutes: FastifyPluginAsync = async (fastify) => {
       await tenantRoutes(fastifyInstance);
     },
     { prefix: "/tenants" },
+  );
+  
+  fastify.register(
+    async (fastifyInstance) => {
+      await formsRoutes(fastifyInstance);
+    },
+    { prefix: "/forms" },
   );
   // Mount user routes under /users
   // fastify.register(userRoute, { prefix: "/users" });

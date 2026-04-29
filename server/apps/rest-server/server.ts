@@ -15,6 +15,7 @@ import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUI from "@fastify/swagger-ui";
 import { eventBusConsumerRegistry } from "#modules/bootstrap";
 import { eventBus } from "#modules/bootstrap/eventBus.instance.js";
+import { registerValidations } from "#modules/forms";
 
 export const createServer = async (): Promise<FastifyInstance> => {
   // const app = Fastify({logger: true});
@@ -27,6 +28,9 @@ export const createServer = async (): Promise<FastifyInstance> => {
   app.register(registerSecurity); // Must be a FastifyPluginAsync
   app.addHook("preHandler", languagePlugin);
   app.addHook("preHandler", requestContextPlugin);
+
+  // Register Form Validators
+  registerValidations();
 
   // Swagger
   app.register(fastifySwagger, {
