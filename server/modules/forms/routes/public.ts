@@ -1,9 +1,7 @@
-import { fastifyUploadAdapter } from "#packages/storage/index.js";
-import { response } from "#packages/utils/index.js";
-import { FastifyInstance, FastifyRequest } from "fastify";
+import { FastifyInstance } from "fastify";
 import { ccPartnershipConfig, ccPartnershipForm } from "../controllers";
 
-export async function formsRoutes(fastify: FastifyInstance) {
+export async function formsPublicRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/partnership",
     {

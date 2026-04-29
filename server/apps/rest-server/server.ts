@@ -1,4 +1,8 @@
-import Fastify, { FastifyInstance } from "fastify";
+import Fastify, {
+  FastifyInstance,
+  FastifyReply,
+  FastifyRequest,
+} from "fastify";
 import multipart from "@fastify/multipart";
 import "dotenv/config";
 import { registerSecurity, registerSession } from "#configs";
@@ -81,6 +85,10 @@ export const createServer = async (): Promise<FastifyInstance> => {
     } catch (err) {
       reply.status(500).send(err);
     }
+  });
+
+  app.get("/ok", (req: FastifyRequest, reply: FastifyReply) => {
+    return reply.send({ statu: "ok" });
   });
 
   // ----------------------------

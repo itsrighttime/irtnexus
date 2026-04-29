@@ -1,36 +1,18 @@
 import { FastifyPluginAsync } from "fastify";
 import { tenantRoutes } from "./tenant";
-import { formsRoutes } from "#modules/forms";
+import { PUBLIC_ROUTES } from "#modules";
 
 export const publicRoutes: FastifyPluginAsync = async (fastify) => {
-  // Root endpoint
-  fastify.get("/", async (request, reply) => {
-    console.log("DDDD : Inside Public API");
-
-    return {
-      success: true,
-      data: "You are using Public API",
-    };
-  });
-  fastify.post("/", async (request, reply) => {
-    try {
-      return { success: true, data: request.body };
-    } catch (err) {
-      reply.code(400);
-      return { error: (err as Error).message };
-    }
-  });
-
   fastify.register(
     async (fastifyInstance) => {
       await tenantRoutes(fastifyInstance);
     },
     { prefix: "/tenants" },
   );
-  
+
   fastify.register(
     async (fastifyInstance) => {
-      await formsRoutes(fastifyInstance);
+      await PUBLIC_ROUTES.forms(fastifyInstance);
     },
     { prefix: "/forms" },
   );

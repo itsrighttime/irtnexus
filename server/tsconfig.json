@@ -39,7 +39,8 @@
       "#types": ["types/index.ts"],
       "#utils": ["packages/utils/index.ts"],
       "#libs": ["libs/index.ts"],
-      "#configs": ["configs/index.ts"]
+      "#configs": ["configs/index.ts"],
+      "#modules": ["modules/index.ts"]
     }
   },
   "include": [

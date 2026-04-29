@@ -1,1 +1,1 @@
-export { formsRoutes } from "./form";
+export { formsPublicRoutes as formsRoutes } from "./public";
