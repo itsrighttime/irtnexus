@@ -3,6 +3,7 @@ import fastifyHelmet from "@fastify/helmet";
 import fastifyRateLimit from "@fastify/rate-limit";
 import { registerCors } from "#configs";
 import { FastifyInstance } from "fastify";
+import { allowedOrigins } from "./cors.config";
 
 /**
  * Apply all security-related middlewares to Fastify
@@ -22,7 +23,7 @@ export const registerSecurity = async (app: FastifyInstance) => {
         styleSrc: ["'self'", "'unsafe-inline'"],
         imgSrc: ["'self'", "data:"],
         fontSrc: ["'self'", "data:"],
-        connectSrc: ["'self'"],
+        connectSrc: ["'self'", ...allowedOrigins],
       },
     },
     crossOriginEmbedderPolicy: false,
@@ -42,7 +43,4 @@ export const registerSecurity = async (app: FastifyInstance) => {
       };
     },
   });
-
-  // 3️⃣ CORS configuration
-  await app.register(registerCors);
 };

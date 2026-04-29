@@ -5,7 +5,7 @@ import Fastify, {
 } from "fastify";
 import multipart from "@fastify/multipart";
 import "dotenv/config";
-import { registerSecurity, registerSession } from "#configs";
+import { registerCors, registerSecurity, registerSession } from "#configs";
 import { publicRoutes, privateRoutes } from "#apps/rest-server/routes";
 import { generateUUID, globalErrorHandler, logger } from "#utils";
 import {
@@ -25,11 +25,13 @@ export const createServer = async (): Promise<FastifyInstance> => {
   // const app = Fastify({logger: true});
   const app = Fastify();
 
+  await registerCors(app)
+
   // ----------------------------
   // Core Plugins / Middleware
   // ----------------------------
-  app.register(registerSession); // Must be a FastifyPluginAsync
   app.register(registerSecurity); // Must be a FastifyPluginAsync
+  app.register(registerSession); // Must be a FastifyPluginAsync
   app.addHook("preHandler", languagePlugin);
   app.addHook("preHandler", requestContextPlugin);
 

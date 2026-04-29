@@ -1,13 +1,14 @@
 // src/config/cors.ts
 import { FastifyInstance } from "fastify";
 import fastifyCors from "@fastify/cors";
+import { logger } from "#packages/utils/logger.util.js";
 
 /**
  * List of allowed origins for CORS
  * Only requests coming from these origins will be accepted.
  */
-const allowedOrigins = [
-  "http://localhost:1060",
+export const allowedOrigins = [
+  "http://localhost:5003",
   "http://localhost:1061",
   "http://localhost:5173",
   "http://localhost:1062",
@@ -27,10 +28,8 @@ export async function registerCors(app: FastifyInstance) {
       if (allowedOrigins.includes(origin)) {
         return cb(null, true);
       } else {
-        return cb(
-          new Error(`CORS policy does not allow access from ${origin}`),
-          false,
-        );
+        logger.error(`Blocked CORS origin: ${origin}`);
+        return cb(null, false);
       }
     },
     credentials: true,
