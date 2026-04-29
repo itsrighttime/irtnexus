@@ -1,5 +1,5 @@
 import { FastifyRequest } from "fastify";
-import { StorageDriverFactory } from "#packages/storage";
+import { FileRecord, StorageDriverFactory } from "#packages/storage";
 import { UploadOptions } from "#packages/storage";
 import { logger } from "#utils";
 
@@ -12,7 +12,7 @@ export async function fastifyUploadAdapter(
   const driver = StorageDriverFactory.createDriver();
   logger.debug("[fastifyUploadAdapter] Storage driver initialized");
 
-  const files = [];
+  const files: FileRecord[] = [];
   const fields: Record<string, any> = {};
 
   const parts = request.parts();
@@ -31,7 +31,7 @@ export async function fastifyUploadAdapter(
         `[fastifyUploadAdapter] File converted to buffer, size=${buffer.length} bytes`,
       );
 
-      const record = await driver.uploadFile(buffer, {
+      const record: FileRecord = await driver.uploadFile(buffer, {
         ...options,
         filename: part.filename,
         mimeType: part.mimetype,

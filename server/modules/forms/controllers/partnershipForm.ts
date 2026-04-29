@@ -14,7 +14,7 @@ export const ccPartnershipForm = async (
 
   const { files, fields } = await fastifyUploadAdapter(request, uploadOptions);
 
-  ssPartnershipForm(fields, files);
+  ssPartnershipForm(files, fields);
 
   return response.success(
     request,

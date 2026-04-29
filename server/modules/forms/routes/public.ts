@@ -3,7 +3,7 @@ import { ccPartnershipConfig, ccPartnershipForm } from "../controllers";
 
 export async function formsPublicRoutes(fastify: FastifyInstance) {
   fastify.post(
-    "/partnership",
+    "/partnership/submit",
     {
       // schema: registerTenantSchema,
       // preValidation: normalizeRegisterTenant,

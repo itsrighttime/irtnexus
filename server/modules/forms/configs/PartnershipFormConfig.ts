@@ -1,3 +1,4 @@
+import { GENERAl_CONST } from "#configs";
 import { FormConfig } from "../types";
 import { FORM_FIELDS_TYPE } from "../validation";
 
@@ -5,6 +6,7 @@ export const PartnershipFormConfig: FormConfig = {
   title: "Complete User Form",
   description: "A single-step form including all field types",
   mode: "single",
+  endpoint: `${GENERAl_CONST.SERVER_URL}/v1/public/forms/partnership/submit`,
   settings: {
     showLabelAlways: true,
     color: "var(--color-primary)",
