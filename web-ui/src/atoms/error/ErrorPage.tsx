@@ -4,7 +4,7 @@ import type { MouseEventHandler } from "react";
 
 interface ErrorPageProps {
   statusCode?: string | number;
-  ErrorMsg?: string;
+  errorMsg?: string;
   statusDetail?: string | null;
   responseCode?: string | number | null;
   handleNavigate: MouseEventHandler<HTMLButtonElement>;
@@ -13,7 +13,7 @@ interface ErrorPageProps {
 
 export const ErrorPage = ({
   statusCode = "404",
-  ErrorMsg = "not found",
+  errorMsg = "not found",
   statusDetail = null,
   responseCode = null,
   handleNavigate,
@@ -43,7 +43,7 @@ export const ErrorPage = ({
           </span>
 
           <p className={styles.description}>
-            The page you are looking for was {ErrorMsg}.
+            The page you are looking for was {errorMsg}.
           </p>
 
           {statusDetail && (

@@ -11,7 +11,7 @@ export async function formsPublicRoutes(fastify: FastifyInstance) {
     ccPartnershipForm,
   );
   fastify.get(
-    "/partnership-config/:key",
+    "/partnership/config/:key",
     {
       // schema: registerTenantSchema,
       // preValidation: normalizeRegisterTenant,
