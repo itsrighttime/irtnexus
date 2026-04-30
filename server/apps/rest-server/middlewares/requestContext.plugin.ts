@@ -44,6 +44,11 @@ export const requestContextPlugin = async (
   // Attach to request
   request.context = context;
 
+  request.ctx = {
+    accountId: null,
+    tenantId: null,
+  };
+
   // Verbose logging for debugging
   logger.verbose("[Request Context] Initialized:", context);
 

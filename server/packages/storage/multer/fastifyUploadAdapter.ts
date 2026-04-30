@@ -10,48 +10,55 @@ export async function fastifyUploadAdapter(
   logger.debug("[fastifyUploadAdapter] Starting upload adapter");
 
   const driver = StorageDriverFactory.createDriver();
-  logger.debug("[fastifyUploadAdapter] Storage driver initialized");
 
   const files: FileRecord[] = [];
-  const fields: Record<string, any> = {};
+  let fields: Record<string, any> = {};
+
+  // CASE 1: NON-MULTIPART (JSON)
+  if (!request.isMultipart()) {
+    logger.debug("[fastifyUploadAdapter] Handling JSON request");
+
+    fields = request.body as Record<string, any>;
+
+    return { files, fields };
+  }
+
+  // CASE 2: MULTIPART
+  logger.debug("[fastifyUploadAdapter] Handling multipart request");
 
   const parts = request.parts();
-  logger.debug("[fastifyUploadAdapter] Beginning to process multipart parts");
 
   for await (const part of parts) {
     logger.debug(`[fastifyUploadAdapter] Processing part: type=${part.type}`);
 
     if (part.type === "file") {
-      logger.debug(
-        `[fastifyUploadAdapter] Reading file part: filename=${part.filename}, mimetype=${part.mimetype}`,
-      );
-
       const buffer = await part.toBuffer();
-      logger.debug(
-        `[fastifyUploadAdapter] File converted to buffer, size=${buffer.length} bytes`,
-      );
 
       const record: FileRecord = await driver.uploadFile(buffer, {
         ...options,
         filename: part.filename,
         mimeType: part.mimetype,
       });
-      logger.debug(`[fastifyUploadAdapter] File uploaded: `, record);
 
       files.push(record);
     } else if (part.type === "field") {
-      logger.debug(
-        `[fastifyUploadAdapter] Reading field part: fieldname=${part.fieldname}, value=${part.value}`,
-      );
-      fields[part.fieldname] = part.value;
-    } else {
-      logger.debug(`[fastifyUploadAdapter] Unknown part type: ${part}`);
+      const { fieldname, value } = part;
+
+      //  Auto-parse structured JSON
+      if (fieldname === "data") {
+        try {
+          fields = JSON.parse(value as any);
+        } catch {
+          logger.warn("[fastifyUploadAdapter] Invalid JSON in 'data'");
+          fields = {};
+        }
+      } else {
+        fields[fieldname] = value;
+      }
     }
   }
 
-  logger.debug(
-    `[fastifyUploadAdapter] Upload adapter finished, total files uploaded=${files.length}`,
-  );
+  logger.debug(`[fastifyUploadAdapter] Completed. files=${files.length}`);
 
   return { files, fields };
 }

@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { HTTP_STATUS, response } from "./response";
 import { AppError, AppErrorParams } from "../errors";
+import { logger } from "./logger.util";
 
 /**
  * Global Fastify error handler
@@ -14,7 +15,8 @@ export function globalErrorHandler(
   // If the error is one of our AppErrors
   if (error instanceof AppError) {
     const payload = {
-      [error.details?.field || "error"]: error.message,
+      message: error.message,
+      ...error.details,
     };
 
     return response.error(
@@ -47,7 +49,7 @@ export function globalErrorHandler(
   }
 
   // Fallback for unexpected/unhandled errors
-  console.error("Unexpected error:", error);
+  logger.error("Unexpected error:", error);
 
   return response.error(
     request,

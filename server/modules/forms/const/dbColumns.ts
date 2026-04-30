@@ -1,6 +1,10 @@
 export const FormSubmissionCol = [
   "form_submissions_id",
   "form_id",
+  "form_name",
+  "submitter_email",
+  "submitter_phone",
+  "external_user_id",
   "data",
   "deleted_at",
   "created_at",

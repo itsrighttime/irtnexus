@@ -11,6 +11,7 @@ export const DATABASES_TABLE_FOLDERS = [
       "04_audit",
       "05_notification",
       "06_partner",
+      "07_form",
     ],
   },
   // { name: process.env.REPORT_DB_NAME, folders: ["01_reporting"] }, // Optional reporting database

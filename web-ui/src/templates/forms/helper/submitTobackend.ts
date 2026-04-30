@@ -44,58 +44,39 @@ export const submitToBackend = async (
   let body: any;
   let headers: Record<string, string> = {};
 
-  /**
-   * =========================
-   * CASE 1: JSON REQUEST
-   * =========================
-   * Best for Fastify normal routes (fast + clean)
-   */
   if (!containsFile) {
+    // ✅ Simple JSON case
     body = JSON.stringify(formData);
     headers["Content-Type"] = "application/json";
   } else {
-
-  /**
-   * =========================
-   * CASE 2: MULTIPART (FILES)
-   * =========================
-   * Only when File/Blob exists
-   */
+    // ✅ Multipart but WITHOUT flattening structure
     const fd = new FormData();
 
-    const append = (key: string, value: FormValue): void => {
-      if (value === null || value === undefined) return;
+    // 1. Send full structured JSON
+    fd.append("data", JSON.stringify(formData));
 
-      // File / Blob
+    // 2. Extract and append files separately
+    const appendFiles = (value: FormValue) => {
+      if (!value) return;
+
       if (value instanceof File || value instanceof Blob) {
-        fd.append(key, value);
+        fd.append("files", value);
         return;
       }
 
-      // Array handling
       if (Array.isArray(value)) {
-        value.forEach((v, i) => append(`${key}[${i}]`, v));
+        value.forEach(appendFiles);
         return;
       }
 
-      // Object handling
       if (typeof value === "object") {
-        Object.entries(value).forEach(([k, v]) => {
-          append(`${key}[${k}]`, v);
-        });
-        return;
+        Object.values(value).forEach(appendFiles);
       }
-
-      // Primitive
-      fd.append(key, String(value));
     };
 
-    Object.entries(formData).forEach(([key, value]) => {
-      append(key, value);
-    });
+    appendFiles(formData);
 
     body = fd;
-    // IMPORTANT: DO NOT set Content-Type manually for FormData
   }
 
   const response: any = await apiCaller({

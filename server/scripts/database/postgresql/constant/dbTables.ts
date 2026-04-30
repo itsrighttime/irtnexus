@@ -62,4 +62,5 @@ export const TABLES = {
   ],
 
   PARTNER: ["partnerships"],
+  FORM: ["form_submissions", "forms", "form_steps"],
 };
